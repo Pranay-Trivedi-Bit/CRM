@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sales Lead Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header__title">
+      <svg class="header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/>
+        <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
+        <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>
+      </svg>
+      <h1>Sales Lead Dashboard</h1>
+    </div>
+    <button class="btn btn--primary" id="btnNewLead">+ New Lead</button>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main">
+
+    <!-- Summary Cards -->
+    <section class="summary-cards" id="summaryCards">
+      <div class="card" data-type="total">
+        <div class="card__accent card__accent--total"></div>
+        <div class="card__body">
+          <span class="card__metric" id="metricTotal">0</span>
+          <span class="card__label">Total Leads</span>
+        </div>
+      </div>
+      <div class="card" data-type="hot">
+        <div class="card__accent card__accent--hot"></div>
+        <div class="card__body">
+          <span class="card__metric" id="metricHot">0</span>
+          <span class="card__label">Hot</span>
+          <span class="card__sublabel" id="metricHotSub">0 hot out of 0 total leads</span>
+        </div>
+      </div>
+      <div class="card" data-type="warm">
+        <div class="card__accent card__accent--warm"></div>
+        <div class="card__body">
+          <span class="card__metric" id="metricWarm">0</span>
+          <span class="card__label">Warm</span>
+          <span class="card__sublabel" id="metricWarmSub">0 warm out of 0 total leads</span>
+        </div>
+      </div>
+      <div class="card" data-type="cold">
+        <div class="card__accent card__accent--cold"></div>
+        <div class="card__body">
+          <span class="card__metric" id="metricCold">0</span>
+          <span class="card__label">Cold</span>
+          <span class="card__sublabel" id="metricColdSub">0 cold out of 0 total leads</span>
+        </div>
+      </div>
+      <div class="card" data-type="dead">
+        <div class="card__accent card__accent--dead"></div>
+        <div class="card__body">
+          <span class="card__metric" id="metricDead">0</span>
+          <span class="card__label">Dead</span>
+          <span class="card__sublabel" id="metricDeadSub">0 dead out of 0 total leads</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lead Status Overview Chart -->
+    <section class="pipeline" id="pipeline">
+      <h2 class="pipeline__title">Lead Status Overview</h2>
+      <div class="chart-container">
+        <div class="chart-canvas-wrap">
+          <canvas id="statusChart" width="240" height="240"></canvas>
+          <div class="chart-center" id="chartCenter">
+            <span class="chart-center__count" id="chartCenterCount">0</span>
+            <span class="chart-center__label">Total Leads</span>
+          </div>
+        </div>
+        <div class="chart-legend" id="chartLegend">
+          <div class="chart-legend__item" data-stage="Hot">
+            <span class="chart-legend__color chart-legend__color--hot"></span>
+            <span class="chart-legend__name">Hot</span>
+            <span class="chart-legend__count" id="legendHot">0</span>
+            <span class="chart-legend__pct" id="legendHotPct">0%</span>
+            <div class="chart-legend__bar"><div class="chart-legend__bar-fill chart-legend__bar-fill--hot" id="legendBarHot"></div></div>
+          </div>
+          <div class="chart-legend__item" data-stage="Warm">
+            <span class="chart-legend__color chart-legend__color--warm"></span>
+            <span class="chart-legend__name">Warm</span>
+            <span class="chart-legend__count" id="legendWarm">0</span>
+            <span class="chart-legend__pct" id="legendWarmPct">0%</span>
+            <div class="chart-legend__bar"><div class="chart-legend__bar-fill chart-legend__bar-fill--warm" id="legendBarWarm"></div></div>
+          </div>
+          <div class="chart-legend__item" data-stage="Cold">
+            <span class="chart-legend__color chart-legend__color--cold"></span>
+            <span class="chart-legend__name">Cold</span>
+            <span class="chart-legend__count" id="legendCold">0</span>
+            <span class="chart-legend__pct" id="legendColdPct">0%</span>
+            <div class="chart-legend__bar"><div class="chart-legend__bar-fill chart-legend__bar-fill--cold" id="legendBarCold"></div></div>
+          </div>
+          <div class="chart-legend__item" data-stage="Dead">
+            <span class="chart-legend__color chart-legend__color--dead"></span>
+            <span class="chart-legend__name">Dead</span>
+            <span class="chart-legend__count" id="legendDead">0</span>
+            <span class="chart-legend__pct" id="legendDeadPct">0%</span>
+            <div class="chart-legend__bar"><div class="chart-legend__bar-fill chart-legend__bar-fill--dead" id="legendBarDead"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filters Toolbar -->
+    <section class="toolbar">
+      <div class="toolbar__search">
+        <svg class="toolbar__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.3-4.3"/>
+        </svg>
+        <input type="text" id="searchInput" class="toolbar__input" placeholder="Search by name, email, company, assignee, or remark...">
+      </div>
+      <div class="toolbar__filters">
+        <select id="filterLeadTemp" class="toolbar__select">
+          <option value="All">All Status</option>
+          <option value="Hot">Hot</option>
+          <option value="Warm">Warm</option>
+          <option value="Cold">Cold</option>
+          <option value="Dead">Dead</option>
+        </select>
+        <select id="filterCampaign" class="toolbar__select">
+          <option value="All">All Campaigns</option>
+        </select>
+        <div class="toolbar__date-filter">
+          <label class="toolbar__date-label" for="filterDateFrom">From</label>
+          <input type="date" id="filterDateFrom" class="toolbar__date-input">
+          <label class="toolbar__date-label" for="filterDateTo">To</label>
+          <input type="date" id="filterDateTo" class="toolbar__date-input">
+          <button class="toolbar__date-clear" id="clearDateFilter" title="Clear date filter">&times;</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Leads Table -->
+    <section class="table-container">
+      <table class="table" id="leadsTable">
+        <thead>
+          <tr>
+            <th style="width:120px">Name</th>
+            <th style="width:200px">Contact</th>
+            <th style="width:140px">Company</th>
+            <th style="width:140px" class="col-hide-tablet">Job Title</th>
+            <th style="width:200px">Campaign</th>
+            <th style="width:120px" class="col-hide-tablet">Location</th>
+            <th style="width:160px">Assigned To</th>
+            <th style="width:220px">Last Remark</th>
+            <th style="width:110px">Disposition</th>
+            <th style="width:130px">Sub-Disposition</th>
+            <th style="width:80px">Status</th>
+            <th style="width:80px" class="col-actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="leadsTableBody">
+        </tbody>
+      </table>
+
+      <!-- Empty State -->
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <svg class="empty-state__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <line x1="19" y1="8" x2="19" y2="14"/>
+          <line x1="22" y1="11" x2="16" y2="11"/>
+        </svg>
+        <p class="empty-state__text" id="emptyStateText">No leads yet. Click "New Lead" to get started.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal Backdrop -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" id="modal">
+      <div class="modal__header">
+        <h2 class="modal__title" id="modalTitle">Add New Lead</h2>
+        <button class="modal__close" id="modalClose" title="Close">&times;</button>
+      </div>
+      <div class="modal__body">
+        <form id="leadForm" class="form" novalidate>
+          <div class="form__grid">
+            <div class="form__group">
+              <label class="form__label" for="fieldName">Name <span class="form__required">*</span></label>
+              <input type="text" id="fieldName" class="form__input" placeholder="e.g. Jane Smith" required>
+              <span class="form__error" id="errorName"></span>
+            </div>
+            <div class="form__group">
+              <label class="form__label" for="fieldEmail">Email</label>
+              <input type="email" id="fieldEmail" class="form__input" placeholder="e.g. jane@acme.com">
+              <span class="form__error" id="errorEmail"></span>
+            </div>
+            <div class="form__group">
+              <label class="form__label" for="fieldPhone">Phone</label>
+              <input type="tel" id="fieldPhone" class="form__input" placeholder="e.g. +1-555-0123">
+            </div>
+            <div class="form__group">
+              <label class="form__label" for="fieldCompany">Company</label>
+              <input type="text" id="fieldCompany" class="form__input" placeholder="e.g. Acme Corp">
+            </div>
+            <div class="form__group">
+              <label class="form__label" for="fieldSource">Source</label>
+              <input type="text" id="fieldSource" class="form__input" value="LinkedIn" readonly style="background:var(--color-surface-elevated); cursor:default; opacity:0.7;">
+            </div>
+            <div class="form__group">
+              <label class="form__label" for="fieldAssignedTo">Assigned To</label>
+              <input type="text" id="fieldAssignedTo" class="form__input" placeholder="e.g. Bob Johnson">
+            </div>
+          </div>
+          <div class="form__group form__group--full">
+            <label class="form__label" for="fieldRemark">Remark</label>
+            <textarea id="fieldRemark" class="form__textarea" rows="3" placeholder="Add notes about this lead..."></textarea>
+          </div>
+          <div class="form__auto-fields" id="autoClassification">
+            <div class="form__auto-field">
+              <span class="form__auto-label">Disposition</span>
+              <span class="form__auto-value" id="autoDisposition">-</span>
+            </div>
+            <div class="form__auto-field">
+              <span class="form__auto-label">Sub-Disposition</span>
+              <span class="form__auto-value" id="autoSubDisposition">-</span>
+            </div>
+            <div class="form__auto-field">
+              <span class="form__auto-label">Status</span>
+              <span class="form__auto-value" id="autoStatus">-</span>
+            </div>
+          </div>
+        </form>
+
+        <!-- Remark History (visible in edit mode) -->
+        <div class="remark-history" id="remarkHistory" style="display: none;">
+          <h3 class="remark-history__title">Remark History</h3>
+          <div class="remark-timeline" id="remarkTimeline">
+          </div>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn--secondary" id="btnCancel">Cancel</button>
+        <button class="btn btn--primary" id="btnSave">Save Lead</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="leads-data.js"></script>
+  <script src="csm-data.js"></script>
+  <script src="campaign-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
