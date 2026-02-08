@@ -61,6 +61,21 @@ var WhatsAppModule = (function () {
   var _drawerItemsMoved = false;
   var _origRightParent = null;
   var _origRightNextSibling = null;
+  var _userInfoObserver = null;
+  var _applyingFirstName = false;
+
+  function applyFirstNameOnly() {
+    var userInfo = document.getElementById('headerUserInfo');
+    if (!userInfo || !_drawerItemsMoved) return;
+    _applyingFirstName = true;
+    var fullText = userInfo.textContent;
+    if (fullText) {
+      userInfo.setAttribute('data-full-text', fullText);
+      var firstName = fullText.split(' ')[0] || fullText;
+      userInfo.textContent = firstName;
+    }
+    _applyingFirstName = false;
+  }
 
   function setupMobileDrawerItems() {
     var navLeft = document.querySelector('.nav-bar__left');
@@ -78,12 +93,15 @@ var WhatsAppModule = (function () {
       navRight.classList.add('nav-bar__right--in-drawer');
 
       // Show only first name in mobile drawer
+      applyFirstNameOnly();
+
+      // Watch for text changes (login sets user info after drawer setup)
       var userInfo = document.getElementById('headerUserInfo');
-      if (userInfo) {
-        userInfo.setAttribute('data-full-text', userInfo.textContent);
-        var fullText = userInfo.textContent;
-        var firstName = fullText.split(' ')[0] || fullText;
-        userInfo.textContent = firstName;
+      if (userInfo && !_userInfoObserver) {
+        _userInfoObserver = new MutationObserver(function() {
+          if (!_applyingFirstName) applyFirstNameOnly();
+        });
+        _userInfoObserver.observe(userInfo, { childList: true, characterData: true, subtree: true });
       }
 
       _drawerItemsMoved = true;
@@ -98,7 +116,11 @@ var WhatsAppModule = (function () {
       }
       navRight.classList.remove('nav-bar__right--in-drawer');
 
-      // Restore full user info text
+      // Stop observing and restore full user info text
+      if (_userInfoObserver) {
+        _userInfoObserver.disconnect();
+        _userInfoObserver = null;
+      }
       var userInfo = document.getElementById('headerUserInfo');
       if (userInfo && userInfo.getAttribute('data-full-text')) {
         userInfo.textContent = userInfo.getAttribute('data-full-text');
