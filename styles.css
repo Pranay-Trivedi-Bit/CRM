@@ -3462,20 +3462,52 @@ body {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  /* Login - tablet: stack vertically */
+  /* Login - tablet: stack vertically with funnel on top */
   .login-split {
     flex-direction: column;
     height: auto;
-    max-height: 95vh;
+    max-height: 98vh;
     max-width: 500px;
     overflow-y: auto;
   }
-  .login-showcase { display: none; }
+  .login-showcase {
+    display: flex;
+    width: 100%;
+    min-height: 220px;
+    max-height: 260px;
+    padding: 16px 12px 8px;
+  }
+  .login-showcase__inner {
+    padding: 0;
+    gap: 8px;
+  }
+  .login-channels {
+    width: 120px;
+    height: 120px;
+  }
+  .login-channels__center {
+    width: 40px;
+    height: 40px;
+  }
+  .login-channels__center svg { width: 18px; height: 18px; }
+  .login-channels__center span { font-size: 0.45rem; }
+  .login-channel {
+    width: 36px;
+    height: 36px;
+    --orbit-radius: 52px;
+  }
+  .login-channel svg { width: 14px; height: 14px; }
+  .login-channel span { display: none; }
+  .login-funnel { margin-top: -4px; }
+  .login-funnel__stages { padding: 0 20px; }
+  .login-funnel__stage { padding: 5px 0; }
+  .login-funnel__label { font-size: 0.6rem; }
+  .login-showcase__footer { display: none; }
   .login-form-side { width: 100%; }
-  .login-card__header { padding: 28px 24px 20px; }
-  .login-card__form { padding: 20px 24px 24px; gap: 16px; }
-  .login-card__logo { width: 110px; }
-  .login-card__crm-text { font-size: 1.6rem; letter-spacing: 4px; }
+  .login-card__header { padding: 20px 24px 14px; }
+  .login-card__form { padding: 14px 24px 20px; gap: 14px; }
+  .login-card__logo { width: 100px; }
+  .login-card__crm-text { font-size: 1.4rem; letter-spacing: 3px; }
 
   /* Toast */
   .toast-container {
@@ -4057,23 +4089,41 @@ body {
     font-size: 0.75rem;
   }
 
-  /* Login - small mobile */
+  /* Login - small mobile: funnel on top */
   .login-split {
     max-width: 100%;
     margin: var(--space-sm);
     border-radius: 16px;
   }
-  .login-showcase { display: none; }
-  .login-card__header { padding: 24px 16px 18px; }
-  .login-card__brand { gap: 8px; margin-bottom: 10px; }
-  .login-card__logo { width: 90px; }
-  .login-card__crm-text { font-size: 1.3rem; letter-spacing: 3px; }
-  .login-card__divider { height: 24px; }
-  .login-card__form { padding: 18px 14px 22px; gap: 12px; }
-  .login-card__field input { padding: 11px 14px; font-size: 0.8rem; }
+  .login-showcase {
+    display: flex;
+    width: 100%;
+    min-height: 180px;
+    max-height: 220px;
+    padding: 12px 10px 6px;
+  }
+  .login-showcase__inner { padding: 0; gap: 6px; }
+  .login-channels { width: 100px; height: 100px; }
+  .login-channels__center { width: 36px; height: 36px; }
+  .login-channels__center svg { width: 16px; height: 16px; }
+  .login-channels__center span { font-size: 0.4rem; }
+  .login-channel { width: 32px; height: 32px; --orbit-radius: 44px; }
+  .login-channel svg { width: 12px; height: 12px; }
+  .login-channel span { display: none; }
+  .login-funnel__stages { padding: 0 16px; }
+  .login-funnel__stage { padding: 4px 0; }
+  .login-funnel__label { font-size: 0.55rem; }
+  .login-showcase__footer { display: none; }
+  .login-card__header { padding: 16px 16px 12px; }
+  .login-card__brand { gap: 8px; margin-bottom: 8px; }
+  .login-card__logo { width: 80px; }
+  .login-card__crm-text { font-size: 1.2rem; letter-spacing: 3px; }
+  .login-card__divider { height: 20px; }
+  .login-card__form { padding: 12px 14px 18px; gap: 10px; }
+  .login-card__field input { padding: 10px 14px; font-size: 0.8rem; }
   .login-card__field label { font-size: 0.68rem; }
-  .login-card__btn { padding: 11px; font-size: 0.8rem; }
-  .login-card__hint { font-size: 0.58rem; }
+  .login-card__btn { padding: 10px; font-size: 0.8rem; }
+  .login-card__hint { font-size: 0.55rem; }
   .login-card__error { font-size: 0.68rem; }
 
   /* Toast */
@@ -9254,11 +9304,12 @@ html {
     top: 0;
     left: -280px;
     width: 260px;
-    height: 100vh;
+    height: 100vh; /* fallback */
+    height: 100dvh; /* dynamic viewport height — accounts for browser chrome */
     background: linear-gradient(180deg, #1e1b4b 0%, #0f0a2e 100%);
     flex-direction: column;
     align-items: stretch;
-    padding: 70px 0 24px;
+    padding: 70px 0 max(32px, env(safe-area-inset-bottom, 32px));
     gap: 0;
     z-index: 1001;
     overflow-y: auto;
@@ -9325,6 +9376,7 @@ html {
     margin-top: auto;
     padding: 16px 0 0;
     border-top: 1px solid rgba(129, 140, 248, 0.12);
+    flex-shrink: 0;
   }
 
   .nav-bar__right--in-drawer .header__live-badge {
@@ -9350,16 +9402,17 @@ html {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 14px 24px;
-    font-size: 0.85rem;
+    padding: 16px 24px;
+    font-size: 0.9rem;
     font-weight: 600;
     border: none;
     border-radius: 0;
-    background: none;
+    background: rgba(239, 68, 68, 0.08);
     color: #fca5a5;
     width: 100%;
     justify-content: flex-start;
     transition: background 0.2s ease;
+    flex-shrink: 0;
   }
 
   .nav-bar__right--in-drawer .header__logout-btn:hover {
