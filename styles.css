@@ -3498,10 +3498,7 @@ body {
   }
   .login-channel svg { width: 14px; height: 14px; }
   .login-channel span { display: none; }
-  .login-funnel { margin-top: -4px; }
-  .login-funnel__stages { padding: 0 20px; }
-  .login-funnel__stage { padding: 5px 0; }
-  .login-funnel__label { font-size: 0.6rem; }
+  .login-funnel { display: none; }
   .login-showcase__footer { display: none; }
   .login-form-side { width: 100%; }
   .login-card__header { padding: 20px 24px 14px; }
@@ -4110,9 +4107,7 @@ body {
   .login-channel { width: 32px; height: 32px; --orbit-radius: 44px; }
   .login-channel svg { width: 12px; height: 12px; }
   .login-channel span { display: none; }
-  .login-funnel__stages { padding: 0 16px; }
-  .login-funnel__stage { padding: 4px 0; }
-  .login-funnel__label { font-size: 0.55rem; }
+  .login-funnel { display: none; }
   .login-showcase__footer { display: none; }
   .login-card__header { padding: 16px 16px 12px; }
   .login-card__brand { gap: 8px; margin-bottom: 8px; }
