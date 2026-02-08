@@ -2,35 +2,70 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sales Lead Dashboard</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5">
+  <title>LinkedIn Leads Dashboard | Koenig Solutions</title>
+  <link rel="stylesheet" href="styles.css?v=29">
 </head>
 <body>
 
-  <!-- Header -->
-  <header class="header">
-    <div class="header__title">
-      <svg class="header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/>
-        <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
-        <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>
-      </svg>
-      <h1>Sales Lead Dashboard</h1>
+  <!-- Sticky Top Bar -->
+  <div class="sticky-top">
+  <nav class="nav-bar" id="navTabs">
+    <div class="nav-bar__left">
+      <svg class="nav-bar__logo" id="brandLogo" title="Koenig Solutions — Click to refresh" viewBox="0 0 129 45" xmlns="http://www.w3.org/2000/svg"><path d="M92.975 22.865v-.591L92.951.905c0-.566.169-.689.676-.665a16.36 16.36 0 0 0 2.197 0c.434-.025.555.148.507.542-.024.369 0 .739 0 1.083v26.072c0 .492-.121.665-.604.64-.821-.049-1.642-.025-2.463 0-.386.025-.604-.123-.845-.443l-9.512-12.901-6.808-9.208c-.073-.098-.145-.197-.242-.295-.169.148-.097.345-.097.517v21.714c0 .542-.145.665-.652.64-.773-.049-1.545-.025-2.294 0-.41.025-.507-.099-.507-.517v-9.872V.88c0-.443.072-.64.579-.615.869.049 1.738.025 2.632 0 .29 0 .483.098.676.345l15.5 20.779 1.159 1.551c.048-.025.072-.049.121-.074z" fill="#fff"/><path d="M19.435 14.421c0-2.61.314-5.17 1.376-7.607 1.449-3.25 3.935-5.219 7.267-6.106 3.525-.936 7.074-.96 10.575.025 3.815 1.059 6.374 3.57 7.581 7.435.917 3.004 1.038 6.056.7 9.158-.241 2.142-.773 4.161-1.859 6.007-1.473 2.487-3.67 4.013-6.398 4.752-3.935 1.034-7.871 1.034-11.734-.345-3.573-1.28-5.746-3.89-6.76-7.558-.169-.616-.314-1.256-.435-1.92-.266-1.256-.338-2.56-.314-3.841zM40.44 5.41c-.024-.074-.072-.123-.145-.123-.024 0-.048-.025-.072-.049 0-.123-.097-.172-.193-.197-.604-.369-1.159-.837-1.835-1.108-2.776-1.157-5.625-1.182-8.498-.468-2.897.739-4.853 2.634-5.746 5.539-1.111 3.57-1.086 7.214.024 10.783.821 2.634 2.559 4.481 5.167 5.392 2.028.689 4.104.763 6.181.492 3.622-.492 6.205-2.413 7.195-6.056 1.183-4.382 1.207-8.765-1.038-12.901.024-.345-.29-.566-.338-.862-.097-.394-.338-.394-.628-.369l-.072-.074z" fill="#0694d1"/><path d="M50.605 14.372V.831c0-.443.072-.615.579-.615h17.069c.434 0 .603.098.555.566-.048.64-.024 1.305 0 1.97.024.369-.097.468-.459.443-2.1-.025-4.201 0-6.301 0h-7.34c-.41 0-.555.098-.531.542v8.445c0 .418.097.517.507.517l11.178-.025c.435 0 .579.098.555.566-.048.64-.048 1.305 0 1.97.024.418-.121.517-.507.492-3.718-.025-7.412 0-11.13-.025-.507 0-.604.148-.604.64v8.666c0 .492.145.591.604.591l13.424-.025c.459 0 .676.074.628.615-.048.64-.024 1.28 0 1.896.024.394-.121.492-.483.468-2.68-.025-5.36 0-8.015 0h-9.199c-.41 0-.507-.098-.507-.517l-.024-13.639z" fill="#fff"/><path d="M128.949 21.61v5.466c0 .271-.024.443-.314.517-4.828 1.6-9.681 1.674-14.461-.123-3.622-1.354-5.843-4.111-6.833-7.878-.917-3.521-.99-7.09-.096-10.611 1.086-4.333 3.838-7.041 8.039-8.174 4.443-1.206 8.885-.96 13.303.295.314.098.362.246.362.542a33.35 33.35 0 0 0 0 2.191c.024.443-.048.566-.507.394-2.414-.886-4.925-1.256-7.508-1.182-1.521.049-3.018.246-4.467.714-3.018 1.009-4.973 3.077-5.746 6.204-.772 3.028-.7 6.106.193 9.109 1.038 3.545 3.453 5.638 6.954 6.401 2.341.517 4.683.443 7.001 0 .362-.074.507-.222.507-.64l-.024-8.568c0-.443.121-.542.531-.542a46.94 46.94 0 0 0 2.632 0c.362 0 .434.123.434.468v5.416z" fill="#fff"/><path d="M21.777 28.577h-4.322c-.29 0-.41-.246-.604-.419l-9.561-9.749-2.583-2.61c-.241-.246-.314-.517-.362-.862-.169-1.157.338-1.92 1.135-2.708L16.973.56c.145-.148.29-.295.531-.295h4.273c-.145.369-.459.591-.7.837L8.378 14.027c-.314.32-.314.492 0 .813l12.844 13.073.579.542c.024.025 0 .074-.024.123z" fill="#0893d1"/><path d="M0 14.446V.806C0 .339.121.215.555.24h2.559c.41-.025.507.098.507.517V15.8v12.211c0 .468-.121.591-.555.566a44.38 44.38 0 0 0-2.559 0c-.41.025-.507-.123-.507-.517V14.446z" fill="#fff"/><path d="M103.477 14.47v13.59c0 .419-.096.566-.531.542-.869-.025-1.738-.025-2.631 0-.314 0-.483-.049-.459-.443V.732c0-.345.072-.468.434-.468a48.63 48.63 0 0 0 2.68 0c.411-.025.507.123.507.517V14.47z" fill="#fff"/><path d="M105.482 39.287l-.7 2.24a8.47 8.47 0 0 0-.242.837c-.072.296-.193.443-.531.443-.386 0-.435-.222-.507-.492l-1.135-3.865c-.048-.123-.265-.394.049-.419.217-.025.579-.197.676.271l.724 2.684c.072.246.096.492.29.788l.748-2.413.266-.935c.072-.246.169-.394.458-.394.314 0 .387.148.459.394l.942 3.521.676-2.487c.096-.345.217-.689.265-1.059.048-.345.266-.369.531-.369.242 0 .314.074.218.32l-1.232 4.161c-.096.345-.314.271-.531.296-.265.025-.386-.099-.434-.345l-.894-3.176h-.096z" fill="#fff"/><path d="M128.176 42.093c-.628.739-1.328.985-2.197.714-.024 0-.024 0-.048-.025-1.087-.369-1.594-1.846-1.135-3.324.362-1.182 1.376-1.797 2.487-1.502.362.098.627.295.941.689v-2.536c0-.295.073-.418.387-.418.338 0 .362.148.362.418v6.056c0 .246.169.591-.338.615-.58.049-.387-.345-.459-.689zm.024-1.748c0-.172.024-.369 0-.542-.048-.615-.483-1.108-1.038-1.231a1.37 1.37 0 0 0-1.497.689c-.338.714-.386 1.453-.048 2.216a1.15 1.15 0 0 0 1.062.763c.531.025.942-.148 1.231-.591.266-.394.338-.837.29-1.305z" fill="#fff"/><path d="M71.054 42.142v2.363c0 .271.024.468-.362.492-.434.025-.386-.222-.386-.517v-5.933c0-.271-.097-.542.362-.542.435 0 .41.221.386.517a1.29 1.29 0 0 0 .024.246c.338-.394.676-.714 1.135-.812 1.038-.222 1.956.296 2.245 1.33.193.689.169 1.403-.024 2.093-.483 1.699-2.463 1.97-3.38.763zm0-1.723v.443c.024.739.483 1.305 1.111 1.379.676.098 1.231-.271 1.497-.96.193-.566.241-1.133.072-1.723-.145-.542-.459-.911-1.014-1.009-.58-.099-1.038.099-1.4.591-.266.443-.29.886-.266 1.28z" fill="#fff"/><path d="M112.266 39.065c-.169-.542-.024-.862.507-.985.338-.098.7-.172 1.038-.172 1.038.025 1.593.542 1.642 1.6l.024 2.88c0 .32-.097.394-.386.394-.314 0-.411-.123-.363-.419v-.172c-.217 0-.265.222-.386.32a1.79 1.79 0 0 1-1.907.172c-.435-.246-.7-.812-.652-1.354.072-.714.459-1.157 1.231-1.329.459-.099.918-.172 1.376-.222.338-.049.387-.172.314-.492-.12-.542-.434-.763-.941-.763-.58.025-1.038.271-1.497.542zm1.038 3.201c.942 0 1.569-.812 1.424-1.65-.024-.172-.096-.221-.241-.197l-1.304.222c-.507.123-.7.468-.603.985.072.468.434.616.724.64z" fill="#fff"/><path d="M66.298 41.822c.193.591-.121.812-.579.935-1.207.369-2.318.049-2.825-.886-.603-1.133-.338-2.782.58-3.545.652-.517 1.642-.591 2.318-.148.604.394 1.038 1.477.869 2.216-.048.246-.217.197-.362.197h-2.511c-.434-.025-.459.148-.362.492.217.886.942 1.305 1.907 1.108.338-.049.652-.246.966-.369zm-1.69-1.871h.966c.29.025.386-.074.314-.369-.145-.615-.507-.985-1.062-1.034-.604-.025-1.159.394-1.352 1.009-.097.295-.024.419.29.394.29-.025.555 0 .845 0zm23.876.468c0-1.773 1.304-2.831 2.97-2.437 1.183.271 1.835 1.477 1.593 2.905-.217 1.354-1.207 2.142-2.535 2.019-1.255-.123-2.028-1.059-2.028-2.487zm.773.025c0 .32.072.64.193.96.266.591.821.886 1.521.837a1.34 1.34 0 0 0 1.231-1.034c.145-.542.169-1.083 0-1.6-.193-.689-.724-1.059-1.424-1.059-.942.025-1.545.763-1.521 1.896z" fill="#fff"/><path d="M53.478 38.868c-.459-.197-.869-.369-1.328-.295-.362.049-.676.172-.748.591-.072.394.193.591.507.739l1.111.517c.459.246.724.64.7 1.182-.048.542-.338.911-.821 1.108-.652.271-1.328.271-1.98.049-.483-.148-.217-.517-.314-.862.507.172.966.419 1.473.369.362-.049.724-.074.845-.517.121-.468-.217-.689-.555-.862l-1.014-.468c-.459-.246-.724-.615-.7-1.182a1.18 1.18 0 0 1 .748-1.083c.579-.295 1.207-.295 1.835-.123.29.099.29.099.241.837z" fill="#fff"/><path d="M83.68 40.715V39.09c0-.295-.073-.443-.386-.418-.242.025-.459.049-.459-.345 0-.345.217-.345.434-.295.338.049.411-.123.411-.443-.024-.295-.024-.616.072-.911.217-.689.869-1.108 1.569-1.034.314.025.435.148.41.492-.024.394-.241.197-.41.172-.507-.025-.797.222-.869.739-.024.172 0 .32-.024.492-.072.418.097.566.507.492.097-.025.169 0 .266 0 .266-.025.314.098.338.345 0 .246-.097.296-.314.296-.772.049-.772.049-.772.862v2.831c0 .295-.048.419-.386.419-.314 0-.386-.099-.386-.394v-1.674z" fill="#fff"/><path d="M59.465 42.192c.169.517-.097.689-.531.714-.821.049-1.328-.394-1.352-1.256V39.09c0-.32-.072-.492-.41-.443-.242.025-.41.025-.41-.32 0-.32.169-.369.41-.32.338.049.459-.099.41-.419-.024-.172 0-.32 0-.492 0-.418.338-.369.579-.418.314-.049.145.246.169.394.024.074 0 .148 0 .222 0 .714 0 .714.7.714.241 0 .507-.074.483.369-.024.418-.29.271-.483.295-.7.025-.7.025-.7.739v1.797c0 .96.217 1.133 1.135.985z" fill="#fff"/><path d="M120.185 38.745c.386-.591.845-.96 1.473-.739.29.098.096.468.121.739-.99-.197-1.521.197-1.618 1.206-.072.812-.048 1.625-.048 2.437 0 .271-.024.443-.362.443s-.411-.099-.411-.443v-3.865c0-.271-.024-.492.362-.492.411-.025.435.197.411.492 0 .025.024.074.072.221z" fill="#fff"/><path d="M97.538 38.893c.241-.443.459-.739.797-.886.676-.271.917-.049.821.689-.99-.172-1.545.246-1.618 1.305-.048.788-.024 1.551-.024 2.339 0 .271-.024.443-.362.419-.338 0-.41-.123-.41-.443v-3.816c0-.32-.024-.542.41-.542.483 0 .314.32.338.566.024.098.024.148.048.369z" fill="#fff"/><g fill="#0893d1"><path d="M41.503 6.715l-.99-1.231c.29-.025.531-.049.628.369.097.295.386.517.362.862zm-1.256-1.477c-.097-.025-.169-.074-.193-.197.097.025.169.074.193.197z"/><path d="M40.44 5.41c-.048-.049-.097-.098-.145-.123.073 0 .121.049.145.123z"/></g></svg>
+      <button class="nav-tab nav-tab--dashboard active" data-view="dashboard">
+        <svg class="nav-tab__linkedin-logo" viewBox="0 0 72 72" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+          <rect width="72" height="72" rx="8" fill="#0A66C2"/>
+          <path d="M20.1 29.6h6.2v20H20.1zM23.2 17.4a3.6 3.6 0 1 1 0 7.2 3.6 3.6 0 0 1 0-7.2M30.5 29.6h5.9v2.7h.1c.8-1.6 2.9-3.2 5.9-3.2 6.3 0 7.5 4.1 7.5 9.5v11h-6.2V39.9c0-2.3 0-5.3-3.2-5.3s-3.7 2.5-3.7 5.1v9.9h-6.2v-20z" fill="#fff"/>
+        </svg>
+        Dashboard
+      </button>
+      <button class="nav-tab nav-tab--whatsapp" data-view="whatsapp">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp Marketing
+      </button>
+      <button class="nav-tab nav-tab--email" data-view="emailMarketing">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email Marketing
+      </button>
     </div>
-    <button class="btn btn--primary" id="btnNewLead">+ New Lead</button>
-  </header>
+    <div class="nav-bar__right">
+      <span class="header__live-badge" id="headerLiveBadge">
+        <span class="header__live-dot"></span>
+        Live
+      </span>
+      <span class="header__last-sync" id="headerLastSync">Last synced: just now</span>
+      <span class="header__user-info" id="headerUserInfo"></span>
+      <button class="header__logout-btn" id="btnLogout" title="Sign out">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Logout
+      </button>
+    </div>
+  </nav>
+  </div>
 
   <!-- Main Content -->
-  <main class="main">
+  <main class="main" id="dashboardView">
 
     <!-- Summary Cards -->
     <section class="summary-cards" id="summaryCards">
-      <div class="card" data-type="total">
+      <div class="card card--total-wide" data-type="total">
         <div class="card__accent card__accent--total"></div>
         <div class="card__body">
           <span class="card__metric" id="metricTotal">0</span>
           <span class="card__label">Total Leads</span>
+          <div class="card__conn-row">
+            <span class="card__conn-item card__conn-item--connected">
+              <span class="card__conn-count" id="metricConnected">0</span>
+              <span class="card__conn-label">Connected</span>
+              <span class="card__conn-pct" id="metricConnectedPct">0%</span>
+            </span>
+            <span class="card__conn-item card__conn-item--notconnected">
+              <span class="card__conn-count" id="metricNotConnected">0</span>
+              <span class="card__conn-label">Not Connected</span>
+              <span class="card__conn-pct" id="metricNotConnectedPct">0%</span>
+            </span>
+          </div>
         </div>
       </div>
       <div class="card" data-type="hot">
@@ -67,58 +102,120 @@
       </div>
     </section>
 
-    <!-- Lead Status Overview Chart -->
+    <!-- Lead Status Overview -->
     <section class="pipeline" id="pipeline">
       <h2 class="pipeline__title">Lead Status Overview</h2>
-      <div class="chart-container">
+      <div class="chart-container" id="salesFunnel">
         <div class="chart-canvas-wrap">
-          <canvas id="statusChart" width="240" height="240"></canvas>
-          <div class="chart-center" id="chartCenter">
+          <canvas id="statusChart" width="260" height="260"></canvas>
+          <div class="chart-center">
             <span class="chart-center__count" id="chartCenterCount">0</span>
             <span class="chart-center__label">Total Leads</span>
           </div>
         </div>
         <div class="chart-legend" id="chartLegend">
-          <div class="chart-legend__item" data-stage="Hot">
-            <span class="chart-legend__color chart-legend__color--hot"></span>
-            <span class="chart-legend__name">Hot</span>
-            <span class="chart-legend__count" id="legendHot">0</span>
-            <span class="chart-legend__pct" id="legendHotPct">0%</span>
-            <div class="chart-legend__bar"><div class="chart-legend__bar-fill chart-legend__bar-fill--hot" id="legendBarHot"></div></div>
+          <div class="legend-row" data-stage="Hot">
+            <span class="legend-row__dot legend-row__dot--hot"></span>
+            <span class="legend-row__name">HOT</span>
+            <span class="legend-row__count" id="legendHot">0</span>
+            <span class="legend-row__pct" id="legendHotPct">0%</span>
+            <div class="legend-row__track">
+              <div class="legend-row__fill legend-row__fill--hot" id="legendBarHot"></div>
+            </div>
           </div>
-          <div class="chart-legend__item" data-stage="Warm">
-            <span class="chart-legend__color chart-legend__color--warm"></span>
-            <span class="chart-legend__name">Warm</span>
-            <span class="chart-legend__count" id="legendWarm">0</span>
-            <span class="chart-legend__pct" id="legendWarmPct">0%</span>
-            <div class="chart-legend__bar"><div class="chart-legend__bar-fill chart-legend__bar-fill--warm" id="legendBarWarm"></div></div>
+          <div class="legend-row" data-stage="Warm">
+            <span class="legend-row__dot legend-row__dot--warm"></span>
+            <span class="legend-row__name">WARM</span>
+            <span class="legend-row__count" id="legendWarm">0</span>
+            <span class="legend-row__pct" id="legendWarmPct">0%</span>
+            <div class="legend-row__track">
+              <div class="legend-row__fill legend-row__fill--warm" id="legendBarWarm"></div>
+            </div>
           </div>
-          <div class="chart-legend__item" data-stage="Cold">
-            <span class="chart-legend__color chart-legend__color--cold"></span>
-            <span class="chart-legend__name">Cold</span>
-            <span class="chart-legend__count" id="legendCold">0</span>
-            <span class="chart-legend__pct" id="legendColdPct">0%</span>
-            <div class="chart-legend__bar"><div class="chart-legend__bar-fill chart-legend__bar-fill--cold" id="legendBarCold"></div></div>
+          <div class="legend-row" data-stage="Cold">
+            <span class="legend-row__dot legend-row__dot--cold"></span>
+            <span class="legend-row__name">COLD</span>
+            <span class="legend-row__count" id="legendCold">0</span>
+            <span class="legend-row__pct" id="legendColdPct">0%</span>
+            <div class="legend-row__track">
+              <div class="legend-row__fill legend-row__fill--cold" id="legendBarCold"></div>
+            </div>
           </div>
-          <div class="chart-legend__item" data-stage="Dead">
-            <span class="chart-legend__color chart-legend__color--dead"></span>
-            <span class="chart-legend__name">Dead</span>
-            <span class="chart-legend__count" id="legendDead">0</span>
-            <span class="chart-legend__pct" id="legendDeadPct">0%</span>
-            <div class="chart-legend__bar"><div class="chart-legend__bar-fill chart-legend__bar-fill--dead" id="legendBarDead"></div></div>
+          <div class="legend-row" data-stage="Dead">
+            <span class="legend-row__dot legend-row__dot--dead"></span>
+            <span class="legend-row__name">DEAD</span>
+            <span class="legend-row__count" id="legendDead">0</span>
+            <span class="legend-row__pct" id="legendDeadPct">0%</span>
+            <div class="legend-row__track">
+              <div class="legend-row__fill legend-row__fill--dead" id="legendBarDead"></div>
+            </div>
           </div>
         </div>
       </div>
     </section>
+
+    <!-- Analytics Grid - 3 Cards -->
+    <section class="analytics-grid" id="analyticsGrid">
+      <!-- Top CSMs Leaderboard -->
+      <div class="analytics-card">
+        <h3 class="analytics-card__title">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Top CSM Assignments
+        </h3>
+        <div class="csm-leaderboard" id="csmLeaderboard"></div>
+      </div>
+
+      <!-- Disposition Breakdown -->
+      <div class="analytics-card">
+        <h3 class="analytics-card__title">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Disposition Breakdown
+        </h3>
+        <div class="disposition-bars" id="dispositionBars"></div>
+      </div>
+
+      <!-- Combined Insights Card with internal tab slider -->
+      <div class="analytics-card analytics-card--tabbed" id="insightsCard">
+        <div class="insights-tabs" id="insightsTabs">
+          <button class="insights-tab active" data-tab="companySize">Size</button>
+          <button class="insights-tab" data-tab="seniority">Seniority</button>
+          <button class="insights-tab" data-tab="industry">Industry</button>
+          <button class="insights-tab" data-tab="location">Location</button>
+          <button class="insights-tab" data-tab="jobFunction">Function</button>
+          <button class="insights-tab" data-tab="companies">Company</button>
+        </div>
+        <div class="insights-panels">
+          <div class="insights-panel active" id="panel-companySize">
+            <div class="company-size-list" id="companySizeList"></div>
+          </div>
+          <div class="insights-panel" id="panel-seniority">
+            <div class="seniority-list" id="seniorityList"></div>
+          </div>
+          <div class="insights-panel" id="panel-industry">
+            <div class="industry-list" id="industryList"></div>
+          </div>
+          <div class="insights-panel" id="panel-location">
+            <div class="location-list" id="locationList"></div>
+          </div>
+          <div class="insights-panel" id="panel-jobFunction">
+            <div class="job-function-list" id="jobFunctionList"></div>
+          </div>
+          <div class="insights-panel" id="panel-companies">
+            <div class="company-list" id="companyList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
 
     <!-- Filters Toolbar -->
     <section class="toolbar">
       <div class="toolbar__search">
         <svg class="toolbar__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/>
-          <path d="m21 21-4.3-4.3"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        <input type="text" id="searchInput" class="toolbar__input" placeholder="Search by name, email, company, assignee, or remark...">
+        <input type="text" id="searchInput" class="toolbar__input" placeholder="Search leads by name, email, company, remark...">
       </div>
       <div class="toolbar__filters">
         <select id="filterLeadTemp" class="toolbar__select">
@@ -132,50 +229,575 @@
           <option value="All">All Campaigns</option>
         </select>
         <div class="toolbar__date-filter">
-          <label class="toolbar__date-label" for="filterDateFrom">From</label>
-          <input type="date" id="filterDateFrom" class="toolbar__date-input">
-          <label class="toolbar__date-label" for="filterDateTo">To</label>
-          <input type="date" id="filterDateTo" class="toolbar__date-input">
-          <button class="toolbar__date-clear" id="clearDateFilter" title="Clear date filter">&times;</button>
+          <select id="filterDatePreset" class="toolbar__select toolbar__select--date">
+            <option value="all">All Time</option>
+            <option value="today">Today</option>
+            <option value="yesterday">Yesterday</option>
+            <option value="last7">Last 7 Days</option>
+            <option value="last30">Last 30 Days</option>
+            <option value="lastMonth">Last Month</option>
+            <option value="custom">Custom Range</option>
+          </select>
+          <div class="toolbar__date-custom" id="dateCustomRange" style="display:none">
+            <input type="date" id="filterDateFrom" class="toolbar__date-input" title="From date">
+            <span class="toolbar__date-sep">–</span>
+            <input type="date" id="filterDateTo" class="toolbar__date-input" title="To date">
+          </div>
         </div>
+        <button class="btn btn--secondary btn--icon" id="btnExportCSV" title="Export to CSV">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Export CSV
+        </button>
       </div>
     </section>
 
     <!-- Leads Table -->
     <section class="table-container">
-      <table class="table" id="leadsTable">
-        <thead>
-          <tr>
-            <th style="width:120px">Name</th>
-            <th style="width:200px">Contact</th>
-            <th style="width:140px">Company</th>
-            <th style="width:140px" class="col-hide-tablet">Job Title</th>
-            <th style="width:200px">Campaign</th>
-            <th style="width:120px" class="col-hide-tablet">Location</th>
-            <th style="width:160px">Assigned To</th>
-            <th style="width:220px">Last Remark</th>
-            <th style="width:110px">Disposition</th>
-            <th style="width:130px">Sub-Disposition</th>
-            <th style="width:80px">Status</th>
-            <th style="width:80px" class="col-actions">Actions</th>
-          </tr>
-        </thead>
-        <tbody id="leadsTableBody">
-        </tbody>
-      </table>
+      <!-- Rainbow top line (fixed) -->
+      <div class="table-rainbow"></div>
+      <!-- Scrollable table area -->
+      <div class="table-scroll" id="tableScroll">
+        <table class="table" id="leadsTable">
+          <thead>
+            <tr>
+              <th style="width:120px" class="col-sticky col-sticky-0">Name</th>
+              <th style="width:200px" class="col-sticky col-sticky-1">Contact</th>
+              <th style="width:140px">Company</th>
+              <th style="width:140px" class="col-hide-tablet">Job Title</th>
+              <th style="width:120px" class="col-hide-tablet">Seniority</th>
+              <th style="width:200px">Campaign</th>
+              <th style="width:120px" class="col-hide-tablet">Location</th>
+              <th style="width:160px">CSM Assignments</th>
+              <th style="width:220px">Last Remark</th>
+              <th style="width:110px">Disposition</th>
+              <th style="width:130px">Sub-Disposition</th>
+              <th style="width:80px">Status</th>
+              <th style="width:90px" class="col-actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="leadsTableBody">
+          </tbody>
+        </table>
 
-      <!-- Empty State -->
-      <div class="empty-state" id="emptyState" style="display: none;">
-        <svg class="empty-state__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-          <circle cx="9" cy="7" r="4"/>
-          <line x1="19" y1="8" x2="19" y2="14"/>
-          <line x1="22" y1="11" x2="16" y2="11"/>
-        </svg>
-        <p class="empty-state__text" id="emptyStateText">No leads yet. Click "New Lead" to get started.</p>
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+          <svg class="empty-state__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <line x1="19" y1="8" x2="19" y2="14"/>
+            <line x1="22" y1="11" x2="16" y2="11"/>
+          </svg>
+          <p class="empty-state__text" id="emptyStateText">No leads yet. Click "New Lead" to get started.</p>
+        </div>
+      </div>
+
+      <!-- Table Footer / Pagination (fixed at bottom) -->
+      <div class="table-footer" id="tableFooter">
+        <span class="table-footer__count" id="rowCount">Showing 0 of 0 leads</span>
+        <div class="table-footer__pagination" id="pagination">
+          <button class="pagination__btn" id="btnPrevPage" disabled title="Previous page">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="pagination__info" id="pageInfo">Page 1 of 1</span>
+          <button class="pagination__btn" id="btnNextPage" disabled title="Next page">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <select class="pagination__size" id="pageSize">
+            <option value="25">25 / page</option>
+            <option value="50" selected>50 / page</option>
+            <option value="100">100 / page</option>
+            <option value="all">All</option>
+          </select>
+        </div>
       </div>
     </section>
   </main>
+
+  <!-- WhatsApp Marketing Section -->
+  <section class="whatsapp-section" id="whatsappView" style="display:none;">
+    <div class="wa-marketing-view" id="waMarketingView">
+
+      <!-- Auto-Acknowledge Settings Card -->
+      <div class="wam-card wam-card--primary">
+        <div class="wam-card__header wam-card__header--clickable" id="wamAutoAckHeader">
+          <div class="wam-card__icon wam-card__icon--green">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div style="flex:1;">
+            <h3>Real-Time Auto-Acknowledge Message</h3>
+            <p>Instantly send a WhatsApp message when a new lead is generated</p>
+          </div>
+          <div id="wamApiStatusBadge" class="wam-status-badge wam-status-badge--offline"><span class="wam-status-dot wam-status-dot--offline"></span> NOT CONFIGURED</div>
+          <input type="checkbox" id="wamAutoAckToggle" style="display:none;">
+          <label class="wam-toggle" id="wamAutoAckSwitch">
+            <span class="wam-toggle__slider"></span>
+          </label>
+          <span class="wam-expand-arrow" id="wamAutoAckArrow">▶</span>
+        </div>
+        <div class="wam-card__body" id="wamAutoAckBody" style="display:none;">
+          <div class="wam-form-row">
+            <div class="wam-form-group wam-form-group--full">
+              <label class="wam-label">Acknowledgement Message Template</label>
+              <textarea class="wam-textarea" id="wamAckTemplate" rows="4" placeholder="Hi {{name}}, thank you for your interest in Koenig Solutions! Our team will reach out to you shortly.">Hi {{name}}, thank you for your interest in Koenig Solutions! Our team will connect with you shortly regarding your inquiry.</textarea>
+              <div class="wam-template-vars">
+                <span class="wam-var-chip">{{name}}</span>
+                <span class="wam-var-chip">{{phone}}</span>
+                <span class="wam-var-chip">{{email}}</span>
+                <span class="wam-var-chip">{{company}}</span>
+                <span class="wam-var-chip">{{jobTitle}}</span>
+                <span class="wam-var-chip">{{location}}</span>
+                <span class="wam-var-chip">{{campaign}}</span>
+                <span class="wam-var-chip">{{source}}</span>
+                <span class="wam-var-chip">{{status}}</span>
+                <span class="wam-var-chip">{{function}}</span>
+                <span class="wam-var-chip">{{industry}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="wam-ack-status" id="wamAckStatus">
+            <div class="wam-ack-stat">
+              <span class="wam-ack-stat__value" id="wamAckSentToday">0</span>
+              <span class="wam-ack-stat__label">Sent Today</span>
+            </div>
+            <div class="wam-ack-stat">
+              <span class="wam-ack-stat__value" id="wamAckSentTotal">0</span>
+              <span class="wam-ack-stat__label">Total Sent</span>
+            </div>
+            <div class="wam-ack-stat">
+              <span class="wam-ack-stat__value" id="wamAckFailed">0</span>
+              <span class="wam-ack-stat__label">Failed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bulk Send from Dashboard Leads -->
+      <div class="wam-card">
+        <div class="wam-card__header wam-card__header--clickable" id="wamBulkSendHeader">
+          <div class="wam-card__icon wam-card__icon--green">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div style="flex:1;">
+            <h3>Send to Dashboard Leads</h3>
+            <p>Select leads from your dashboard and send WhatsApp messages</p>
+          </div>
+          <span class="wam-expand-arrow" id="wamBulkSendArrow">▶</span>
+        </div>
+        <div class="wam-card__body" id="wamBulkSendBody" style="display:none;">
+          <!-- Filters -->
+          <div class="wam-filters">
+            <div class="wam-form-group">
+              <label class="wam-label">Filter by Disposition</label>
+              <select class="wam-select" id="wamFilterStatus">
+                <option value="all">All Dispositions</option>
+                <option value="Prospect">Prospect</option>
+                <option value="Follow up">Follow up</option>
+                <option value="Converted">Converted</option>
+                <option value="Call Back">Call Back</option>
+                <option value="Other Agent Callback">Other Agent Callback</option>
+                <option value="Other Agent FollowUp">Other Agent FollowUp</option>
+                <option value="Next Batch">Next Batch</option>
+                <option value="Fallout">Fallout</option>
+                <option value="New Lead">New Lead</option>
+                <option value="Not interested">Not interested</option>
+                <option value="DNC">DNC</option>
+                <option value="Not Eligible">Not Eligible</option>
+                <option value="Wrong Number">Wrong Number</option>
+                <option value="Not Enquired">Not Enquired</option>
+                <option value="Remark Not Clear">Remark Not Clear</option>
+              </select>
+            </div>
+            <div class="wam-form-group">
+              <label class="wam-label">Filter by Status</label>
+              <select class="wam-select" id="wamFilterTemp">
+                <option value="all">All</option>
+                <option value="Hot">Hot</option>
+                <option value="Warm">Warm</option>
+                <option value="Cold">Cold</option>
+                <option value="Dead">Dead</option>
+              </select>
+            </div>
+            <div class="wam-form-group">
+              <label class="wam-label">Filter by CSM</label>
+              <select class="wam-select" id="wamFilterCSM">
+                <option value="all">All CSMs</option>
+              </select>
+            </div>
+            <div class="wam-form-group wam-form-group--action">
+              <button class="btn btn--primary btn--sm" id="wamLoadLeads">Load Leads</button>
+            </div>
+          </div>
+
+          <!-- Leads Table -->
+          <div class="wam-leads-table-wrap">
+            <table class="wam-leads-table" id="wamLeadsTable">
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="wamSelectAll"></th>
+                  <th>Name</th>
+                  <th>Contact</th>
+                  <th>Company</th>
+                  <th>Job Title</th>
+                  <th>Seniority</th>
+                  <th>Campaign</th>
+                  <th>Location</th>
+                  <th>CSM Assignments</th>
+                  <th>Last Remark</th>
+                  <th>Disposition</th>
+                  <th>Sub-Disposition</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="wamLeadsBody">
+                <tr><td colspan="13" class="wam-empty">Click "Load Leads" to see dashboard leads with phone numbers</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="wam-leads-summary" id="wamLeadsSummary">
+            <span id="wamSelectedCount">0 leads selected</span>
+          </div>
+
+          <!-- Message Composer -->
+          <div class="wam-composer">
+            <div class="wam-form-group wam-form-group--full">
+              <label class="wam-label">Message</label>
+              <textarea class="wam-textarea" id="wamBulkMessage" rows="4" placeholder="Type your message here... Use {{name}}, {{company}} for personalization"></textarea>
+              <div class="wam-template-vars">
+                <span class="wam-var-chip">{{name}}</span>
+                <span class="wam-var-chip">{{phone}}</span>
+                <span class="wam-var-chip">{{email}}</span>
+                <span class="wam-var-chip">{{company}}</span>
+                <span class="wam-var-chip">{{jobTitle}}</span>
+                <span class="wam-var-chip">{{location}}</span>
+                <span class="wam-var-chip">{{campaign}}</span>
+                <span class="wam-var-chip">{{source}}</span>
+                <span class="wam-var-chip">{{status}}</span>
+                <span class="wam-var-chip">{{function}}</span>
+                <span class="wam-var-chip">{{industry}}</span>
+              </div>
+            </div>
+            <div class="wam-composer__actions">
+              <button class="btn btn--primary wam-send-btn" id="wamSendBulk" disabled>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                Send WhatsApp Messages
+              </button>
+              <span class="wam-send-status" id="wamSendStatus"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Acknowledgements / Message History -->
+      <div class="wam-card">
+        <div class="wam-card__header wam-card__header--clickable" id="wamRecentHeader">
+          <div class="wam-card__icon wam-card__icon--green">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div style="flex:1;">
+            <h3>Recent Messages</h3>
+            <p>WhatsApp messages sent from the platform</p>
+          </div>
+          <span class="wam-expand-arrow" id="wamRecentArrow">▶</span>
+        </div>
+        <div class="wam-card__body" id="wamRecentBody" style="display:none;">
+          <div class="wam-recent-list" id="wamRecentList">
+            <div class="wam-empty">No messages sent yet.</div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /waMarketingView -->
+  </section>
+
+  <!-- Email Marketing Section -->
+  <section class="em-section" id="emailMarketingView" style="display:none;">
+    <div class="em-marketing-view" id="emMarketingView">
+
+      <!-- Card 1: Real-Time Auto-Acknowledge Email -->
+      <div class="emc-card emc-card--primary">
+        <div class="emc-card__header emc-card__header--clickable" id="emAutoAckHeader">
+          <div class="emc-card__icon emc-card__icon--teal">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div style="flex:1;">
+            <h3>Real-Time Auto-Acknowledge Email <span id="emLiveIndicator" class="emc-live-dot" style="display:none;">● LIVE</span></h3>
+            <p>Instantly send an acknowledgement email from the assigned CSM when a new lead is created</p>
+          </div>
+          <input type="checkbox" id="emAutoAckToggle" style="display:none;">
+          <label class="emc-toggle" id="emAutoAckSwitch">
+            <span class="emc-toggle__slider"></span>
+          </label>
+          <span class="emc-expand-arrow" id="emAutoAckArrow">▶</span>
+        </div>
+        <div class="emc-card__body" id="emAutoAckBody" style="display:none;">
+          <div class="emc-form-row">
+            <div class="emc-form-group emc-form-group--full">
+              <label class="emc-label">Email Subject Template</label>
+              <input type="text" class="emc-input" id="emAckSubject" value="Thank you for your interest, {{name}}!" placeholder="Email subject line...">
+            </div>
+          </div>
+          <div class="emc-form-row">
+            <div class="emc-form-group emc-form-group--full">
+              <label class="emc-label">Email Template</label>
+              <select class="emc-select" id="emAckTemplateSelect">
+                <option value="">Select a template...</option>
+              </select>
+            </div>
+          </div>
+          <div class="emc-form-row">
+            <div class="emc-form-group emc-form-group--full">
+              <label class="emc-label">Or write custom email body (HTML)</label>
+              <textarea class="emc-textarea" id="emAckTemplate" rows="5" placeholder="<p>Hi {{name}},</p><p>Thank you for your interest in Koenig Solutions...</p>"><p>Hi {{name}},</p><p>Thank you for your interest in Koenig Solutions! I'm {{csm_name}}, your dedicated point of contact. I'll be reaching out to you shortly regarding your inquiry.</p><p>Best regards,<br>{{csm_name}}<br>{{csm_email}}</p></textarea>
+              <div class="emc-template-vars">
+                <span class="emc-var-chip">{{name}}</span>
+                <span class="emc-var-chip">{{company}}</span>
+                <span class="emc-var-chip">{{email}}</span>
+                <span class="emc-var-chip">{{csm_name}}</span>
+                <span class="emc-var-chip">{{csm_email}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="emc-csm-info">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>Emails are sent <strong>FROM</strong> the CSM assigned to each lead. Each lead receives a personalized email from their own CSM.</span>
+          </div>
+          <div class="emc-ack-status" id="emAckStatus">
+            <div class="emc-ack-stat">
+              <span class="emc-ack-stat__value" id="emAckSentToday">0</span>
+              <span class="emc-ack-stat__label">Sent Today</span>
+            </div>
+            <div class="emc-ack-stat">
+              <span class="emc-ack-stat__value" id="emAckSentTotal">0</span>
+              <span class="emc-ack-stat__label">Total Sent</span>
+            </div>
+            <div class="emc-ack-stat">
+              <span class="emc-ack-stat__value" id="emAckOpened">0</span>
+              <span class="emc-ack-stat__label">Opened</span>
+            </div>
+            <div class="emc-ack-stat">
+              <span class="emc-ack-stat__value" id="emAckFailed">0</span>
+              <span class="emc-ack-stat__label">Failed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Send Emails to Dashboard Leads -->
+      <div class="emc-card">
+        <div class="emc-card__header emc-card__header--clickable" id="emBulkSendHeader">
+          <div class="emc-card__icon emc-card__icon--teal">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div style="flex:1;">
+            <h3>Send Emails to Dashboard Leads</h3>
+            <p>Select leads from your dashboard and send personalized emails from their assigned CSM</p>
+          </div>
+          <span class="emc-expand-arrow" id="emBulkSendArrow">▶</span>
+        </div>
+        <div class="emc-card__body" id="emBulkSendBody" style="display:none;">
+          <!-- Filters -->
+          <div class="emc-filters">
+            <div class="emc-form-group">
+              <label class="emc-label">Filter by Disposition</label>
+              <select class="emc-select" id="emFilterStatus">
+                <option value="all">All Dispositions</option>
+                <option value="Prospect">Prospect</option>
+                <option value="Follow up">Follow up</option>
+                <option value="Converted">Converted</option>
+                <option value="Call Back">Call Back</option>
+                <option value="Other Agent Callback">Other Agent Callback</option>
+                <option value="Other Agent FollowUp">Other Agent FollowUp</option>
+                <option value="Next Batch">Next Batch</option>
+                <option value="Fallout">Fallout</option>
+                <option value="New Lead">New Lead</option>
+                <option value="Not interested">Not interested</option>
+                <option value="DNC">DNC</option>
+                <option value="Not Eligible">Not Eligible</option>
+                <option value="Wrong Number">Wrong Number</option>
+                <option value="Not Enquired">Not Enquired</option>
+                <option value="Remark Not Clear">Remark Not Clear</option>
+              </select>
+            </div>
+            <div class="emc-form-group">
+              <label class="emc-label">Filter by Status</label>
+              <select class="emc-select" id="emFilterTemp">
+                <option value="all">All</option>
+                <option value="Hot">Hot</option>
+                <option value="Warm">Warm</option>
+                <option value="Cold">Cold</option>
+                <option value="Dead">Dead</option>
+              </select>
+            </div>
+            <div class="emc-form-group">
+              <label class="emc-label">Filter by CSM</label>
+              <select class="emc-select" id="emFilterCSM">
+                <option value="all">All CSMs</option>
+              </select>
+            </div>
+            <div class="emc-form-group emc-form-group--action">
+              <button class="btn btn--primary btn--sm" id="emLoadLeads">Load Leads</button>
+            </div>
+          </div>
+
+          <!-- Leads Table -->
+          <div class="emc-leads-table-wrap">
+            <table class="emc-leads-table" id="emLeadsTable">
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="emSelectAll"></th>
+                  <th>Name</th>
+                  <th>Contact</th>
+                  <th>Company</th>
+                  <th>Job Title</th>
+                  <th>Seniority</th>
+                  <th>Campaign</th>
+                  <th>Location</th>
+                  <th>CSM Assignment</th>
+                  <th>CSM Email (From)</th>
+                  <th>Last Remark</th>
+                  <th>Disposition</th>
+                  <th>Sub-Disposition</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="emLeadsBody">
+                <tr><td colspan="14" class="emc-empty">Click "Load Leads" to see dashboard leads with email addresses</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="emc-leads-summary" id="emLeadsSummary">
+            <span id="emSelectedCount">0 leads selected</span>
+          </div>
+
+          <!-- Email Composer -->
+          <div class="emc-composer">
+            <div class="emc-form-row">
+              <div class="emc-form-group emc-form-group--full">
+                <label class="emc-label">Email Template</label>
+                <select class="emc-select" id="emBulkTemplateSelect">
+                  <option value="">Select a template...</option>
+                </select>
+              </div>
+            </div>
+            <div class="emc-form-row">
+              <div class="emc-form-group emc-form-group--full">
+                <label class="emc-label">Email Subject</label>
+                <input type="text" class="emc-input" id="emBulkSubject" placeholder="Email subject... Use {{name}}, {{company}}, {{csm_name}} for personalization">
+              </div>
+            </div>
+            <div class="emc-form-row">
+              <div class="emc-form-group emc-form-group--full">
+                <label class="emc-label">Email Body (or leave blank to use template)</label>
+                <textarea class="emc-textarea" id="emBulkMessage" rows="4" placeholder="Write your email body here... Use {{name}}, {{company}}, {{csm_name}}, {{csm_email}} for personalization"></textarea>
+                <div class="emc-template-vars">
+                  <span class="emc-var-chip">{{name}}</span>
+                  <span class="emc-var-chip">{{company}}</span>
+                  <span class="emc-var-chip">{{email}}</span>
+                  <span class="emc-var-chip">{{csm_name}}</span>
+                  <span class="emc-var-chip">{{csm_email}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="emc-composer__actions">
+              <button class="emc-send-btn" id="emSendBulk" disabled>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                Send Emails from CSM Accounts
+              </button>
+              <span class="emc-send-status" id="emSendStatus"></span>
+            </div>
+          </div>
+
+          <!-- CSM Send Log (shows after sending) -->
+          <div class="emc-send-log" id="emCsmSendLogPanel" style="display:none;">
+            <h4 class="emc-send-log__title">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              Send Log — Emails sent from CSM accounts
+            </h4>
+            <div class="emc-send-log__body" id="emSendLogBody"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Recent Emails Sent -->
+      <div class="emc-card">
+        <div class="emc-card__header emc-card__header--clickable" id="emRecentHeader">
+          <div class="emc-card__icon emc-card__icon--teal">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div style="flex:1;">
+            <h3>Recent Emails</h3>
+            <p>Email acknowledgements and campaigns sent from the platform</p>
+          </div>
+          <span class="emc-expand-arrow" id="emRecentArrow">▶</span>
+        </div>
+        <div class="emc-card__body" id="emRecentBody" style="display:none;">
+          <div class="emc-recent-list" id="emRecentList">
+            <div class="emc-empty">No emails sent yet.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Email Analytics Summary -->
+      <div class="emc-card">
+        <div class="emc-card__header emc-card__header--clickable" id="emAnalyticsHeader">
+          <div class="emc-card__icon emc-card__icon--teal">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          <div style="flex:1;">
+            <h3>Email Analytics</h3>
+            <p>Open rates, click rates, and campaign performance</p>
+          </div>
+          <span class="emc-expand-arrow" id="emAnalyticsArrow">▶</span>
+        </div>
+        <div class="emc-card__body" id="emAnalyticsBody" style="display:none;">
+          <div class="emc-analytics-grid">
+            <div class="emc-analytics-stat">
+              <span class="emc-analytics-stat__value" id="emStatSent">0</span>
+              <span class="emc-analytics-stat__label">Total Sent</span>
+            </div>
+            <div class="emc-analytics-stat emc-analytics-stat--opened">
+              <span class="emc-analytics-stat__value" id="emStatOpened">0</span>
+              <span class="emc-analytics-stat__label">Opened</span>
+            </div>
+            <div class="emc-analytics-stat emc-analytics-stat--clicked">
+              <span class="emc-analytics-stat__value" id="emStatClicked">0</span>
+              <span class="emc-analytics-stat__label">Clicked</span>
+            </div>
+            <div class="emc-analytics-stat emc-analytics-stat--bounced">
+              <span class="emc-analytics-stat__value" id="emStatBounced">0</span>
+              <span class="emc-analytics-stat__label">Bounced</span>
+            </div>
+          </div>
+          <div class="emc-analytics-chart-wrap">
+            <canvas id="emAnalyticsChart" width="600" height="280"></canvas>
+          </div>
+          <div class="emc-leads-table-wrap" style="margin-top:16px;">
+            <table class="emc-leads-table" id="emAnalyticsTable">
+              <thead>
+                <tr>
+                  <th>Campaign</th>
+                  <th>Status</th>
+                  <th>Sent</th>
+                  <th>Opened</th>
+                  <th>Clicked</th>
+                  <th>Bounced</th>
+                  <th>Open Rate</th>
+                  <th>Click Rate</th>
+                </tr>
+              </thead>
+              <tbody id="emAnalyticsTableBody">
+                <tr><td colspan="8" class="emc-empty">No campaign data yet.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /emMarketingView -->
+  </section>
 
   <!-- Modal Backdrop -->
   <div class="modal-backdrop" id="modalBackdrop">
@@ -210,13 +832,56 @@
               <input type="text" id="fieldSource" class="form__input" value="LinkedIn" readonly style="background:var(--color-surface-elevated); cursor:default; opacity:0.7;">
             </div>
             <div class="form__group">
-              <label class="form__label" for="fieldAssignedTo">Assigned To</label>
+              <label class="form__label" for="fieldAssignedTo">CSM Assignment</label>
               <input type="text" id="fieldAssignedTo" class="form__input" placeholder="e.g. Bob Johnson">
             </div>
           </div>
-          <div class="form__group form__group--full">
-            <label class="form__label" for="fieldRemark">Remark</label>
-            <textarea id="fieldRemark" class="form__textarea" rows="3" placeholder="Add notes about this lead..."></textarea>
+
+          <!-- Derived Insights (read-only, shown in edit mode) -->
+          <div class="form__insights" id="formInsights" style="display:none;">
+            <div class="form__insights-title">Lead Insights</div>
+            <div class="form__insights-grid">
+              <div class="form__insight-field">
+                <span class="form__insight-label">Company</span>
+                <span class="form__insight-value" id="insightCompany">-</span>
+              </div>
+              <div class="form__insight-field">
+                <span class="form__insight-label">Company Size</span>
+                <span class="form__insight-value" id="insightCompanySize">-</span>
+              </div>
+              <div class="form__insight-field">
+                <span class="form__insight-label">Industry</span>
+                <span class="form__insight-value" id="insightIndustry">-</span>
+              </div>
+              <div class="form__insight-field">
+                <span class="form__insight-label">Location</span>
+                <span class="form__insight-value" id="insightLocation">-</span>
+              </div>
+              <div class="form__insight-field">
+                <span class="form__insight-label">Seniority</span>
+                <span class="form__insight-value" id="insightSeniority">-</span>
+              </div>
+              <div class="form__insight-field">
+                <span class="form__insight-label">Function</span>
+                <span class="form__insight-value" id="insightFunction">-</span>
+              </div>
+              <div class="form__insight-field">
+                <span class="form__insight-label">Secondary Email</span>
+                <span class="form__insight-value" id="insightSecondaryEmail">-</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="remark-input" id="remarkInputSection">
+            <div class="remark-input__header">
+              <svg class="remark-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"/>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+              </svg>
+              <label class="remark-input__label" for="fieldRemark">Sales Remark</label>
+              <span class="remark-input__hint">Auto-classifies disposition &amp; status</span>
+            </div>
+            <textarea id="fieldRemark" class="form__textarea remark-input__textarea" rows="3" placeholder="e.g. Interested in advanced module, will confirm by Friday..."></textarea>
           </div>
           <div class="form__auto-fields" id="autoClassification">
             <div class="form__auto-field">
@@ -240,6 +905,21 @@
           <div class="remark-timeline" id="remarkTimeline">
           </div>
         </div>
+
+        <!-- WhatsApp Chat (visible in edit mode for leads with phone) -->
+        <div class="wa-chat-section" id="waChatSection" style="display:none;">
+          <h3 class="wa-chat-section__title">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp Conversation
+          </h3>
+          <div class="wa-chat-messages" id="waChatMessages">
+            <div class="wa-empty-hint">No WhatsApp messages yet.</div>
+          </div>
+          <div class="wa-chat-input">
+            <input type="text" id="waChatInput" class="form__input" placeholder="Type a message...">
+            <button class="btn btn--primary btn--sm" id="btnWaSend">Send</button>
+          </div>
+        </div>
       </div>
       <div class="modal__footer">
         <button class="btn btn--secondary" id="btnCancel">Cancel</button>
@@ -248,12 +928,45 @@
     </div>
   </div>
 
+  <!-- Login Screen -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <div class="login-card__header">
+        <svg class="login-card__logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/>
+          <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
+          <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>
+        </svg>
+        <h2>Sales Lead Dashboard</h2>
+        <p class="login-card__subtitle">Sign in to access your leads</p>
+      </div>
+      <form class="login-card__form" id="loginForm">
+        <div class="login-card__field">
+          <label for="loginUsername">Username</label>
+          <input type="text" id="loginUsername" placeholder="Enter username or email" autocomplete="username" required>
+        </div>
+        <div class="login-card__field">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" required>
+        </div>
+        <span class="login-card__error" id="loginError"></span>
+        <button type="submit" class="login-card__btn">Sign In</button>
+        <p class="login-card__hint">Admin: admin / admin123 &nbsp;|&nbsp; CSMs: email or firstname / firstname123</p>
+      </form>
+    </div>
+  </div>
+
   <!-- Toast Container -->
   <div class="toast-container" id="toastContainer"></div>
 
-  <script src="leads-data.js"></script>
-  <script src="csm-data.js"></script>
-  <script src="campaign-data.js"></script>
-  <script src="app.js"></script>
+  <script src="leads-data.js?v=3"></script>
+  <script src="csm-data.js?v=4"></script>
+  <script src="campaign-data.js?v=3"></script>
+  <script src="app.js?v=20"></script>
+  <script src="js/whatsapp-chat.js?v=1"></script>
+  <script src="js/contact-import.js?v=1"></script>
+  <script src="js/wa-marketing.js?v=10"></script>
+  <script src="js/email-module.js?v=5"></script>
+  <script src="js/whatsapp-module.js?v=2"></script>
 </body>
 </html>

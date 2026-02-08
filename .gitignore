@@ -1,0 +1,11 @@
+node_modules/
+.env
+data/flows/*.json
+data/conversations/*.json
+data/leads.json
+data/campaigns/*.json
+data/contact-lists/*.json
+data/email-events/*.json
+data/templates/*.json
+yarn-error.log
+.DS_Store
