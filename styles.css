@@ -3482,21 +3482,29 @@ body {
     gap: 8px;
   }
   .login-channels {
+    width: 160px;
+    height: 160px;
+  }
+  .login-channels::after {
     width: 120px;
     height: 120px;
   }
   .login-channels__center {
-    width: 40px;
-    height: 40px;
+    width: 46px;
+    height: 46px;
   }
-  .login-channels__center svg { width: 18px; height: 18px; }
+  .login-channels__center svg { width: 20px; height: 20px; }
   .login-channels__center span { font-size: 0.45rem; }
   .login-channel {
-    width: 36px;
-    height: 36px;
-    --orbit-radius: 52px;
+    width: 38px;
+    height: 38px;
+    margin: -19px 0 0 -19px;
+    transform: rotate(var(--angle)) translateY(-60px) rotate(calc(-1 * var(--angle)));
   }
-  .login-channel svg { width: 14px; height: 14px; }
+  .login-channel:hover {
+    transform: rotate(var(--angle)) translateY(-60px) rotate(calc(-1 * var(--angle))) scale(1.1);
+  }
+  .login-channel svg { width: 16px; height: 16px; }
   .login-channel span { display: none; }
   .login-funnel { display: none; }
   .login-showcase__footer { display: none; }
@@ -4100,12 +4108,20 @@ body {
     padding: 12px 10px 6px;
   }
   .login-showcase__inner { padding: 0; gap: 6px; }
-  .login-channels { width: 100px; height: 100px; }
-  .login-channels__center { width: 36px; height: 36px; }
-  .login-channels__center svg { width: 16px; height: 16px; }
+  .login-channels { width: 140px; height: 140px; }
+  .login-channels::after { width: 105px; height: 105px; }
+  .login-channels__center { width: 40px; height: 40px; }
+  .login-channels__center svg { width: 18px; height: 18px; }
   .login-channels__center span { font-size: 0.4rem; }
-  .login-channel { width: 32px; height: 32px; --orbit-radius: 44px; }
-  .login-channel svg { width: 12px; height: 12px; }
+  .login-channel {
+    width: 34px; height: 34px;
+    margin: -17px 0 0 -17px;
+    transform: rotate(var(--angle)) translateY(-52px) rotate(calc(-1 * var(--angle)));
+  }
+  .login-channel:hover {
+    transform: rotate(var(--angle)) translateY(-52px) rotate(calc(-1 * var(--angle))) scale(1.1);
+  }
+  .login-channel svg { width: 14px; height: 14px; }
   .login-channel span { display: none; }
   .login-funnel { display: none; }
   .login-showcase__footer { display: none; }
