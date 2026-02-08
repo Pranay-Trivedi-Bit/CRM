@@ -31,18 +31,18 @@ var WAMarketing = (function () {
     fetch('/api/whatsapp/config')
       .then(function (res) { return res.json(); })
       .then(function (data) {
-        var badge = document.getElementById('wamApiStatusBadge');
+        var btn = document.getElementById('wamApiStatusBtn');
         if (data.configured) {
           apiConfigured = true;
-          if (badge) {
-            badge.className = 'wam-status-badge wam-status-badge--live';
-            badge.innerHTML = '<span class="wam-status-dot wam-status-dot--live"></span> LIVE';
+          if (btn) {
+            btn.className = 'wam-status-btn wam-status-btn--live';
+            btn.innerHTML = '<span class="wam-status-btn__dot"></span> LIVE';
           }
         } else {
           apiConfigured = false;
-          if (badge) {
-            badge.className = 'wam-status-badge wam-status-badge--offline';
-            badge.innerHTML = '<span class="wam-status-dot wam-status-dot--offline"></span> NOT CONFIGURED';
+          if (btn) {
+            btn.className = 'wam-status-btn wam-status-btn--offline';
+            btn.innerHTML = '<span class="wam-status-btn__dot"></span> NOT CONFIGURED';
           }
         }
       })
@@ -58,13 +58,15 @@ var WAMarketing = (function () {
   }
 
   function bindEvents() {
-    // Auto-acknowledge header click — only opens/closes the panel
+    // Auto-acknowledge header click — opens/closes the panel
     var ackHeader = document.getElementById('wamAutoAckHeader');
+    var statusBtn = document.getElementById('wamApiStatusBtn');
     var toggle = document.getElementById('wamAutoAckToggle');
     var sw = document.getElementById('wamAutoAckSwitch');
     if (ackHeader) {
       ackHeader.addEventListener('click', function (e) {
-        // If user clicked the toggle switch itself, don't also toggle the panel
+        // If user clicked the status button or toggle, don't toggle the panel
+        if (statusBtn && (e.target === statusBtn || statusBtn.contains(e.target))) return;
         if (sw && (e.target === sw || sw.contains(e.target))) return;
         var body = document.getElementById('wamAutoAckBody');
         var arrow = document.getElementById('wamAutoAckArrow');
@@ -79,10 +81,10 @@ var WAMarketing = (function () {
       });
     }
 
-    // Toggle switch — manual ON/OFF for auto-acknowledge mode
+    // Toggle switch — ON/OFF for auto-acknowledge mode
     if (sw) {
       sw.addEventListener('click', function (e) {
-        e.stopPropagation(); // don't trigger header click
+        e.stopPropagation();
         autoAckEnabled = !autoAckEnabled;
         if (toggle) toggle.checked = autoAckEnabled;
         syncToggleSwitch(autoAckEnabled);

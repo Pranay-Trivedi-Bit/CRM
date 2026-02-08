@@ -1,0 +1,9 @@
+{
+  "name": "Welcome Email",
+  "subject": "Welcome to {{company}}!",
+  "isPrebuilt": true,
+  "htmlContent": "<!DOCTYPE html>\n<html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"></head>\n<body style=\"margin:0;padding:0;background:#f4f4f7;font-family:Arial,sans-serif;\">\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#f4f4f7;padding:40px 0;\">\n<tr><td align=\"center\">\n<table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#ffffff;border-radius:8px;overflow:hidden;\">\n<tr><td style=\"background:linear-gradient(135deg,#6366f1,#a78bfa);padding:40px 30px;text-align:center;\">\n<h1 style=\"color:#ffffff;margin:0;font-size:28px;\">Welcome!</h1>\n</td></tr>\n<tr><td style=\"padding:30px;\">\n<p style=\"color:#333;font-size:16px;line-height:1.6;\">Hi {{name}},</p>\n<p style=\"color:#333;font-size:16px;line-height:1.6;\">Thank you for joining us. We're excited to have you on board!</p>\n<p style=\"color:#333;font-size:16px;line-height:1.6;\">Get started by exploring our platform and discovering what we have to offer.</p>\n<table cellpadding=\"0\" cellspacing=\"0\" style=\"margin:30px 0;\"><tr><td style=\"background:#6366f1;border-radius:6px;padding:12px 30px;\">\n<a href=\"{{cta_url}}\" style=\"color:#ffffff;text-decoration:none;font-weight:bold;font-size:16px;\">Get Started</a>\n</td></tr></table>\n<p style=\"color:#666;font-size:14px;\">Best regards,<br>The {{company}} Team</p>\n</td></tr>\n<tr><td style=\"background:#f8f9fa;padding:20px;text-align:center;\">\n<p style=\"color:#999;font-size:12px;margin:0;\">You received this email because you signed up at {{company}}.</p>\n</td></tr>\n</table>\n</td></tr></table>\n</body></html>",
+  "id": "tmpl_1770532771294_1607",
+  "createdAt": "2026-02-08T06:39:31.294Z",
+  "updatedAt": "2026-02-08T06:39:31.294Z"
+}

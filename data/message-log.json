@@ -1,0 +1,92 @@
+[
+  {
+    "timestamp": "2026-02-08T08:05:21.748876Z",
+    "to": "919840907809",
+    "leadName": "Senthil Kumar Balasubramanian",
+    "csmName": "Meera Joshi",
+    "brand": "Koenig Solutions",
+    "messageId": "wamid.HBgMOTE5ODQwOTA3ODA5FQIAERgSRTJEMERFQzAzQkNFMTM5NDdDAA==",
+    "status": "sent",
+    "textPreview": "Hi Senthil Kumar Balasubramanian, thank you for your interest in Koenig Solutions! Our team will con"
+  },
+  {
+    "timestamp": "2026-02-08T08:05:37.575734Z",
+    "to": "919840907809",
+    "leadName": "Senthil Kumar Balasubramanian",
+    "csmName": "Meera Joshi",
+    "brand": "Koenig Solutions",
+    "messageId": "wamid.HBgMOTE5ODQwOTA3ODA5FQIAERgSNUQxMUM1RjU3NUVEQjlCNTc0AA==",
+    "status": "sent",
+    "textPreview": "Hi Senthil Kumar Balasubramanian, thank you for your interest in Koenig Solutions! Our team will con"
+  },
+  {
+    "timestamp": "2026-02-08T08:05:39.750741Z",
+    "to": "919840907809",
+    "leadName": "Senthil Kumar Balasubramanian",
+    "csmName": "Meera Joshi",
+    "brand": "Koenig Solutions",
+    "messageId": "wamid.HBgMOTE5ODQwOTA3ODA5FQIAERgSRTIxQkMyMTVCOUUyMzlDQThDAA==",
+    "status": "sent",
+    "textPreview": "Hi Senthil Kumar Balasubramanian, thank you for your interest in Koenig Solutions! Our team will con"
+  },
+  {
+    "timestamp": "2026-02-08T08:13:45.749035Z",
+    "to": "917982438137",
+    "leadName": "",
+    "csmName": "",
+    "brand": "Koenig Solutions",
+    "messageId": "wamid.HBgMOTE3OTgyNDM4MTM3FQIAERgSNjNCRkYwMERCMjk4RTQyMTFDAA==",
+    "status": "sent",
+    "textPreview": "Test message from Koenig Solutions!"
+  },
+  {
+    "timestamp": "2026-02-08T09:27:07.248217Z",
+    "to": "917982438137",
+    "leadName": "",
+    "csmName": "",
+    "brand": "Koenig Solutions",
+    "status": "failed",
+    "error": "HTTP 401: {\"error\":{\"message\":\"Authentication Error\",\"code\":190,\"type\":\"OAuthException\",\"fbtrace_id\":\"AwDDMkabDMBCtwySZskLxEr\"}}",
+    "textPreview": "Hi, thank you for your interest in Koenig Solutions! Our team will connect with you shortly regardin"
+  },
+  {
+    "timestamp": "2026-02-08T10:00:56.697484Z",
+    "to": "917982438137",
+    "leadName": "Test User",
+    "csmName": "",
+    "brand": "Koenig Solutions",
+    "status": "failed",
+    "error": "HTTP 401: {\"error\":{\"message\":\"The access token could not be decrypted\",\"type\":\"OAuthException\",\"code\":190,\"fbtrace_id\":\"AJd_vRg-EtTHRT0LJyfBI2T\"}}",
+    "textPreview": "Hello! This is a test message from Koenig Solutions WhatsApp Marketing Dashboard."
+  },
+  {
+    "timestamp": "2026-02-08T10:03:26.600547Z",
+    "to": "917982438137",
+    "leadName": "Test User",
+    "csmName": "",
+    "brand": "Koenig Solutions",
+    "messageId": "wamid.HBgMOTE3OTgyNDM4MTM3FQIAERgSN0NFOTYyRkI4Q0RDNjY1NTVFAA==",
+    "status": "sent",
+    "textPreview": "Hello! This is a test message from Koenig Solutions WhatsApp Marketing Dashboard."
+  },
+  {
+    "timestamp": "2026-02-08T10:07:27.649067Z",
+    "to": "919171816900",
+    "leadName": "Test User",
+    "csmName": "",
+    "brand": "Koenig Solutions",
+    "messageId": "wamid.HBgMOTE5MTcxODE2OTAwFQIAERgSQ0YwN0Y0MzIyRDk2NzRBQTA3AA==",
+    "status": "sent",
+    "textPreview": "Hello! This is a test message from Koenig Solutions WhatsApp Marketing Dashboard."
+  },
+  {
+    "timestamp": "2026-02-08T10:11:19.603955Z",
+    "to": "917982438137",
+    "leadName": "Test User",
+    "csmName": "",
+    "brand": "Koenig Solutions",
+    "messageId": "wamid.HBgMOTE3OTgyNDM4MTM3FQIAERgSQzMxOUNGM0I1QUE4NDg3MzkwAA==",
+    "status": "sent",
+    "textPreview": "Hello! This is a test message from Koenig Solutions WhatsApp Marketing Dashboard."
+  }
+]

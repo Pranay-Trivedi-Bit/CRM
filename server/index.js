@@ -33,35 +33,41 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
-app.listen(config.port, async () => {
-  console.log('='.repeat(60));
-  console.log('  Sales Dashboard + WhatsApp Bot + Email Marketing Server');
-  console.log('='.repeat(60));
-  console.log(`  Dashboard:     http://localhost:${config.port}`);
-  console.log(`  API proxy:     http://localhost:${config.port}/api/leads`);
-  console.log(`  Webhook:       http://localhost:${config.port}/api/webhook`);
-  console.log(`  Flows API:     http://localhost:${config.port}/api/flows`);
-  console.log(`  Campaigns:     http://localhost:${config.port}/api/campaigns`);
-  console.log(`  Templates:     http://localhost:${config.port}/api/email-templates`);
-  console.log(`  Email Send:    http://localhost:${config.port}/api/email/send`);
+// Export for Vercel serverless deployment
+module.exports = app;
 
-  // Check WhatsApp config
-  const wa = config.whatsapp;
-  if (wa.accessToken && wa.phoneNumberId) {
-    console.log(`  WhatsApp:      CONFIGURED (Brand: ${wa.brandName}, Phone: ...${wa.phoneNumberId.slice(-4)})`);
-  } else if (wa.accessToken) {
-    console.log('  WhatsApp:      PARTIAL (Access token set, but Phone Number ID missing)');
-  } else {
-    console.log('  WhatsApp:      NOT CONFIGURED (add WHATSAPP_ACCESS_TOKEN to .env)');
-  }
+// Only listen when running locally (not on Vercel)
+if (process.env.VERCEL !== '1') {
+  app.listen(config.port, async () => {
+    console.log('='.repeat(60));
+    console.log('  Sales Dashboard + WhatsApp Bot + Email Marketing Server');
+    console.log('='.repeat(60));
+    console.log(`  Dashboard:     http://localhost:${config.port}`);
+    console.log(`  API proxy:     http://localhost:${config.port}/api/leads`);
+    console.log(`  Webhook:       http://localhost:${config.port}/api/webhook`);
+    console.log(`  Flows API:     http://localhost:${config.port}/api/flows`);
+    console.log(`  Campaigns:     http://localhost:${config.port}/api/campaigns`);
+    console.log(`  Templates:     http://localhost:${config.port}/api/email-templates`);
+    console.log(`  Email Send:    http://localhost:${config.port}/api/email/send`);
 
-  // Verify SMTP connection at startup
-  try {
-    const emailSender = require('./services/email-sender');
-    await emailSender.verifyConnection();
-  } catch (err) {
-    console.error('  Email:         Error during verification —', err.message);
-  }
+    // Check WhatsApp config
+    const wa = config.whatsapp;
+    if (wa.accessToken && wa.phoneNumberId) {
+      console.log(`  WhatsApp:      CONFIGURED (Brand: ${wa.brandName}, Phone: ...${wa.phoneNumberId.slice(-4)})`);
+    } else if (wa.accessToken) {
+      console.log('  WhatsApp:      PARTIAL (Access token set, but Phone Number ID missing)');
+    } else {
+      console.log('  WhatsApp:      NOT CONFIGURED (add WHATSAPP_ACCESS_TOKEN to .env)');
+    }
 
-  console.log('='.repeat(60));
-});
+    // Verify SMTP connection at startup
+    try {
+      const emailSender = require('./services/email-sender');
+      await emailSender.verifyConnection();
+    } catch (err) {
+      console.error('  Email:         Error during verification —', err.message);
+    }
+
+    console.log('='.repeat(60));
+  });
+}

@@ -193,15 +193,7 @@
         }
       }
 
-      // Also add CSMs who appear in seed data salesTeam
-      const extraCSMs = ['Rohit Sharma', 'Sneha Kapoor', 'Arjun Patel', 'Meera Joshi', 'Vikram Das',
-        'Shikha Mishra', 'Manish Chaturvedi', 'Gurpreet Kaur'];
-      for (const name of extraCSMs) {
-        const firstName = name.split(' ')[0].toLowerCase();
-        if (!creds[firstName]) {
-          creds[firstName] = { password: firstName + '123', fullName: name, role: 'csm', email: '' };
-        }
-      }
+      // All CSMs are auto-generated from CSM_EMAIL_MAP above — no extra fake names needed
 
       return creds;
     },
@@ -595,8 +587,7 @@
         csmCounts[csm] = (csmCounts[csm] || 0) + 1;
       }
       const csmSorted = Object.entries(csmCounts)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 8);
+        .sort((a, b) => b[1] - a[1]);
       const maxCSM = csmSorted.length > 0 ? csmSorted[0][1] : 1;
 
       const csmContainer = this.elements.csmLeaderboard;
@@ -1140,22 +1131,7 @@
       // 7. Assigned To (with CSM email from SharePoint sheet)
       const tdAssigned = document.createElement('td');
       const assignedName = lead.assignedTo || '-';
-      const csmEmail = (typeof CSM_EMAIL_MAP !== 'undefined' && assignedName !== '-')
-        ? CSM_EMAIL_MAP[assignedName.toLowerCase()] || ''
-        : '';
-      if (csmEmail) {
-        const csmNameSpan = document.createElement('span');
-        csmNameSpan.className = 'csm-name';
-        csmNameSpan.textContent = assignedName;
-        tdAssigned.appendChild(csmNameSpan);
-        const emailLink = document.createElement('a');
-        emailLink.className = 'csm-email';
-        emailLink.href = 'mailto:' + csmEmail;
-        emailLink.textContent = csmEmail;
-        tdAssigned.appendChild(emailLink);
-      } else {
-        tdAssigned.textContent = assignedName;
-      }
+      tdAssigned.textContent = assignedName;
       tr.appendChild(tdAssigned);
 
       // 8. Last Remark (truncated)
@@ -2484,7 +2460,7 @@
   // ============================================================
   const SeedData = {
     SEED_KEY: 'salesLeads_seeded',
-    SEED_VERSION: '3',  // Increment to force re-seed with accurate API data (205 leads)
+    SEED_VERSION: '7',  // Increment to force re-seed — all 215 leads mapped, CSM name casing normalized
 
     shouldSeed() {
       const version = localStorage.getItem(this.SEED_KEY);
@@ -2507,7 +2483,6 @@
       localStorage.removeItem(DataStore.STORAGE_KEY);
 
       const statuses = ['New', 'Contacted', 'Qualified', 'Proposal Sent', 'Negotiation', 'Won', 'Lost'];
-      const salesTeam = ['Pranay Trivedi', 'Rohit Sharma', 'Sneha Kapoor', 'Arjun Patel', 'Meera Joshi', 'Vikram Das'];
       const sources = ['LinkedIn', 'Website', 'Referral', 'Cold Call', 'Social Media', 'Event'];
       const campaigns = [
         'LinkedIn - Power BI Feb 2026',
@@ -2596,9 +2571,9 @@
         else status = 'Lost';
 
         const priority = 'Medium';
-        // Look up CSM from leadallocation emails, fallback to random sales team member
+        // Look up CSM from leadallocation emails — leave blank if not found (no fake assignments)
         const csmName = (typeof CSM_MAP !== 'undefined' && email) ? CSM_MAP[email.toLowerCase()] : null;
-        const assignedTo = csmName || salesTeam[Math.floor(Math.random() * salesTeam.length)];
+        const assignedTo = csmName || '';
         const source = 'LinkedIn';
         // Use actual campaign from API data, fallback to campaign map, then random
         const campaignFromMap = (typeof CAMPAIGN_MAP !== 'undefined' && email) ? CAMPAIGN_MAP[email.toLowerCase()] : null;
@@ -2661,7 +2636,6 @@
         if (lead.email) existing[lead.email.toLowerCase()] = lead;
       });
 
-      var salesTeam = ['Pranay Trivedi', 'Rohit Sharma', 'Sneha Kapoor', 'Arjun Patel', 'Meera Joshi', 'Vikram Das'];
       var remarksHot = [
         'Interested in Microsoft Power BI certification, details shared',
         'Payment this week for Azure course enrollment',
@@ -2729,7 +2703,7 @@
         else status = 'Lost';
 
         var csmName = (typeof CSM_MAP !== 'undefined' && email) ? CSM_MAP[email.toLowerCase()] : null;
-        var assignedTo = csmName || salesTeam[Math.floor(Math.random() * salesTeam.length)];
+        var assignedTo = csmName || '';
         var remark = allRemarks[Math.floor(Math.random() * allRemarks.length)];
 
         var hex = Math.random().toString(16).substring(2, 6);

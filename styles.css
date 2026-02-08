@@ -71,7 +71,6 @@ body {
 .nav-bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 0 var(--space-lg);
   background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
   color: #ffffff;
@@ -114,6 +113,7 @@ body {
   display: flex;
   align-items: center;
   gap: var(--space-md);
+  margin-left: auto;
 }
 
 .header--hidden {
@@ -2357,6 +2357,7 @@ body {
 }
 
 /* ============ Login Screen ============ */
+/* ---- Login Screen ---- */
 .login-screen {
   position: fixed;
   inset: 0;
@@ -2364,36 +2365,472 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-bg);
-  background-image: radial-gradient(ellipse at 30% 40%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-                    radial-gradient(ellipse at 70% 60%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+  background: #050510;
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(6, 148, 209, 0.1) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 100%, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
+  overflow: hidden;
 }
 
 .login-screen.hidden { display: none; }
 
+/* Animated floating orbs */
+.login-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.45;
+  animation: loginOrbFloat 12s ease-in-out infinite;
+  pointer-events: none;
+}
+.login-bg-orb--1 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.4), transparent 70%);
+  top: -15%; left: -8%;
+  animation-delay: 0s;
+}
+.login-bg-orb--2 {
+  width: 450px; height: 450px;
+  background: radial-gradient(circle, rgba(6, 148, 209, 0.35), transparent 70%);
+  bottom: -12%; right: -5%;
+  animation-delay: -4s;
+}
+.login-bg-orb--3 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.3), transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: -8s;
+}
+
+@keyframes loginOrbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 15px) scale(0.95); }
+}
+
+/* ---- Split Layout ---- */
+.login-split {
+  position: relative;
+  display: flex;
+  width: 95%;
+  max-width: 1100px;
+  height: 85vh;
+  max-height: 680px;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 100px rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(129, 140, 248, 0.12);
+  animation: loginCardIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes loginCardIn {
+  from { opacity: 0; transform: translateY(30px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ---- LEFT: Showcase ---- */
+.login-showcase {
+  flex: 1;
+  background: linear-gradient(160deg, #0f0a2e 0%, #1a1150 40%, #1e1b4b 100%);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-showcase::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(99, 102, 241, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 70% 80%, rgba(6, 148, 209, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.1) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.login-showcase__inner {
+  position: relative;
+  z-index: 1;
+  padding: 40px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+
+/* ---- Channels Orbit ---- */
+.login-channels {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  flex-shrink: 0;
+}
+
+.login-channels__center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 72px; height: 72px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  box-shadow: 0 0 30px rgba(99, 102, 241, 0.5), 0 0 60px rgba(99, 102, 241, 0.2);
+  z-index: 2;
+}
+
+.login-channels__center span {
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Orbit ring */
+.login-channels::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 190px; height: 190px;
+  transform: translate(-50%, -50%);
+  border: 1.5px dashed rgba(129, 140, 248, 0.2);
+  border-radius: 50%;
+  animation: orbitSpin 30s linear infinite;
+}
+
+@keyframes orbitSpin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Channel nodes */
+.login-channel {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 56px; height: 56px;
+  margin: -28px 0 0 -28px;
+  transform: rotate(var(--angle)) translateY(-95px) rotate(calc(-1 * var(--angle)));
+  background: rgba(15, 15, 35, 0.9);
+  border: 1.5px solid rgba(129, 140, 248, 0.2);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.login-channel span {
+  font-size: 0.42rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.03em;
+}
+
+.login-channel--linkedin { color: #0a66c2; border-color: rgba(10, 102, 194, 0.4); }
+.login-channel--whatsapp { color: #25d366; border-color: rgba(37, 211, 102, 0.4); }
+.login-channel--email { color: #f59e0b; border-color: rgba(245, 158, 11, 0.4); }
+.login-channel--phone { color: #ef4444; border-color: rgba(239, 68, 68, 0.4); }
+
+.login-channel:hover {
+  transform: rotate(var(--angle)) translateY(-95px) rotate(calc(-1 * var(--angle))) scale(1.15);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+}
+
+/* ---- Sales Funnel ---- */
+.login-funnel {
+  width: 100%;
+  max-width: 340px;
+  flex-shrink: 0;
+}
+
+.login-funnel__title {
+  display: none;
+}
+
+.login-funnel__stages {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  filter: drop-shadow(0 8px 24px rgba(79, 70, 229, 0.35));
+}
+
+/* All stages use full width; clip-path creates the connected funnel shape.
+   Each stage bottom-edge matches the next stage top-edge exactly. */
+.login-funnel__stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 0;
+  text-align: center;
+  font-weight: 700;
+  color: #fff;
+  position: relative;
+  animation: funnelSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: filter 0.3s ease;
+}
+
+.login-funnel__stage:hover {
+  filter: brightness(1.2);
+}
+
+.login-funnel__stage svg {
+  opacity: 0.9;
+  flex-shrink: 0;
+}
+
+/* Stage 1: full width top → tapers to 78% */
+.login-funnel__stage--1 {
+  background: linear-gradient(180deg, #3730a3, #4338ca);
+  font-size: 0.78rem;
+  animation-delay: 0.1s;
+  clip-path: polygon(0% 0%, 100% 0%, 89% 100%, 11% 100%);
+}
+
+/* Stage 2: picks up at 78% → tapers to 56% */
+.login-funnel__stage--2 {
+  background: linear-gradient(180deg, #4f46e5, #6d28d9);
+  font-size: 0.74rem;
+  animation-delay: 0.2s;
+  clip-path: polygon(11% 0%, 89% 0%, 78% 100%, 22% 100%);
+}
+
+/* Stage 3: picks up at 56% → tapers to 38% */
+.login-funnel__stage--3 {
+  background: linear-gradient(180deg, #6d28d9, #7c3aed);
+  font-size: 0.7rem;
+  animation-delay: 0.3s;
+  clip-path: polygon(22% 0%, 78% 0%, 69% 100%, 31% 100%);
+}
+
+/* Stage 4: picks up at 38% → tapers to point */
+.login-funnel__stage--4 {
+  background: linear-gradient(180deg, #7c3aed, #9333ea);
+  font-size: 0.66rem;
+  color: #fff;
+  animation-delay: 0.4s;
+  clip-path: polygon(31% 0%, 69% 0%, 62% 100%, 38% 100%);
+}
+
+.login-funnel__label {
+  opacity: 1;
+  font-weight: 700;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  letter-spacing: 0.02em;
+}
+
+.login-funnel__count {
+  font-weight: 800;
+}
+
+@keyframes funnelSlideIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Marketing Stats Row */
+.login-stats-row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  max-width: 340px;
+}
+
+.login-stat-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(129, 140, 248, 0.15);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+  animation: funnelSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.6s;
+}
+
+.login-stat-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(129, 140, 248, 0.3);
+  transform: translateY(-2px);
+}
+
+.login-stat-card__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.login-stat-card__icon--blue {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(59, 130, 246, 0.2));
+  color: #818cf8;
+}
+
+.login-stat-card__icon--green {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(16, 185, 129, 0.2));
+  color: #4ade80;
+}
+
+.login-stat-card__icon svg {
+  stroke: currentColor;
+}
+
+.login-stat-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.login-stat-card__label {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+
+.login-stat-card__value {
+  font-size: 1rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #a5b4fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+
+/* Showcase footer */
+.login-showcase__footer {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+/* ---- RIGHT: Login Form Side ---- */
+.login-form-side {
+  width: 420px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(13, 13, 31, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Login Card (inside right side) */
 .login-card {
+  position: relative;
   width: 100%;
   max-width: 420px;
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg), 0 0 60px rgba(99, 102, 241, 0.15);
-  border: 1px solid var(--color-border);
   overflow: hidden;
 }
 
+/* Header */
 .login-card__header {
   text-align: center;
-  padding: var(--space-xl) var(--space-lg) var(--space-lg);
-  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
-  border-bottom: 1px solid rgba(129, 140, 248, 0.2);
+  padding: 36px 28px 24px;
+  background: linear-gradient(160deg, rgba(30, 27, 75, 0.6) 0%, rgba(49, 46, 129, 0.3) 50%, transparent 100%);
+  border-bottom: 1px solid rgba(129, 140, 248, 0.08);
+  position: relative;
+}
+
+.login-card__header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.4), transparent);
+}
+
+/* Brand row: Logo | divider | CRM */
+.login-card__brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.login-card__logo-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+  flex-shrink: 0;
 }
 
 .login-card__logo {
-  width: 48px;
-  height: 48px;
-  color: #fbbf24;
-  filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.6));
-  margin-bottom: 12px;
+  width: 120px;
+  height: auto;
+  filter: drop-shadow(0 0 12px rgba(6, 148, 209, 0.4));
+  flex-shrink: 0;
+}
+
+.login-card__stepforward {
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  color: #ffffff;
+  text-transform: lowercase;
+  font-family: 'Inter', -apple-system, sans-serif;
+  margin-top: 2px;
+  margin-right: -2px;
+  opacity: 0.9;
+}
+
+.login-card__divider {
+  width: 1.5px;
+  height: 32px;
+  background: linear-gradient(180deg, transparent, rgba(165, 180, 252, 0.4), transparent);
+  flex-shrink: 0;
+}
+
+.login-card__crm-text {
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: 5px;
+  background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: crmShimmer 4s ease-in-out infinite;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+@keyframes crmShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.login-card__title {
+  display: none;
 }
 
 .login-card__header h2 {
@@ -2407,86 +2844,119 @@ body {
 }
 
 .login-card__subtitle {
-  font-size: var(--font-size-sm);
-  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.03em;
 }
 
+/* Form */
 .login-card__form {
-  padding: var(--space-lg);
+  padding: 24px 28px 28px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: 18px;
 }
 
 .login-card__field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .login-card__field label {
-  font-size: var(--font-size-sm);
+  font-size: 0.72rem;
   font-weight: 600;
   color: var(--color-text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.login-card__field label svg {
+  opacity: 0.6;
 }
 
 .login-card__field input {
-  padding: 12px 16px;
+  padding: 13px 16px;
   font-size: var(--font-size-base);
   font-family: inherit;
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-surface-elevated);
+  border: 1.5px solid rgba(167, 139, 250, 0.12);
+  border-radius: 10px;
+  background: rgba(26, 26, 53, 0.6);
   color: var(--color-text-primary);
-  transition: all 0.25s ease;
+  transition: all 0.3s ease;
+}
+
+.login-card__field input::placeholder {
+  color: rgba(124, 133, 160, 0.6);
 }
 
 .login-card__field input:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2), var(--shadow-glow);
+  border-color: rgba(99, 102, 241, 0.6);
+  background: rgba(26, 26, 53, 0.9);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12), 0 0 20px rgba(99, 102, 241, 0.08);
 }
 
 .login-card__error {
   color: #f43f5e;
   font-size: var(--font-size-sm);
   font-weight: 500;
-  min-height: 20px;
+  min-height: 0;
   text-align: center;
+  transition: all 0.3s ease;
+}
+.login-card__error:not(:empty) {
+  min-height: 20px;
+  margin-top: -4px;
 }
 
 .login-card__btn {
-  padding: 13px;
-  font-size: var(--font-size-base);
+  padding: 13px 20px;
+  font-size: 0.88rem;
   font-weight: 700;
   font-family: inherit;
   border: none;
-  border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border-radius: 10px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
   color: #fff;
   cursor: pointer;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.login-card__btn svg {
+  transition: transform 0.3s ease;
 }
 
 .login-card__btn:hover {
-  background: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
-  box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
+  background: linear-gradient(135deg, #818cf8 0%, #a78bfa 50%, #c084fc 100%);
+  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.45);
   transform: translateY(-2px);
+}
+
+.login-card__btn:hover svg {
+  transform: translateX(4px);
 }
 
 .login-card__btn:active { transform: scale(0.98); }
 
 .login-card__hint {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   color: var(--color-text-muted);
   text-align: center;
-  opacity: 0.6;
-  line-height: 1.4;
+  opacity: 0.5;
+  line-height: 1.5;
+  margin-top: -4px;
 }
 
 /* Header user info & logout */
@@ -2992,33 +3462,20 @@ body {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  /* Login */
-  .login-card {
-    max-width: 90%;
-    margin: var(--space-md);
+  /* Login - tablet: stack vertically */
+  .login-split {
+    flex-direction: column;
+    height: auto;
+    max-height: 95vh;
+    max-width: 500px;
+    overflow-y: auto;
   }
-
-  .login-card__header {
-    padding: var(--space-lg) var(--space-md) var(--space-md);
-  }
-
-  .login-card__logo {
-    width: 40px;
-    height: 40px;
-  }
-
-  .login-card__header h2 {
-    font-size: 1.1rem;
-  }
-
-  .login-card__form {
-    padding: var(--space-md);
-    gap: var(--space-sm);
-  }
-
-  .login-card__btn {
-    padding: 11px;
-  }
+  .login-showcase { display: none; }
+  .login-form-side { width: 100%; }
+  .login-card__header { padding: 28px 24px 20px; }
+  .login-card__form { padding: 20px 24px 24px; gap: 16px; }
+  .login-card__logo { width: 110px; }
+  .login-card__crm-text { font-size: 1.6rem; letter-spacing: 4px; }
 
   /* Toast */
   .toast-container {
@@ -3600,57 +4057,24 @@ body {
     font-size: 0.75rem;
   }
 
-  /* Login */
-  .login-card {
+  /* Login - small mobile */
+  .login-split {
     max-width: 100%;
     margin: var(--space-sm);
-    border-radius: var(--radius-md);
+    border-radius: 16px;
   }
-
-  .login-card__header {
-    padding: var(--space-lg) var(--space-sm) var(--space-md);
-  }
-
-  .login-card__logo {
-    width: 36px;
-    height: 36px;
-    margin-bottom: 8px;
-  }
-
-  .login-card__header h2 {
-    font-size: 1rem;
-  }
-
-  .login-card__subtitle {
-    font-size: 0.7rem;
-  }
-
-  .login-card__form {
-    padding: var(--space-md) var(--space-sm);
-    gap: var(--space-sm);
-  }
-
-  .login-card__field input {
-    padding: 10px 12px;
-    font-size: 0.8rem;
-  }
-
-  .login-card__field label {
-    font-size: 0.7rem;
-  }
-
-  .login-card__btn {
-    padding: 10px;
-    font-size: 0.8rem;
-  }
-
-  .login-card__hint {
-    font-size: 0.6rem;
-  }
-
-  .login-card__error {
-    font-size: 0.7rem;
-  }
+  .login-showcase { display: none; }
+  .login-card__header { padding: 24px 16px 18px; }
+  .login-card__brand { gap: 8px; margin-bottom: 10px; }
+  .login-card__logo { width: 90px; }
+  .login-card__crm-text { font-size: 1.3rem; letter-spacing: 3px; }
+  .login-card__divider { height: 24px; }
+  .login-card__form { padding: 18px 14px 22px; gap: 12px; }
+  .login-card__field input { padding: 11px 14px; font-size: 0.8rem; }
+  .login-card__field label { font-size: 0.68rem; }
+  .login-card__btn { padding: 11px; font-size: 0.8rem; }
+  .login-card__hint { font-size: 0.58rem; }
+  .login-card__error { font-size: 0.68rem; }
 
   /* Toast */
   .toast {
@@ -3984,28 +4408,14 @@ body {
     overflow-y: auto;
   }
 
-  .login-card {
-    max-width: 400px;
-  }
-
-  .login-card__header {
-    padding: var(--space-sm);
-  }
-
-  .login-card__logo {
-    width: 30px;
-    height: 30px;
-    margin-bottom: 4px;
-  }
-
-  .login-card__header h2 {
-    font-size: 0.9rem;
-  }
-
-  .login-card__form {
-    padding: var(--space-sm);
-    gap: var(--space-xs);
-  }
+  .login-split { max-width: 100%; border-radius: 12px; }
+  .login-showcase { display: none; }
+  .login-card__header { padding: 18px 14px 14px; }
+  .login-card__brand { gap: 6px; }
+  .login-card__logo { width: 80px; }
+  .login-card__crm-text { font-size: 1.1rem; letter-spacing: 2px; }
+  .login-card__divider { height: 20px; }
+  .login-card__form { padding: 14px 12px 18px; gap: 10px; }
 }
 
 /* ============ Print styles ============ */
@@ -4530,11 +4940,12 @@ html {
   .btn { padding: 5px 8px; font-size: 0.65rem; }
 
   /* Login */
-  .login-card__header h2 { font-size: 0.85rem; }
-  .login-card__subtitle { font-size: 0.65rem; }
-  .login-card__hint { font-size: 0.5rem; }
-  .login-card__error { font-size: 0.62rem; }
-  .login-card__btn { padding: 9px; font-size: 0.75rem; }
+  .login-card__logo { width: 70px; }
+  .login-card__crm-text { font-size: 1rem; letter-spacing: 1px; }
+  .login-card__subtitle { font-size: 0.6rem; }
+  .login-card__hint { font-size: 0.48rem; }
+  .login-card__error { font-size: 0.6rem; }
+  .login-card__btn { padding: 9px; font-size: 0.72rem; }
 
   /* Toast */
   .toast { padding: 6px var(--space-xs); font-size: 0.68rem; }
@@ -5887,6 +6298,68 @@ html {
   box-shadow: 0 0 4px rgba(244, 63, 94, 0.4);
 }
 
+/* WhatsApp Status Button (replaces badge + toggle) */
+.wam-status-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 20px;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+  border: none;
+  cursor: default;
+  font-family: inherit;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.wam-status-btn__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.wam-status-btn--live {
+  background: #25d366;
+  color: #fff;
+  animation: wamBtnPulseLive 2s ease-in-out infinite;
+}
+.wam-status-btn--live .wam-status-btn__dot {
+  background: #fff;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+  animation: livePulse 2s ease-in-out infinite;
+}
+
+.wam-status-btn--offline {
+  background: #f43f5e;
+  color: #fff;
+  animation: wamBtnPulseOffline 2s ease-in-out infinite;
+}
+.wam-status-btn--offline .wam-status-btn__dot {
+  background: #fff;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
+  animation: offlinePulse 2s ease-in-out infinite;
+}
+
+@keyframes wamBtnPulseLive {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
+  50% { box-shadow: 0 0 0 6px rgba(37, 211, 102, 0); }
+}
+
+@keyframes wamBtnPulseOffline {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.5); }
+  50% { box-shadow: 0 0 0 6px rgba(244, 63, 94, 0); }
+}
+
+@keyframes offlinePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.6); }
+  50% { box-shadow: 0 0 0 4px rgba(255, 255, 255, 0); }
+}
+
 .wam-leads-summary {
   display: flex;
   justify-content: space-between;
@@ -6716,6 +7189,7 @@ html {
   background: rgba(6, 182, 212, 0.12);
   color: #06b6d4;
   border: 1px solid rgba(6, 182, 212, 0.25);
+  animation: emcPulseLive 2s ease-in-out infinite;
 }
 .emc-smtp-status--dryrun {
   background: rgba(251, 191, 36, 0.12);
@@ -6726,6 +7200,17 @@ html {
   background: rgba(244, 63, 94, 0.12);
   color: #f43f5e;
   border: 1px solid rgba(244, 63, 94, 0.25);
+  animation: emcPulseOffline 2s ease-in-out infinite;
+}
+
+@keyframes emcPulseLive {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(6, 182, 212, 0); }
+}
+
+@keyframes emcPulseOffline {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(244, 63, 94, 0); }
 }
 .emc-smtp-dot {
   width: 8px;
@@ -7374,5 +7859,1831 @@ html {
 
   .ci-preview__stats {
     flex-wrap: wrap;
+  }
+}
+
+/* ====================================================================
+   COMPREHENSIVE RESPONSIVE OVERHAUL
+   Covers: Phone (320px) → Small Phone (375px) → Phone (480px) →
+           Tablet (768px) → Small Laptop (1024px) → Desktop (1280px) →
+           Large Desktop (1600px) → Ultra-wide / TV (1920px+)
+   ==================================================================== */
+
+/* ============ Ultra-Wide / TV (1920px+) ============ */
+@media (min-width: 1920px) {
+  :root {
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.5rem;
+    --font-size-metric: 2.5rem;
+  }
+
+  .main {
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: var(--space-xl) 48px;
+  }
+
+  /* Nav bar */
+  .nav-bar {
+    padding: 0 48px;
+  }
+
+  .nav-bar__logo {
+    height: 36px;
+  }
+
+  .nav-tab {
+    padding: 16px 28px;
+    font-size: 1rem;
+  }
+
+  .header__user-info {
+    font-size: 0.95rem;
+  }
+
+  .header__logout-btn {
+    padding: 8px 18px;
+    font-size: 0.85rem;
+  }
+
+  /* Summary Cards */
+  .summary-cards {
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .card--total-wide {
+    grid-column: span 1;
+  }
+
+  .card__metric {
+    font-size: 2.2rem;
+  }
+
+  .card__label {
+    font-size: 1rem;
+  }
+
+  .card__sublabel {
+    font-size: 0.85rem;
+  }
+
+  .card__conn-count {
+    font-size: 1.2rem;
+  }
+
+  .card__conn-label {
+    font-size: 0.65rem;
+  }
+
+  .card__conn-pct {
+    font-size: 0.6rem;
+  }
+
+  /* Pipeline */
+  .pipeline__title {
+    font-size: 1.25rem;
+  }
+
+  .chart-canvas-wrap {
+    width: 300px;
+    height: 300px;
+  }
+
+  .chart-canvas-wrap canvas {
+    width: 300px;
+    height: 300px;
+  }
+
+  .chart-center__count {
+    font-size: 2.2rem;
+  }
+
+  .chart-center__label {
+    font-size: 0.85rem;
+  }
+
+  .legend-row__count {
+    font-size: 1.5rem;
+  }
+
+  .legend-row__name {
+    font-size: 0.95rem;
+  }
+
+  .legend-row__pct {
+    font-size: 0.85rem;
+  }
+
+  .legend-row__track {
+    height: 12px;
+    min-width: 100px;
+  }
+
+  /* Analytics Grid */
+  .analytics-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .analytics-card {
+    padding: var(--space-lg);
+  }
+
+  .analytics-card__title {
+    font-size: 1rem;
+  }
+
+  .csm-item__name {
+    font-size: 0.9rem;
+  }
+
+  .csm-item__count {
+    font-size: 1rem;
+  }
+
+  .disp-item__name {
+    font-size: 0.85rem;
+  }
+
+  .disp-item__count {
+    font-size: 0.9rem;
+  }
+
+  .disp-item__bar-wrap {
+    height: 22px;
+  }
+
+  .insights-tab {
+    font-size: 0.75rem;
+    padding: 10px 12px;
+  }
+
+  .insights-panels {
+    min-height: 280px;
+  }
+
+  /* Toolbar */
+  .toolbar {
+    padding: var(--space-md) var(--space-lg);
+    gap: var(--space-md);
+  }
+
+  .toolbar__input {
+    padding: 12px 16px 12px 42px;
+    font-size: 0.95rem;
+  }
+
+  .toolbar__select {
+    padding: 10px 14px;
+    font-size: 0.95rem;
+  }
+
+  .toolbar__date-input {
+    padding: 10px 12px;
+  }
+
+  #btnExportCSV {
+    padding: 10px 18px;
+    font-size: 0.95rem;
+  }
+
+  /* Table */
+  .table th {
+    padding: 14px 12px;
+    font-size: 0.8rem;
+  }
+
+  .table td {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+
+  .th-filter, .th-filter-select {
+    font-size: 0.75rem;
+    padding: 6px 8px;
+  }
+
+  .lead-name { font-size: 0.95rem; }
+  .lead-email { font-size: 0.85rem; }
+  .lead-phone { font-size: 0.8rem; }
+
+  .badge--campaign { font-size: 0.75rem; max-width: 200px; }
+  .badge--disposition { font-size: 0.75rem; }
+  .badge--sub-disposition { font-size: 0.75rem; max-width: 180px; }
+  .badge--temp { font-size: 0.8rem; }
+
+  .csm-name { font-size: 0.9rem; }
+  .csm-email { font-size: 0.8rem; }
+
+  .lead-remark { max-width: 280px; font-size: 0.85rem; }
+
+  .action-btn { padding: 6px 10px; font-size: 0.8rem; }
+
+  /* Table footer */
+  .table-footer__count { font-size: 0.85rem; }
+  .pagination__btn { width: 36px; height: 36px; }
+  .pagination__info { font-size: 0.85rem; }
+  .pagination__size { font-size: 0.85rem; }
+
+  /* Modal */
+  .modal {
+    max-width: 800px;
+  }
+
+  .modal__title {
+    font-size: 1.2rem;
+  }
+
+  /* Login - large screen */
+  .login-split {
+    max-width: 1300px;
+    max-height: 800px;
+  }
+
+  .login-showcase__inner {
+    padding: 60px 48px;
+    gap: 36px;
+  }
+
+  .login-channels {
+    width: 300px;
+    height: 300px;
+  }
+
+  .login-channels__center {
+    width: 90px;
+    height: 90px;
+  }
+
+  .login-channels__center span {
+    font-size: 0.65rem;
+  }
+
+  .login-channels::after {
+    width: 240px;
+    height: 240px;
+  }
+
+  .login-channel {
+    width: 64px;
+    height: 64px;
+    margin: -32px 0 0 -32px;
+    transform: rotate(var(--angle)) translateY(-120px) rotate(calc(-1 * var(--angle)));
+  }
+
+  .login-channel:hover {
+    transform: rotate(var(--angle)) translateY(-120px) rotate(calc(-1 * var(--angle))) scale(1.15);
+  }
+
+  .login-channel span {
+    font-size: 0.48rem;
+  }
+
+  .login-funnel {
+    max-width: 420px;
+  }
+
+  .login-funnel__stage {
+    padding: 16px 0;
+  }
+
+  .login-funnel__stage--1 { font-size: 0.9rem; }
+  .login-funnel__stage--2 { font-size: 0.85rem; }
+  .login-funnel__stage--3 { font-size: 0.82rem; }
+  .login-funnel__stage--4 { font-size: 0.78rem; }
+
+  .login-form-side {
+    width: 480px;
+  }
+
+  .login-card__logo { width: 140px; }
+  .login-card__crm-text { font-size: 2rem; letter-spacing: 6px; }
+  .login-card__divider { height: 38px; }
+  .login-card__stepforward { font-size: 0.7rem; }
+  .login-card__header h2 { font-size: 1.5rem; }
+  .login-card__subtitle { font-size: 0.9rem; }
+  .login-card__field input { padding: 15px 18px; }
+  .login-card__btn { padding: 15px 24px; font-size: 0.95rem; }
+  .login-card__hint { font-size: 0.75rem; }
+
+  /* WhatsApp Marketing */
+  .wa-marketing-view,
+  .em-marketing-view {
+    padding: 32px 48px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .wam-card__header,
+  .emc-card__header {
+    padding: 24px 32px;
+  }
+
+  .wam-card__body,
+  .emc-card__body {
+    padding: 24px 32px;
+  }
+
+  .emc-analytics-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  .emc-analytics-stat {
+    padding: 20px;
+  }
+
+  .emc-analytics-stat__value {
+    font-size: 2rem;
+  }
+
+  /* Contact Import */
+  .ci-method-tab {
+    padding: 14px 24px;
+    font-size: 1rem;
+  }
+
+  .ci-upload-zone {
+    padding: 64px;
+  }
+}
+
+/* ============ Extra Large TV (2560px+) ============ */
+@media (min-width: 2560px) {
+  :root {
+    --font-size-sm: 1rem;
+    --font-size-base: 1.125rem;
+    --font-size-lg: 1.25rem;
+    --font-size-xl: 1.75rem;
+    --font-size-metric: 3rem;
+  }
+
+  .main {
+    max-width: 2200px;
+    padding: 48px 64px;
+  }
+
+  .nav-bar {
+    padding: 0 64px;
+  }
+
+  .nav-bar__logo {
+    height: 42px;
+  }
+
+  .nav-tab {
+    padding: 18px 34px;
+    font-size: 1.1rem;
+  }
+
+  .summary-cards {
+    gap: var(--space-xl);
+  }
+
+  .card__metric {
+    font-size: 2.8rem;
+  }
+
+  .chart-canvas-wrap {
+    width: 360px;
+    height: 360px;
+  }
+
+  .chart-canvas-wrap canvas {
+    width: 360px;
+    height: 360px;
+  }
+
+  .chart-center__count {
+    font-size: 2.5rem;
+  }
+
+  .login-split {
+    max-width: 1500px;
+    max-height: 900px;
+  }
+
+  .login-channels {
+    width: 360px;
+    height: 360px;
+  }
+
+  .login-channels__center {
+    width: 100px;
+    height: 100px;
+  }
+
+  .login-channels::after {
+    width: 290px;
+    height: 290px;
+  }
+
+  .login-channel {
+    width: 72px;
+    height: 72px;
+    margin: -36px 0 0 -36px;
+    transform: rotate(var(--angle)) translateY(-145px) rotate(calc(-1 * var(--angle)));
+  }
+
+  .login-channel:hover {
+    transform: rotate(var(--angle)) translateY(-145px) rotate(calc(-1 * var(--angle))) scale(1.15);
+  }
+
+  .login-funnel {
+    max-width: 500px;
+  }
+
+  .login-funnel__stage {
+    padding: 18px 0;
+  }
+
+  .login-funnel__stage--1 { font-size: 1rem; }
+  .login-funnel__stage--2 { font-size: 0.95rem; }
+  .login-funnel__stage--3 { font-size: 0.9rem; }
+  .login-funnel__stage--4 { font-size: 0.85rem; }
+
+  .login-form-side {
+    width: 560px;
+  }
+
+  .login-card__logo { width: 160px; }
+  .login-card__crm-text { font-size: 2.4rem; letter-spacing: 8px; }
+  .login-card__stepforward { font-size: 0.8rem; }
+
+  .table th { padding: 16px 14px; font-size: 0.9rem; }
+  .table td { padding: 14px; font-size: 1rem; }
+
+  .wa-marketing-view,
+  .em-marketing-view {
+    max-width: 2000px;
+    padding: 40px 64px;
+  }
+}
+
+/* ============ Large Desktop (1600px) ============ */
+@media (min-width: 1600px) and (max-width: 1919px) {
+  .main {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: var(--space-xl) 40px;
+  }
+
+  .nav-bar {
+    padding: 0 40px;
+  }
+
+  .summary-cards {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .card--total-wide {
+    grid-column: span 1;
+  }
+
+  .card__metric {
+    font-size: 1.9rem;
+  }
+
+  .chart-canvas-wrap {
+    width: 260px;
+    height: 260px;
+  }
+
+  .chart-canvas-wrap canvas {
+    width: 260px;
+    height: 260px;
+  }
+
+  .login-split {
+    max-width: 1200px;
+    max-height: 720px;
+  }
+
+  .login-channels {
+    width: 270px;
+    height: 270px;
+  }
+
+  .login-channels::after {
+    width: 215px;
+    height: 215px;
+  }
+
+  .login-channel {
+    width: 60px;
+    height: 60px;
+    margin: -30px 0 0 -30px;
+    transform: rotate(var(--angle)) translateY(-108px) rotate(calc(-1 * var(--angle)));
+  }
+
+  .login-channel:hover {
+    transform: rotate(var(--angle)) translateY(-108px) rotate(calc(-1 * var(--angle))) scale(1.15);
+  }
+
+  .login-funnel {
+    max-width: 380px;
+  }
+
+  .wa-marketing-view,
+  .em-marketing-view {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+}
+
+/* ============ Login BG Orbs - Responsive Sizing ============ */
+@media (max-width: 768px) {
+  .login-bg-orb--1 {
+    width: 300px; height: 300px;
+  }
+  .login-bg-orb--2 {
+    width: 250px; height: 250px;
+  }
+  .login-bg-orb--3 {
+    width: 180px; height: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-bg-orb--1 {
+    width: 200px; height: 200px;
+  }
+  .login-bg-orb--2 {
+    width: 180px; height: 180px;
+  }
+  .login-bg-orb--3 {
+    width: 120px; height: 120px;
+  }
+}
+
+/* ============ Login Showcase - Tablet: Compact Horizontal Strip ============ */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .login-split {
+    max-width: 900px;
+    height: 80vh;
+    max-height: 620px;
+  }
+
+  .login-showcase__inner {
+    padding: 28px 24px;
+    gap: 20px;
+  }
+
+  .login-channels {
+    width: 200px;
+    height: 200px;
+  }
+
+  .login-channels__center {
+    width: 60px;
+    height: 60px;
+  }
+
+  .login-channels__center span {
+    font-size: 0.48rem;
+  }
+
+  .login-channels::after {
+    width: 160px;
+    height: 160px;
+  }
+
+  .login-channel {
+    width: 46px;
+    height: 46px;
+    margin: -23px 0 0 -23px;
+    transform: rotate(var(--angle)) translateY(-80px) rotate(calc(-1 * var(--angle)));
+  }
+
+  .login-channel:hover {
+    transform: rotate(var(--angle)) translateY(-80px) rotate(calc(-1 * var(--angle))) scale(1.15);
+  }
+
+  .login-channel span {
+    font-size: 0.36rem;
+  }
+
+  .login-channel svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .login-funnel {
+    max-width: 280px;
+  }
+
+  .login-funnel__stage {
+    padding: 10px 0;
+  }
+
+  .login-funnel__stage--1 { font-size: 0.68rem; }
+  .login-funnel__stage--2 { font-size: 0.64rem; }
+  .login-funnel__stage--3 { font-size: 0.6rem; }
+  .login-funnel__stage--4 { font-size: 0.56rem; }
+
+  .login-funnel__stage svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .login-form-side {
+    width: 380px;
+  }
+
+  .login-showcase__footer {
+    font-size: 0.55rem;
+  }
+}
+
+/* ============ Nav Bar - Mobile Hamburger-Free Layout ============ */
+@media (max-width: 480px) {
+  .nav-bar {
+    padding: var(--space-xs) var(--space-sm);
+    flex-wrap: wrap;
+    gap: 2px;
+  }
+
+  .nav-bar__left {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .nav-bar__logo {
+    height: 18px;
+    margin-right: 8px;
+  }
+
+  .nav-tab {
+    padding: 8px 10px;
+    font-size: 0.68rem;
+    gap: 4px;
+  }
+
+  .nav-tab svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .nav-bar__right {
+    width: 100%;
+    justify-content: center;
+    gap: var(--space-xs);
+  }
+
+  .header__user-info {
+    font-size: 0.6rem;
+    max-width: 120px;
+  }
+
+  .header__logout-btn {
+    padding: 3px 8px;
+    font-size: 0.6rem;
+    gap: 4px;
+  }
+
+  .header__logout-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* ============ WhatsApp Marketing - Enhanced Mobile ============ */
+@media (max-width: 480px) {
+  .wa-marketing-view {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .wam-card {
+    border-radius: 12px;
+  }
+
+  .wam-card__header {
+    padding: 14px 16px;
+    gap: 10px;
+  }
+
+  .wam-card__header h3 {
+    font-size: 0.85rem;
+  }
+
+  .wam-card__header p {
+    font-size: 0.7rem;
+  }
+
+  .wam-card__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+  }
+
+  .wam-card__body {
+    padding: 14px 16px;
+  }
+
+  .wam-filters {
+    gap: 8px;
+  }
+
+  .wam-send-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 16px;
+  }
+
+  .wam-recent-list {
+    max-height: 300px;
+  }
+
+  .wam-history-item {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+
+  .wam-history-item__msg {
+    font-size: 0.75rem;
+  }
+
+  .wam-type-badge {
+    font-size: 0.58rem;
+  }
+
+  .wam-ack-status {
+    gap: 6px;
+  }
+}
+
+@media (max-width: 375px) {
+  .wa-marketing-view {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .wam-card__header {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .wam-card__header h3 {
+    font-size: 0.78rem;
+  }
+
+  .wam-card__icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+  }
+
+  .wam-card__body {
+    padding: 10px 12px;
+  }
+
+  .wam-send-btn {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+
+  .wam-history-item {
+    padding: 6px 8px;
+    gap: 6px;
+    font-size: 0.75rem;
+  }
+}
+
+/* ============ Email Marketing - Enhanced Mobile ============ */
+@media (max-width: 480px) {
+  .em-marketing-view {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .emc-card {
+    border-radius: 12px;
+  }
+
+  .emc-card__header {
+    padding: 14px 16px;
+    gap: 10px;
+  }
+
+  .emc-card__header h3 {
+    font-size: 0.85rem;
+  }
+
+  .emc-card__header p {
+    font-size: 0.7rem;
+  }
+
+  .emc-card__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+  }
+
+  .emc-card__body {
+    padding: 14px 16px;
+  }
+
+  .emc-analytics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .emc-analytics-stat {
+    padding: 12px;
+    border-radius: 8px;
+  }
+
+  .emc-analytics-stat__value {
+    font-size: 1.3rem;
+  }
+
+  .emc-analytics-stat__label {
+    font-size: 0.6rem;
+  }
+
+  .emc-toggle {
+    width: 40px;
+    height: 22px;
+  }
+
+  .emc-smtp-status {
+    font-size: 0.65rem;
+    padding: 3px 8px;
+  }
+
+  .emc-live-dot {
+    font-size: 10px;
+    padding: 1px 8px;
+  }
+
+  .emc-filters {
+    gap: 8px;
+  }
+
+  .emc-composer__actions {
+    gap: 8px;
+  }
+
+  .emc-api-status {
+    font-size: 0.75rem;
+    padding: 8px 14px;
+  }
+}
+
+@media (max-width: 375px) {
+  .em-marketing-view {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .emc-card__header {
+    padding: 10px 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .emc-card__header h3 {
+    font-size: 0.78rem;
+  }
+
+  .emc-card__icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+  }
+
+  .emc-card__body {
+    padding: 10px 12px;
+  }
+
+  .emc-analytics-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .emc-analytics-stat {
+    padding: 10px;
+  }
+
+  .emc-analytics-stat__value {
+    font-size: 1.1rem;
+  }
+
+  .emc-analytics-stat__label {
+    font-size: 0.55rem;
+  }
+
+  .emc-smtp-status {
+    font-size: 0.58rem;
+    padding: 2px 6px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+/* ============ Contact Import - Enhanced Mobile ============ */
+@media (max-width: 480px) {
+  .ci-method-tabs {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ci-method-tab {
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    border-radius: 10px;
+  }
+
+  .ci-upload-zone {
+    padding: 28px 16px;
+    border-radius: 12px;
+  }
+
+  .ci-upload-zone__title {
+    font-size: 0.9rem;
+  }
+
+  .ci-upload-zone__hint {
+    font-size: 0.75rem;
+  }
+
+  .ci-mapping {
+    padding: 14px;
+    border-radius: 10px;
+  }
+
+  .ci-mapping__row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .ci-manual-entry {
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .ci-manual-entry__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ci-import-action {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 14px;
+  }
+
+  .ci-import-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 16px;
+  }
+
+  .ci-history-item {
+    padding: 10px 12px;
+    border-radius: 10px;
+  }
+
+  .ci-history-item__meta {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .ci-acknowledge__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .ci-import-options__row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 375px) {
+  .ci-method-tab {
+    padding: 8px 12px;
+    font-size: 0.75rem;
+  }
+
+  .ci-upload-zone {
+    padding: 20px 12px;
+  }
+
+  .ci-upload-zone__title {
+    font-size: 0.82rem;
+  }
+
+  .ci-mapping {
+    padding: 10px;
+  }
+
+  .ci-mapping__row {
+    padding: 6px;
+  }
+
+  .ci-import-btn {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+/* ============ Ultra Small - 320px (iPhone SE 1st gen) ============ */
+@media (max-width: 320px) {
+  .nav-bar {
+    padding: 2px var(--space-xs);
+  }
+
+  .nav-bar__logo {
+    height: 12px;
+    margin-right: 4px;
+  }
+
+  .nav-tab {
+    padding: 5px 6px;
+    font-size: 0.55rem;
+    gap: 2px;
+  }
+
+  .nav-tab svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .nav-bar__right {
+    gap: 2px;
+  }
+
+  .header__user-info {
+    font-size: 0.52rem;
+    max-width: 80px;
+  }
+
+  .header__logout-btn {
+    padding: 2px 5px;
+    font-size: 0.48rem;
+    gap: 2px;
+  }
+
+  .header__logout-btn svg {
+    width: 9px;
+    height: 9px;
+  }
+
+  .main {
+    padding: var(--space-xs);
+  }
+
+  .summary-cards {
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+  }
+
+  .card__metric {
+    font-size: 0.9rem;
+  }
+
+  .card__label {
+    font-size: 0.52rem;
+  }
+
+  .card__sublabel {
+    display: none;
+  }
+
+  .card__conn-row {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .card__conn-count { font-size: 0.68rem; }
+  .card__conn-label { font-size: 0.38rem; }
+  .card__conn-pct { font-size: 0.36rem; }
+
+  .pipeline__title {
+    font-size: 0.72rem;
+  }
+
+  .chart-canvas-wrap {
+    width: 110px;
+    height: 110px;
+  }
+
+  .chart-canvas-wrap canvas {
+    width: 110px;
+    height: 110px;
+  }
+
+  .chart-center__count { font-size: 0.85rem; }
+  .chart-center__label { font-size: 0.42rem; }
+
+  .analytics-card {
+    padding: 3px;
+  }
+
+  .analytics-card__title {
+    font-size: 0.62rem;
+    gap: 3px;
+    margin-bottom: 4px;
+    padding-bottom: 2px;
+  }
+
+  .analytics-card__title svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  .insights-tab {
+    font-size: 0.4rem;
+    padding: 3px 1px;
+  }
+
+  .toolbar {
+    padding: 2px;
+    gap: 2px;
+  }
+
+  .toolbar__input {
+    padding: 4px 6px 4px 22px;
+    font-size: 0.6rem;
+  }
+
+  .toolbar__search-icon {
+    width: 10px;
+    height: 10px;
+    left: 6px;
+  }
+
+  .toolbar__select {
+    padding: 4px 3px;
+    font-size: 0.6rem;
+  }
+
+  #btnExportCSV {
+    padding: 4px;
+    font-size: 0.6rem;
+  }
+
+  .table th {
+    padding: 4px 2px;
+    font-size: 0.48rem;
+  }
+
+  .table td {
+    padding: 3px 2px;
+    font-size: 0.58rem;
+  }
+
+  .th-filter, .th-filter-select {
+    font-size: 0.45rem;
+    padding: 1px 2px;
+  }
+
+  /* Login */
+  .login-split {
+    margin: var(--space-xs);
+    border-radius: 12px;
+  }
+
+  .login-card__header { padding: 18px 12px 14px; }
+  .login-card__brand { gap: 6px; margin-bottom: 8px; }
+  .login-card__logo { width: 60px; }
+  .login-card__stepforward { font-size: 0.42rem; }
+  .login-card__crm-text { font-size: 0.9rem; letter-spacing: 1px; }
+  .login-card__divider { height: 18px; }
+  .login-card__header h2 { font-size: 0.8rem; }
+  .login-card__subtitle { font-size: 0.55rem; }
+  .login-card__form { padding: 14px 10px 18px; gap: 10px; }
+  .login-card__field label { font-size: 0.58rem; }
+  .login-card__field input { padding: 9px 10px; }
+  .login-card__btn { padding: 8px; font-size: 0.68rem; }
+  .login-card__hint { font-size: 0.44rem; }
+  .login-card__error { font-size: 0.55rem; }
+
+  /* WhatsApp Marketing */
+  .wa-marketing-view { padding: 6px; gap: 6px; }
+  .wam-card__header { padding: 8px 10px; }
+  .wam-card__header h3 { font-size: 0.72rem; }
+  .wam-card__icon { width: 26px; height: 26px; }
+  .wam-card__body { padding: 8px 10px; }
+
+  /* Email Marketing */
+  .em-marketing-view { padding: 6px; gap: 6px; }
+  .emc-card__header { padding: 8px 10px; }
+  .emc-card__header h3 { font-size: 0.72rem; }
+  .emc-card__icon { width: 26px; height: 26px; }
+  .emc-card__body { padding: 8px 10px; }
+  .emc-analytics-grid { gap: 4px; }
+  .emc-analytics-stat { padding: 8px; }
+  .emc-analytics-stat__value { font-size: 0.95rem; }
+  .emc-analytics-stat__label { font-size: 0.48rem; }
+
+  /* Contact Import */
+  .ci-method-tab { padding: 6px 10px; font-size: 0.68rem; }
+  .ci-upload-zone { padding: 16px 10px; }
+  .ci-mapping { padding: 8px; }
+  .ci-import-btn { padding: 6px 10px; font-size: 0.72rem; }
+
+  /* Modal */
+  .modal__title { font-size: 0.72rem; }
+  .modal__close { width: 22px; height: 22px; font-size: 14px; }
+  .form__label { font-size: 0.55rem; }
+  .btn { padding: 4px 6px; font-size: 0.58rem; }
+}
+
+/* ============ Orientation Fixes ============ */
+@media (max-height: 400px) and (orientation: landscape) {
+  .login-screen {
+    overflow-y: auto;
+    align-items: flex-start;
+    padding: var(--space-sm);
+  }
+
+  .login-split {
+    height: auto;
+    max-height: none;
+    border-radius: 12px;
+  }
+
+  .login-showcase { display: none; }
+  .login-form-side { width: 100%; }
+  .login-card__header { padding: 14px 12px 10px; }
+  .login-card__brand { gap: 6px; margin-bottom: 6px; }
+  .login-card__form { padding: 10px 12px 14px; gap: 8px; }
+  .login-card__field input { padding: 8px 12px; }
+  .login-card__btn { padding: 8px; }
+}
+
+/* ============ High DPI / Retina Optimizations ============ */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .login-bg-orb {
+    filter: blur(100px);
+  }
+
+  .login-channels::after {
+    border-width: 1px;
+  }
+}
+
+/* ============ Reduced Motion ============ */
+@media (prefers-reduced-motion: reduce) {
+  .login-bg-orb,
+  .login-channels::after,
+  .login-card__crm-text,
+  .login-funnel__stage {
+    animation: none !important;
+  }
+
+  .login-channel,
+  .login-channel:hover {
+    transition: none;
+  }
+
+  .login-card__btn:hover {
+    transform: none;
+  }
+}
+
+/* ============ Dark Mode / OLED Enhancement ============ */
+@media (prefers-color-scheme: dark) {
+  /* Already dark theme - optimize for OLED */
+  .login-screen {
+    background-color: #000;
+  }
+}
+
+/* ============ Hamburger Menu ============ */
+
+/* Hamburger button — hidden on desktop */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(129, 140, 248, 0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+  z-index: 1002;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.nav-hamburger:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(129, 140, 248, 0.4);
+}
+
+.nav-hamburger__line {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: #fff;
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Hamburger → X animation when open */
+.nav-hamburger.open .nav-hamburger__line:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-hamburger.open .nav-hamburger__line:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.nav-hamburger.open .nav-hamburger__line:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Overlay behind menu */
+.nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.nav-overlay.open {
+  display: block;
+  opacity: 1;
+}
+
+/* ============ Mobile Hamburger Layout (≤768px) ============ */
+@media (max-width: 768px) {
+  .nav-hamburger {
+    display: flex;
+  }
+
+  /* Nav bar becomes a compact top bar */
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px var(--space-md);
+    flex-wrap: nowrap;
+    gap: var(--space-sm);
+    position: relative;
+  }
+
+  /* Logo stays visible in top bar — pushed to right end */
+  .nav-bar__logo {
+    height: 24px;
+    order: 10;
+    margin-left: auto;
+  }
+
+  /* nav-bar__left becomes the slide-out drawer */
+  .nav-bar__left {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 260px;
+    height: 100vh;
+    background: linear-gradient(180deg, #1e1b4b 0%, #0f0a2e 100%);
+    flex-direction: column;
+    align-items: stretch;
+    padding: 70px 0 24px;
+    gap: 0;
+    z-index: 1001;
+    overflow-y: auto;
+    box-shadow: 4px 0 30px rgba(0, 0, 0, 0.5);
+    transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    border-right: 1px solid rgba(129, 140, 248, 0.15);
+  }
+
+  .nav-bar__left.open {
+    left: 0;
+  }
+
+  /* Logo is now a direct child of .nav-bar, outside the drawer */
+
+  /* Tab items inside drawer — full width, vertical */
+  .nav-bar__left .nav-tab {
+    width: 100%;
+    padding: 16px 24px;
+    font-size: 0.9rem;
+    gap: 12px;
+    border-bottom: none;
+    border-left: 3px solid transparent;
+    border-radius: 0;
+    justify-content: flex-start;
+    transition: background 0.2s ease, border-left-color 0.2s ease;
+  }
+
+  .nav-bar__left .nav-tab:hover {
+    background: rgba(129, 140, 248, 0.08);
+  }
+
+  .nav-bar__left .nav-tab.active {
+    background: rgba(129, 140, 248, 0.12);
+    border-left-color: currentColor;
+    border-bottom-color: transparent;
+  }
+
+  .nav-bar__left .nav-tab--dashboard.active {
+    border-left-color: #0A66C2;
+  }
+  .nav-bar__left .nav-tab--whatsapp.active {
+    border-left-color: #25D366;
+  }
+  .nav-bar__left .nav-tab--email.active {
+    border-left-color: #06b6d4;
+  }
+
+  .nav-bar__left .nav-tab svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Right side hidden from top bar — moved into drawer via JS */
+  .nav-bar__right {
+    display: none;
+  }
+
+  /* When moved inside the drawer */
+  .nav-bar__right--in-drawer {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    margin-top: auto;
+    padding: 16px 0 0;
+    border-top: 1px solid rgba(129, 140, 248, 0.12);
+  }
+
+  .nav-bar__right--in-drawer .header__live-badge {
+    display: none;
+  }
+
+  .nav-bar__right--in-drawer .header__last-sync {
+    display: none;
+  }
+
+  .nav-bar__right--in-drawer .header__user-info {
+    display: block;
+    padding: 10px 24px;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.5);
+    max-width: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .nav-bar__right--in-drawer .header__logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 0;
+    background: none;
+    color: #fca5a5;
+    width: 100%;
+    justify-content: flex-start;
+    transition: background 0.2s ease;
+  }
+
+  .nav-bar__right--in-drawer .header__logout-btn:hover {
+    background: rgba(239, 68, 68, 0.12);
+  }
+
+  .nav-bar__right--in-drawer .header__logout-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* ============ Small Phone Hamburger (≤480px) ============ */
+@media (max-width: 480px) {
+  .nav-bar {
+    padding: 6px var(--space-sm);
+  }
+
+  .nav-hamburger {
+    width: 32px;
+    height: 32px;
+    padding: 5px;
+    gap: 4px;
+  }
+
+  .nav-hamburger__line {
+    width: 18px;
+    height: 1.5px;
+  }
+
+  .nav-bar__logo {
+    height: 20px;
+  }
+
+  .nav-bar__left {
+    width: 240px;
+    left: -260px;
+    padding-top: 60px;
+  }
+
+  .nav-bar__left .nav-tab {
+    padding: 14px 20px;
+    font-size: 0.82rem;
+  }
+
+  .header__live-badge {
+    display: none;
+  }
+}
+
+/* ============ Ultra Small Hamburger (≤375px) ============ */
+@media (max-width: 375px) {
+  .nav-bar {
+    padding: 5px var(--space-xs);
+  }
+
+  .nav-hamburger {
+    width: 30px;
+    height: 30px;
+  }
+
+  .nav-bar__logo {
+    height: 16px;
+  }
+
+  .nav-bar__left {
+    width: 220px;
+    left: -240px;
+  }
+
+  .nav-bar__left .nav-tab {
+    padding: 12px 16px;
+    font-size: 0.78rem;
+    gap: 10px;
+  }
+
+  .header__logout-btn {
+    padding: 3px 8px;
+    font-size: 0.58rem;
+  }
+}
+
+/* ============ Mobile: Email Status - Dot only ============ */
+@media (max-width: 768px) {
+  /* Toggle visible on mobile — smaller size */
+  .wam-toggle {
+    width: 36px;
+    height: 20px;
+  }
+  .wam-toggle__slider::before {
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+  }
+  .wam-toggle input:checked + .wam-toggle__slider::before,
+  .wam-toggle--on .wam-toggle__slider::before {
+    transform: translateX(16px);
+  }
+
+  /* WhatsApp status button: smaller on mobile */
+  .wam-status-btn {
+    font-size: 0.6rem;
+    padding: 4px 10px;
+    gap: 4px;
+  }
+
+  .wam-status-btn__dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  /* Email status badge: dot only on mobile */
+  .emc-smtp-status {
+    font-size: 0;
+    padding: 0;
+    min-width: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    gap: 0;
+    border: none;
+    margin-left: 4px;
+    margin-right: 4px;
+  }
+
+  .emc-smtp-status .emc-smtp-dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .emc-smtp-status--live {
+    background: rgba(6, 182, 212, 0.3);
+  }
+  .emc-smtp-status--dryrun {
+    background: rgba(251, 191, 36, 0.3);
+  }
+  .emc-smtp-status--offline {
+    background: rgba(244, 63, 94, 0.3);
+  }
+}
+
+/* ============ Mobile: WhatsApp Card Alignment Fix ============ */
+@media (max-width: 768px) {
+  .wam-card__header {
+    flex-wrap: nowrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .wam-card__header > div[style*="flex:1"] {
+    flex: 1 1 0% !important;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .wam-card__header .wam-card__icon {
+    flex-shrink: 0;
+  }
+
+  .wam-card__header .wam-status-badge,
+  .wam-card__header .wam-status-btn {
+    display: none;
+  }
+
+  .wam-card__header .wam-toggle {
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  .wam-card__header .wam-expand-arrow {
+    flex-shrink: 0;
+    margin-left: 0;
+  }
+
+  .wam-card__header h3 {
+    font-size: 0.82rem;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .wam-card__header p {
+    font-size: 0.65rem;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ---- Send to Dashboard: Filters full-width stacked (WhatsApp) ---- */
+  .wam-filters {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .wam-form-group {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .wam-form-group--action {
+    align-items: stretch;
+  }
+
+  .wam-form-group--action .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .wam-select {
+    width: 100%;
+  }
+
+  .wam-leads-table-wrap {
+    max-height: 300px;
+    border-radius: 8px;
+  }
+
+  .wam-leads-table th,
+  .wam-leads-table td {
+    padding: 8px 10px;
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
+  .wam-leads-summary {
+    font-size: 0.75rem;
+    padding: 8px 0;
+  }
+
+  .wam-composer {
+    gap: 10px;
+  }
+
+  .wam-textarea {
+    font-size: 0.8rem;
+    padding: 10px;
+    min-height: 80px;
+  }
+
+  .wam-template-vars {
+    gap: 4px;
+  }
+
+  .wam-var-chip {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+  }
+
+  /* ---- Send to Dashboard: Filters full-width stacked (Email) ---- */
+  .emc-filters {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .emc-form-group {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .emc-form-group--action {
+    align-items: stretch;
+  }
+
+  .emc-form-group--action .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .emc-select {
+    width: 100%;
+  }
+
+  .emc-leads-table-wrap {
+    max-height: 300px;
+    border-radius: 8px;
+  }
+
+  .emc-leads-table th,
+  .emc-leads-table td {
+    padding: 8px 10px;
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
+  .emc-composer {
+    gap: 10px;
+  }
+
+  .emc-textarea,
+  .emc-input {
+    font-size: 0.8rem;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wam-card__header {
+    padding: 12px 14px;
+    gap: 8px;
+  }
+
+  .wam-card__header h3 {
+    font-size: 0.82rem;
+  }
+
+  .wam-card__header p {
+    font-size: 0.68rem;
+  }
+
+  .wam-card__icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+  }
+
+  .wam-card__icon svg {
+    width: 18px;
+    height: 18px;
   }
 }

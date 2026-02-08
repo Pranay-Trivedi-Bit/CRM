@@ -12,6 +12,7 @@ var WhatsAppModule = (function () {
     initialized = true;
 
     bindTabNavigation();
+    bindHamburgerMenu();
   }
 
   function bindTabNavigation() {
@@ -23,10 +24,120 @@ var WhatsAppModule = (function () {
           e.stopPropagation();
           var view = tab.dataset.view;
           switchView(view);
+          closeHamburger();
           window.scrollTo(0, 0);
         };
       })(tabs[i]);
     }
+  }
+
+  function bindHamburgerMenu() {
+    var hamburger = document.getElementById('navHamburger');
+    var overlay = document.getElementById('navOverlay');
+    if (!hamburger) return;
+
+    hamburger.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleHamburger();
+    });
+
+    if (overlay) {
+      overlay.addEventListener('click', function () {
+        closeHamburger();
+      });
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeHamburger();
+    });
+
+    // Move right-side items (user info, logout) into drawer on mobile
+    setupMobileDrawerItems();
+    window.addEventListener('resize', setupMobileDrawerItems);
+  }
+
+  var _drawerItemsMoved = false;
+  var _origRightParent = null;
+  var _origRightNextSibling = null;
+
+  function setupMobileDrawerItems() {
+    var navLeft = document.querySelector('.nav-bar__left');
+    var navRight = document.querySelector('.nav-bar__right');
+    if (!navLeft || !navRight) return;
+
+    var isMobile = window.innerWidth <= 768;
+
+    if (isMobile && !_drawerItemsMoved) {
+      // Remember original position
+      _origRightParent = navRight.parentNode;
+      _origRightNextSibling = navRight.nextSibling;
+      // Move into drawer at the bottom
+      navLeft.appendChild(navRight);
+      navRight.classList.add('nav-bar__right--in-drawer');
+
+      // Show only first name in mobile drawer
+      var userInfo = document.getElementById('headerUserInfo');
+      if (userInfo) {
+        userInfo.setAttribute('data-full-text', userInfo.textContent);
+        var fullText = userInfo.textContent;
+        var firstName = fullText.split(' ')[0] || fullText;
+        userInfo.textContent = firstName;
+      }
+
+      _drawerItemsMoved = true;
+    } else if (!isMobile && _drawerItemsMoved) {
+      // Move back to original position
+      if (_origRightParent) {
+        if (_origRightNextSibling) {
+          _origRightParent.insertBefore(navRight, _origRightNextSibling);
+        } else {
+          _origRightParent.appendChild(navRight);
+        }
+      }
+      navRight.classList.remove('nav-bar__right--in-drawer');
+
+      // Restore full user info text
+      var userInfo = document.getElementById('headerUserInfo');
+      if (userInfo && userInfo.getAttribute('data-full-text')) {
+        userInfo.textContent = userInfo.getAttribute('data-full-text');
+      }
+
+      _drawerItemsMoved = false;
+    }
+  }
+
+  function toggleHamburger() {
+    var hamburger = document.getElementById('navHamburger');
+    var navLeft = document.querySelector('.nav-bar__left');
+    var overlay = document.getElementById('navOverlay');
+    if (!hamburger || !navLeft) return;
+
+    var isOpen = hamburger.classList.contains('open');
+    if (isOpen) {
+      closeHamburger();
+    } else {
+      hamburger.classList.add('open');
+      hamburger.setAttribute('aria-expanded', 'true');
+      navLeft.classList.add('open');
+      if (overlay) overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeHamburger() {
+    var hamburger = document.getElementById('navHamburger');
+    var navLeft = document.querySelector('.nav-bar__left');
+    var overlay = document.getElementById('navOverlay');
+
+    if (hamburger) {
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    }
+    if (navLeft) navLeft.classList.remove('open');
+    if (overlay) overlay.classList.remove('open');
+    document.body.style.overflow = '';
   }
 
   function switchView(view) {
