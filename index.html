@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5">
   <title>CRM | Koenig Solutions</title>
-  <link rel="stylesheet" href="styles.css?v=59">
+  <link rel="stylesheet" href="styles.css?v=60">
 </head>
 <body>
 
@@ -348,8 +348,16 @@
           <div class="wam-form-row">
             <div class="wam-form-group wam-form-group--full">
               <label class="wam-label">Acknowledgement Message Template</label>
-              <textarea class="wam-textarea" id="wamAckTemplate" rows="4" placeholder="Hi {{name}}, thank you for your interest in Koenig Solutions! Our team will reach out to you shortly.">Hi {{name}}, thank you for your interest in Koenig Solutions! Our team will connect with you shortly regarding your inquiry.</textarea>
+              <textarea class="wam-textarea" id="wamAckTemplate" rows="8" placeholder="Hi {{firstName}}, thank you for reaching out to Koenig Solutions!">Hi {{firstName}} 👋,
+Thank you for reaching out to Koenig Solutions – Your Trusted global IT training partner.
+
+With 30+ years of training excellence, 350+ certified trainers, and 30,000+ professionals trained every month, Koenig delivers globally recognized, career-focused certification programs.
+
+Your enquiry has been received, and our training expert will connect with you shortly to discuss course details, schedules, and next steps.
+
+We look forward to supporting your learning journey! 🚀</textarea>
               <div class="wam-template-vars">
+                <span class="wam-var-chip">{{firstName}}</span>
                 <span class="wam-var-chip">{{name}}</span>
                 <span class="wam-var-chip">{{phone}}</span>
                 <span class="wam-var-chip">{{email}}</span>
@@ -473,6 +481,7 @@
               <label class="wam-label">Message</label>
               <textarea class="wam-textarea" id="wamBulkMessage" rows="4" placeholder="Type your message here... Use {{name}}, {{company}} for personalization"></textarea>
               <div class="wam-template-vars">
+                <span class="wam-var-chip">{{firstName}}</span>
                 <span class="wam-var-chip">{{name}}</span>
                 <span class="wam-var-chip">{{phone}}</span>
                 <span class="wam-var-chip">{{email}}</span>

@@ -595,6 +595,7 @@ var WAMarketing = (function () {
   function interpolateTemplate(template, lead) {
     return template
       .replace(/\{\{name\}\}/gi, lead.name || 'there')
+      .replace(/\{\{firstName\}\}/gi, (lead.name ? lead.name.split(' ')[0] : 'there'))
       .replace(/\{\{phone\}\}/gi, lead.phone || '')
       .replace(/\{\{email\}\}/gi, lead.email || '')
       .replace(/\{\{company\}\}/gi, lead.company || '')
