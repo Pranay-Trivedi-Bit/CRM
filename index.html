@@ -545,6 +545,46 @@ We look forward to supporting your Microsoft learning journey 🚀</textarea>
                 <span class="wam-var-chip">{{industry}}</span>
               </div>
             </div>
+            <!-- Media Attachment for Bulk Send -->
+            <div class="wam-form-group wam-form-group--full" style="margin-top:12px;">
+              <label class="wam-label">Attach Media <span style="font-weight:400; color:var(--color-text-muted)">(optional)</span></label>
+              <div class="wam-media-type-tabs">
+                <button class="wam-media-type-btn wam-media-type-btn--active" data-type="image" data-scope="bulk">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  Image
+                </button>
+                <button class="wam-media-type-btn" data-type="video" data-scope="bulk">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                  Video
+                </button>
+                <button class="wam-media-type-btn" data-type="document" data-scope="bulk">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  Document
+                </button>
+              </div>
+              <p class="wam-media-hint" id="wamBulkMediaHint">JPEG, PNG &middot; Max 5 MB</p>
+            </div>
+            <div class="wam-form-group wam-form-group--full">
+              <label class="wam-label">Media URL or Upload</label>
+              <input type="text" class="wam-input" id="wamBulkMediaUrl" placeholder="Paste a public image/video/document URL here...">
+              <div class="wam-upload-divider"><span>or</span></div>
+              <div class="wam-upload-zone" id="wamBulkUploadZone">
+                <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <p>Drag &amp; drop a file here or <strong>click to browse</strong></p>
+                <input type="file" id="wamBulkFileInput" accept="image/jpeg,image/png" style="display:none;">
+              </div>
+              <!-- Preview -->
+              <div class="wam-media-preview" id="wamBulkMediaPreview" style="display:none;">
+                <div class="wam-media-preview__inner" id="wamBulkPreviewInner"></div>
+                <button class="wam-media-preview__remove" id="wamBulkPreviewRemove" title="Remove">&times;</button>
+                <div class="wam-media-preview__name" id="wamBulkPreviewName"></div>
+              </div>
+            </div>
+            <div class="wam-form-group wam-form-group--full">
+              <label class="wam-label">Caption <span style="font-weight:400; color:var(--color-text-muted)">(optional, for media)</span></label>
+              <textarea class="wam-textarea" id="wamBulkMediaCaption" rows="2" placeholder="Add a caption to your media message..."></textarea>
+            </div>
+
             <div class="wam-composer__actions">
               <button class="btn btn--primary wam-send-btn" id="wamSendBulk" disabled>
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
@@ -553,73 +593,6 @@ We look forward to supporting your Microsoft learning journey 🚀</textarea>
               <span class="wam-send-status" id="wamSendStatus"></span>
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- Media Upload & Campaign Card -->
-      <div class="wam-card">
-        <div class="wam-card__header wam-card__header--clickable" id="wamMediaHeader">
-          <div class="wam-card__icon wam-card__icon--green">
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          </div>
-          <div style="flex:1;">
-            <h3>Media Upload &amp; Campaign</h3>
-            <p>Send images, videos, and documents to your leads via WhatsApp</p>
-          </div>
-          <span class="wam-expand-arrow" id="wamMediaArrow">&#9654;</span>
-        </div>
-        <div class="wam-card__body" id="wamMediaBody" style="display:none;">
-
-          <!-- Media Type Selector -->
-          <div class="wam-form-group">
-            <label class="wam-label">Media Type</label>
-            <div class="wam-media-type-tabs">
-              <button class="wam-media-type-btn wam-media-type-btn--active" data-type="image">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                Image
-              </button>
-              <button class="wam-media-type-btn" data-type="video">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-                Video
-              </button>
-              <button class="wam-media-type-btn" data-type="document">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                Document
-              </button>
-            </div>
-            <p class="wam-media-hint" id="wamMediaHint">JPEG, PNG &middot; Max 5 MB</p>
-          </div>
-
-          <!-- Upload Area -->
-          <div class="wam-form-group">
-            <label class="wam-label">Media URL or Upload</label>
-            <input type="text" class="wam-input" id="wamMediaUrl" placeholder="Paste a public image/video/document URL here...">
-            <div class="wam-upload-divider"><span>or</span></div>
-            <div class="wam-upload-zone" id="wamUploadZone">
-              <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              <p>Drag &amp; drop a file here or <strong>click to browse</strong></p>
-              <input type="file" id="wamFileInput" accept="image/jpeg,image/png" style="display:none;">
-            </div>
-            <!-- Preview -->
-            <div class="wam-media-preview" id="wamMediaPreview" style="display:none;">
-              <div class="wam-media-preview__inner" id="wamPreviewInner"></div>
-              <button class="wam-media-preview__remove" id="wamPreviewRemove" title="Remove">&times;</button>
-              <div class="wam-media-preview__name" id="wamPreviewName"></div>
-            </div>
-          </div>
-
-          <!-- Caption -->
-          <div class="wam-form-group">
-            <label class="wam-label">Caption / Message <span style="font-weight:400; color:var(--color-text-muted)">(optional)</span></label>
-            <textarea class="wam-textarea" id="wamMediaCaption" rows="3" placeholder="Add a caption to your media message..."></textarea>
-          </div>
-
-          <!-- Status & Send -->
-          <div class="wam-composer__actions">
-            <span class="wam-media-send-info" id="wamMediaSendInfo">Attach media above, then select leads from "Send to Dashboard Leads" and use this to send.</span>
-            <span class="wam-send-status" id="wamMediaStatus"></span>
-          </div>
-
         </div>
       </div>
 

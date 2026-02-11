@@ -254,6 +254,62 @@ var WAMarketing = (function () {
       });
     }
 
+    // ---- Bulk Send Media Upload Handlers ----
+    var bulkMediaBtns = document.querySelectorAll('.wam-media-type-btn[data-scope="bulk"]');
+    for (var bm = 0; bm < bulkMediaBtns.length; bm++) {
+      bulkMediaBtns[bm].addEventListener('click', function () {
+        for (var bn = 0; bn < bulkMediaBtns.length; bn++) {
+          bulkMediaBtns[bn].classList.remove('wam-media-type-btn--active');
+        }
+        this.classList.add('wam-media-type-btn--active');
+        var type = this.getAttribute('data-type');
+        updateBulkMediaTypeHint(type);
+        clearBulkMediaPreview();
+      });
+    }
+
+    var bulkUploadZone = document.getElementById('wamBulkUploadZone');
+    var bulkFileInput = document.getElementById('wamBulkFileInput');
+    if (bulkUploadZone && bulkFileInput) {
+      bulkUploadZone.addEventListener('click', function () { bulkFileInput.click(); });
+      bulkUploadZone.addEventListener('dragover', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        bulkUploadZone.classList.add('wam-upload-zone--dragover');
+      });
+      bulkUploadZone.addEventListener('dragleave', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        bulkUploadZone.classList.remove('wam-upload-zone--dragover');
+      });
+      bulkUploadZone.addEventListener('drop', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        bulkUploadZone.classList.remove('wam-upload-zone--dragover');
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          handleBulkMediaFile(e.dataTransfer.files[0]);
+        }
+      });
+      bulkFileInput.addEventListener('change', function () {
+        if (this.files && this.files.length > 0) {
+          handleBulkMediaFile(this.files[0]);
+        }
+      });
+    }
+
+    var bulkMediaUrlInput = document.getElementById('wamBulkMediaUrl');
+    if (bulkMediaUrlInput) {
+      bulkMediaUrlInput.addEventListener('change', function () {
+        var url = this.value.trim();
+        if (url) { showBulkUrlPreview(url); } else { clearBulkMediaPreview(); }
+      });
+    }
+
+    var bulkRemoveBtn = document.getElementById('wamBulkPreviewRemove');
+    if (bulkRemoveBtn) {
+      bulkRemoveBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        clearBulkMediaPreview();
+      });
+    }
+
     // Bulk Send header click — toggle open/close
     var bulkHeader = document.getElementById('wamBulkSendHeader');
     if (bulkHeader) {
@@ -580,7 +636,7 @@ var WAMarketing = (function () {
     if (!tbody || !messageEl) return;
 
     var messageTemplate = messageEl.value.trim();
-    var mediaAttachment = getMediaAttachment();
+    var mediaAttachment = getBulkMediaAttachment();
 
     // Need at least text or media
     if (!messageTemplate && !mediaAttachment) {
@@ -943,7 +999,7 @@ var WAMarketing = (function () {
   }
 
   function getMediaAttachment() {
-    // Returns current media state for bulk send integration
+    // Returns current media state from the standalone Media Upload card
     var url = (document.getElementById('wamMediaUrl') || {}).value || '';
     var caption = (document.getElementById('wamMediaCaption') || {}).value || '';
     if (!url && !currentMediaUrl) return null;
@@ -952,6 +1008,19 @@ var WAMarketing = (function () {
       mediaUrl: url || currentMediaUrl,
       caption: caption,
       filename: currentMediaFilename || 'media'
+    };
+  }
+
+  function getBulkMediaAttachment() {
+    // Returns current media state from the bulk send card's media section
+    var url = (document.getElementById('wamBulkMediaUrl') || {}).value || '';
+    var caption = (document.getElementById('wamBulkMediaCaption') || {}).value || '';
+    if (!url && !bulkMediaUrl) return null;
+    return {
+      mediaType: getActiveBulkMediaType(),
+      mediaUrl: url || bulkMediaUrl,
+      caption: caption,
+      filename: bulkMediaFilename || 'media'
     };
   }
 
@@ -1046,6 +1115,89 @@ var WAMarketing = (function () {
       mediaUrl: url || ackMediaUrl,
       filename: ackMediaFilename || 'media'
     };
+  }
+
+  // ============ Bulk Send Media Upload Helpers ============
+  var bulkMediaType = 'image';
+  var bulkMediaUrl = '';
+  var bulkMediaFilename = '';
+
+  function getActiveBulkMediaType() {
+    var activeBtn = document.querySelector('.wam-media-type-btn--active[data-scope="bulk"]');
+    return activeBtn ? activeBtn.getAttribute('data-type') : 'image';
+  }
+
+  function updateBulkMediaTypeHint(type) {
+    bulkMediaType = type;
+    var hint = document.getElementById('wamBulkMediaHint');
+    var fileInput = document.getElementById('wamBulkFileInput');
+    var cfg = mediaTypeConfig[type] || mediaTypeConfig.image;
+    if (hint) hint.textContent = cfg.hint;
+    if (fileInput) fileInput.setAttribute('accept', cfg.accept);
+  }
+
+  function handleBulkMediaFile(file) {
+    var type = getActiveBulkMediaType();
+    var cfg = mediaTypeConfig[type] || mediaTypeConfig.image;
+    if (file.size > cfg.maxSize) {
+      showToast('File too large. Max ' + (cfg.maxSize / (1024 * 1024)) + ' MB for ' + type + '.', 'error');
+      return;
+    }
+    bulkMediaFilename = file.name;
+    var blobUrl = URL.createObjectURL(file);
+    bulkMediaUrl = blobUrl;
+    bulkMediaType = type;
+    renderBulkPreview(blobUrl, file.name, type);
+    var zone = document.getElementById('wamBulkUploadZone');
+    if (zone) zone._selectedFile = file;
+  }
+
+  function showBulkUrlPreview(url) {
+    var type = getActiveBulkMediaType();
+    bulkMediaUrl = url;
+    bulkMediaType = type;
+    bulkMediaFilename = url.split('/').pop().split('?')[0] || 'media';
+    renderBulkPreview(url, bulkMediaFilename, type);
+  }
+
+  function renderBulkPreview(url, name, type) {
+    var container = document.getElementById('wamBulkMediaPreview');
+    var inner = document.getElementById('wamBulkPreviewInner');
+    var nameEl = document.getElementById('wamBulkPreviewName');
+    if (!container || !inner) return;
+    inner.innerHTML = '';
+    if (type === 'image') {
+      var img = document.createElement('img');
+      img.src = url; img.alt = name;
+      img.onerror = function () { inner.innerHTML = '<div class="wam-doc-icon"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Image preview unavailable</span></div>'; };
+      inner.appendChild(img);
+    } else if (type === 'video') {
+      var vid = document.createElement('video');
+      vid.src = url; vid.controls = true; vid.style.maxWidth = '100%'; vid.style.maxHeight = '280px';
+      vid.onerror = function () { inner.innerHTML = '<div class="wam-doc-icon"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg><span>Video preview unavailable</span></div>'; };
+      inner.appendChild(vid);
+    } else {
+      inner.innerHTML = '<div class="wam-doc-icon"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>' + escapeHtml(name) + '</span></div>';
+    }
+    if (nameEl) nameEl.textContent = name;
+    container.style.display = '';
+  }
+
+  function clearBulkMediaPreview() {
+    var container = document.getElementById('wamBulkMediaPreview');
+    var inner = document.getElementById('wamBulkPreviewInner');
+    var nameEl = document.getElementById('wamBulkPreviewName');
+    var urlInput = document.getElementById('wamBulkMediaUrl');
+    var fileInput = document.getElementById('wamBulkFileInput');
+    var zone = document.getElementById('wamBulkUploadZone');
+    if (container) container.style.display = 'none';
+    if (inner) inner.innerHTML = '';
+    if (nameEl) nameEl.textContent = '';
+    if (urlInput) urlInput.value = '';
+    if (fileInput) fileInput.value = '';
+    if (zone) zone._selectedFile = null;
+    bulkMediaUrl = '';
+    bulkMediaFilename = '';
   }
 
   function showToast(message, type) {
