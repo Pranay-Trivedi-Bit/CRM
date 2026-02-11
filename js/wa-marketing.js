@@ -198,6 +198,62 @@ var WAMarketing = (function () {
       });
     }
 
+    // ---- Auto-Ack Media Upload Handlers ----
+    var ackMediaBtns = document.querySelectorAll('.wam-media-type-btn[data-scope="ack"]');
+    for (var a = 0; a < ackMediaBtns.length; a++) {
+      ackMediaBtns[a].addEventListener('click', function () {
+        for (var b = 0; b < ackMediaBtns.length; b++) {
+          ackMediaBtns[b].classList.remove('wam-media-type-btn--active');
+        }
+        this.classList.add('wam-media-type-btn--active');
+        var type = this.getAttribute('data-type');
+        updateAckMediaTypeHint(type);
+        clearAckMediaPreview();
+      });
+    }
+
+    var ackUploadZone = document.getElementById('wamAckUploadZone');
+    var ackFileInput = document.getElementById('wamAckFileInput');
+    if (ackUploadZone && ackFileInput) {
+      ackUploadZone.addEventListener('click', function () { ackFileInput.click(); });
+      ackUploadZone.addEventListener('dragover', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        ackUploadZone.classList.add('wam-upload-zone--dragover');
+      });
+      ackUploadZone.addEventListener('dragleave', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        ackUploadZone.classList.remove('wam-upload-zone--dragover');
+      });
+      ackUploadZone.addEventListener('drop', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        ackUploadZone.classList.remove('wam-upload-zone--dragover');
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          handleAckMediaFile(e.dataTransfer.files[0]);
+        }
+      });
+      ackFileInput.addEventListener('change', function () {
+        if (this.files && this.files.length > 0) {
+          handleAckMediaFile(this.files[0]);
+        }
+      });
+    }
+
+    var ackMediaUrlInput = document.getElementById('wamAckMediaUrl');
+    if (ackMediaUrlInput) {
+      ackMediaUrlInput.addEventListener('change', function () {
+        var url = this.value.trim();
+        if (url) { showAckUrlPreview(url); } else { clearAckMediaPreview(); }
+      });
+    }
+
+    var ackRemoveBtn = document.getElementById('wamAckPreviewRemove');
+    if (ackRemoveBtn) {
+      ackRemoveBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        clearAckMediaPreview();
+      });
+    }
+
     // Bulk Send header click — toggle open/close
     var bulkHeader = document.getElementById('wamBulkSendHeader');
     if (bulkHeader) {
@@ -342,9 +398,12 @@ var WAMarketing = (function () {
 
   async function sendAutoAck(lead, template) {
     var message = interpolateTemplate(template, lead);
+    var ackMedia = getAckMediaAttachment();
 
     try {
-      var res = await fetch('/api/messages/send', {
+      var res;
+      // Send text message first
+      res = await fetch('/api/messages/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -357,12 +416,31 @@ var WAMarketing = (function () {
       });
       var data = await res.json();
 
+      // If media is attached, send it as a follow-up
+      if (ackMedia && data.success) {
+        try {
+          await fetch('/api/messages/send-media', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              phone: lead.phone,
+              mediaType: ackMedia.mediaType,
+              mediaUrl: ackMedia.mediaUrl,
+              caption: '',
+              filename: ackMedia.filename,
+              leadId: lead.id,
+              leadName: lead.name
+            })
+          });
+        } catch (mediaErr) { /* media send failed, text was still sent */ }
+      }
+
       addToHistory({
         type: 'auto-ack',
         leadName: lead.name || 'Unknown',
         phone: lead.phone,
         csmName: lead.assignedTo || '',
-        message: message,
+        message: ackMedia ? message + ' [+' + ackMedia.mediaType + ']' : message,
         status: data.success ? 'sent' : 'failed',
         simulated: data.simulated || false,
         timestamp: new Date().toISOString()
@@ -874,6 +952,99 @@ var WAMarketing = (function () {
       mediaUrl: url || currentMediaUrl,
       caption: caption,
       filename: currentMediaFilename || 'media'
+    };
+  }
+
+  // ============ Auto-Ack Media Upload Helpers ============
+  var ackMediaType = 'image';
+  var ackMediaUrl = '';
+  var ackMediaFilename = '';
+
+  function getActiveAckMediaType() {
+    var activeBtn = document.querySelector('.wam-media-type-btn--active[data-scope="ack"]');
+    return activeBtn ? activeBtn.getAttribute('data-type') : 'image';
+  }
+
+  function updateAckMediaTypeHint(type) {
+    ackMediaType = type;
+    var hint = document.getElementById('wamAckMediaHint');
+    var fileInput = document.getElementById('wamAckFileInput');
+    var cfg = mediaTypeConfig[type] || mediaTypeConfig.image;
+    if (hint) hint.textContent = cfg.hint;
+    if (fileInput) fileInput.setAttribute('accept', cfg.accept);
+  }
+
+  function handleAckMediaFile(file) {
+    var type = getActiveAckMediaType();
+    var cfg = mediaTypeConfig[type] || mediaTypeConfig.image;
+    if (file.size > cfg.maxSize) {
+      showToast('File too large. Max ' + (cfg.maxSize / (1024 * 1024)) + ' MB for ' + type + '.', 'error');
+      return;
+    }
+    ackMediaFilename = file.name;
+    var blobUrl = URL.createObjectURL(file);
+    ackMediaUrl = blobUrl;
+    ackMediaType = type;
+    renderAckPreview(blobUrl, file.name, type);
+    var zone = document.getElementById('wamAckUploadZone');
+    if (zone) zone._selectedFile = file;
+  }
+
+  function showAckUrlPreview(url) {
+    var type = getActiveAckMediaType();
+    ackMediaUrl = url;
+    ackMediaType = type;
+    ackMediaFilename = url.split('/').pop().split('?')[0] || 'media';
+    renderAckPreview(url, ackMediaFilename, type);
+  }
+
+  function renderAckPreview(url, name, type) {
+    var container = document.getElementById('wamAckMediaPreview');
+    var inner = document.getElementById('wamAckPreviewInner');
+    var nameEl = document.getElementById('wamAckPreviewName');
+    if (!container || !inner) return;
+    inner.innerHTML = '';
+    if (type === 'image') {
+      var img = document.createElement('img');
+      img.src = url; img.alt = name;
+      img.onerror = function () { inner.innerHTML = '<div class="wam-doc-icon"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Image preview unavailable</span></div>'; };
+      inner.appendChild(img);
+    } else if (type === 'video') {
+      var vid = document.createElement('video');
+      vid.src = url; vid.controls = true; vid.style.maxWidth = '100%'; vid.style.maxHeight = '280px';
+      vid.onerror = function () { inner.innerHTML = '<div class="wam-doc-icon"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg><span>Video preview unavailable</span></div>'; };
+      inner.appendChild(vid);
+    } else {
+      inner.innerHTML = '<div class="wam-doc-icon"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>' + escapeHtml(name) + '</span></div>';
+    }
+    if (nameEl) nameEl.textContent = name;
+    container.style.display = '';
+  }
+
+  function clearAckMediaPreview() {
+    var container = document.getElementById('wamAckMediaPreview');
+    var inner = document.getElementById('wamAckPreviewInner');
+    var nameEl = document.getElementById('wamAckPreviewName');
+    var urlInput = document.getElementById('wamAckMediaUrl');
+    var fileInput = document.getElementById('wamAckFileInput');
+    var zone = document.getElementById('wamAckUploadZone');
+    if (container) container.style.display = 'none';
+    if (inner) inner.innerHTML = '';
+    if (nameEl) nameEl.textContent = '';
+    if (urlInput) urlInput.value = '';
+    if (fileInput) fileInput.value = '';
+    if (zone) zone._selectedFile = null;
+    ackMediaUrl = '';
+    ackMediaFilename = '';
+  }
+
+  function getAckMediaAttachment() {
+    var url = (document.getElementById('wamAckMediaUrl') || {}).value || '';
+    if (!url && !ackMediaUrl) return null;
+    return {
+      mediaType: getActiveAckMediaType(),
+      mediaUrl: url || ackMediaUrl,
+      filename: ackMediaFilename || 'media'
     };
   }
 

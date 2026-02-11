@@ -6547,22 +6547,22 @@ html {
   box-shadow: 0 0 4px rgba(244, 63, 94, 0.4);
 }
 
-/* WhatsApp Status Button (replaces badge + toggle) */
+/* WhatsApp Status Button — matches Email Marketing badge style */
 .wam-status-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 6px 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 12px;
   border-radius: 20px;
   white-space: nowrap;
-  letter-spacing: 0.5px;
   border: none;
   cursor: default;
   font-family: inherit;
-  text-transform: uppercase;
   flex-shrink: 0;
+  margin-left: auto;
+  margin-right: 12px;
 }
 
 .wam-status-btn__dot {
@@ -6573,40 +6573,41 @@ html {
 }
 
 .wam-status-btn--live {
-  background: #25d366;
-  color: #fff;
+  background: rgba(37, 211, 102, 0.12);
+  color: #25d366;
+  border: 1px solid rgba(37, 211, 102, 0.25);
   animation: wamBtnPulseLive 2s ease-in-out infinite;
 }
 .wam-status-btn--live .wam-status-btn__dot {
-  background: #fff;
-  box-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
-  animation: livePulse 2s ease-in-out infinite;
+  background: #25d366;
+  box-shadow: 0 0 6px rgba(37, 211, 102, 0.6);
+  animation: wamDotPulse 2s infinite;
 }
 
 .wam-status-btn--offline {
-  background: #f43f5e;
-  color: #fff;
+  background: rgba(244, 63, 94, 0.12);
+  color: #f43f5e;
+  border: 1px solid rgba(244, 63, 94, 0.25);
   animation: wamBtnPulseOffline 2s ease-in-out infinite;
 }
 .wam-status-btn--offline .wam-status-btn__dot {
-  background: #fff;
-  box-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
-  animation: offlinePulse 2s ease-in-out infinite;
+  background: #f43f5e;
+  box-shadow: 0 0 4px rgba(244, 63, 94, 0.4);
 }
 
 @keyframes wamBtnPulseLive {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
   50% { box-shadow: 0 0 0 6px rgba(37, 211, 102, 0); }
 }
 
 @keyframes wamBtnPulseOffline {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.5); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.4); }
   50% { box-shadow: 0 0 0 6px rgba(244, 63, 94, 0); }
 }
 
-@keyframes offlinePulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.6); }
-  50% { box-shadow: 0 0 0 4px rgba(255, 255, 255, 0); }
+@keyframes wamDotPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
 
 .wam-leads-summary {
@@ -9714,8 +9715,8 @@ html {
 
   /* WhatsApp status button: smaller on mobile */
   .wam-status-btn {
-    font-size: 0.6rem;
-    padding: 4px 10px;
+    font-size: 0.65rem;
+    padding: 3px 8px;
     gap: 4px;
   }
 
