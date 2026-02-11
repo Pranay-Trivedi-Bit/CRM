@@ -94,4 +94,45 @@ router.post('/send-interactive', async (req, res) => {
   }
 });
 
+// Send a media message (image, video, or document)
+router.post('/send-media', async (req, res) => {
+  try {
+    const { phone, mediaType, mediaUrl, caption, filename, leadId, leadName } = req.body;
+    if (!phone || !mediaUrl) {
+      return res.status(400).json({ error: 'phone and mediaUrl are required' });
+    }
+
+    let result;
+    switch (mediaType) {
+      case 'image':
+        result = await whatsappApi.sendImage(phone, mediaUrl, caption);
+        break;
+      case 'video':
+        result = await whatsappApi.sendVideo(phone, mediaUrl, caption);
+        break;
+      case 'document':
+        result = await whatsappApi.sendDocument(phone, mediaUrl, filename || 'document');
+        break;
+      default:
+        return res.status(400).json({ error: 'Invalid mediaType. Use image, video, or document.' });
+    }
+
+    const messageId = result.messages && result.messages[0] ? result.messages[0].id : null;
+
+    conversationsStore.createOrGet(phone, leadId, leadName);
+    conversationsStore.addMessage(phone, {
+      direction: 'outgoing',
+      type: mediaType,
+      text: caption || `[${mediaType}]`,
+      status: 'sent',
+      waMessageId: messageId
+    });
+
+    res.json({ success: true, messageId });
+  } catch (err) {
+    console.error('Send media error:', err.response ? err.response.data : err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

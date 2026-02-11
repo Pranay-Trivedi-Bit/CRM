@@ -516,141 +516,68 @@ We look forward to supporting your Microsoft learning journey 🚀</textarea>
         </div>
       </div>
 
-      <!-- WhatsApp Media & Marketing Guide -->
+      <!-- Media Upload & Campaign Card -->
       <div class="wam-card">
-        <div class="wam-card__header wam-card__header--clickable" id="wamGuideHeader">
+        <div class="wam-card__header wam-card__header--clickable" id="wamMediaHeader">
           <div class="wam-card__icon wam-card__icon--green">
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           </div>
           <div style="flex:1;">
-            <h3>WhatsApp Marketing Guide</h3>
-            <p>Media types, limitations, and best practices for WhatsApp Business API</p>
+            <h3>Media Upload &amp; Campaign</h3>
+            <p>Send images, videos, and documents to your leads via WhatsApp</p>
           </div>
-          <span class="wam-expand-arrow" id="wamGuideArrow">&#9654;</span>
+          <span class="wam-expand-arrow" id="wamMediaArrow">&#9654;</span>
         </div>
-        <div class="wam-card__body" id="wamGuideBody" style="display:none;">
+        <div class="wam-card__body" id="wamMediaBody" style="display:none;">
 
-          <!-- Section 1: Supported Media Types -->
-          <div class="wam-guide-section">
-            <h4 class="wam-guide-section__title">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              Supported Media Types and Limitations
-            </h4>
-            <p class="wam-guide-section__desc">The WhatsApp Business API supports various media types, each with specific file format and size limitations:</p>
-            <div class="wam-guide-media-grid">
-              <div class="wam-guide-media-item">
-                <div class="wam-guide-media-icon wam-guide-media-icon--image">
-                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                </div>
-                <div class="wam-guide-media-info">
-                  <strong>Images</strong>
-                  <span class="wam-guide-media-formats">JPEG, PNG</span>
-                  <span class="wam-guide-media-limit">Max 5 MB</span>
-                </div>
-              </div>
-              <div class="wam-guide-media-item">
-                <div class="wam-guide-media-icon wam-guide-media-icon--video">
-                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-                </div>
-                <div class="wam-guide-media-info">
-                  <strong>Videos</strong>
-                  <span class="wam-guide-media-formats">MP4, 3GP</span>
-                  <span class="wam-guide-media-limit">Max 16 MB</span>
-                </div>
-              </div>
-              <div class="wam-guide-media-item">
-                <div class="wam-guide-media-icon wam-guide-media-icon--audio">
-                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-                </div>
-                <div class="wam-guide-media-info">
-                  <strong>Audio</strong>
-                  <span class="wam-guide-media-formats">AAC, MP4, MPEG, AMR, OGG</span>
-                  <span class="wam-guide-media-limit">Max 16 MB</span>
-                </div>
-              </div>
-              <div class="wam-guide-media-item">
-                <div class="wam-guide-media-icon wam-guide-media-icon--document">
-                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                </div>
-                <div class="wam-guide-media-info">
-                  <strong>Documents</strong>
-                  <span class="wam-guide-media-formats">PDF, DOCX, PPT</span>
-                  <span class="wam-guide-media-limit">Max 100 MB</span>
-                </div>
-              </div>
-              <div class="wam-guide-media-item">
-                <div class="wam-guide-media-icon wam-guide-media-icon--sticker">
-                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-                </div>
-                <div class="wam-guide-media-info">
-                  <strong>Stickers</strong>
-                  <span class="wam-guide-media-formats">WebP</span>
-                  <span class="wam-guide-media-limit">Static: 100 KB &middot; Animated: 500 KB</span>
-                </div>
-              </div>
+          <!-- Media Type Selector -->
+          <div class="wam-form-group">
+            <label class="wam-label">Media Type</label>
+            <div class="wam-media-type-tabs">
+              <button class="wam-media-type-btn wam-media-type-btn--active" data-type="image">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                Image
+              </button>
+              <button class="wam-media-type-btn" data-type="video">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                Video
+              </button>
+              <button class="wam-media-type-btn" data-type="document">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                Document
+              </button>
+            </div>
+            <p class="wam-media-hint" id="wamMediaHint">JPEG, PNG &middot; Max 5 MB</p>
+          </div>
+
+          <!-- Upload Area -->
+          <div class="wam-form-group">
+            <label class="wam-label">Media URL or Upload</label>
+            <input type="text" class="wam-input" id="wamMediaUrl" placeholder="Paste a public image/video/document URL here...">
+            <div class="wam-upload-divider"><span>or</span></div>
+            <div class="wam-upload-zone" id="wamUploadZone">
+              <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <p>Drag &amp; drop a file here or <strong>click to browse</strong></p>
+              <input type="file" id="wamFileInput" accept="image/jpeg,image/png" style="display:none;">
+            </div>
+            <!-- Preview -->
+            <div class="wam-media-preview" id="wamMediaPreview" style="display:none;">
+              <div class="wam-media-preview__inner" id="wamPreviewInner"></div>
+              <button class="wam-media-preview__remove" id="wamPreviewRemove" title="Remove">&times;</button>
+              <div class="wam-media-preview__name" id="wamPreviewName"></div>
             </div>
           </div>
 
-          <!-- Section 2: How It Works -->
-          <div class="wam-guide-section">
-            <h4 class="wam-guide-section__title">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              How It Works
-            </h4>
-            <p class="wam-guide-section__desc">Sending media involves a two-step process:</p>
-            <div class="wam-guide-steps">
-              <div class="wam-guide-step">
-                <div class="wam-guide-step__number">1</div>
-                <div class="wam-guide-step__content">
-                  <strong>Upload the Media</strong>
-                  <p>Upload the image or video file to WhatsApp servers using the media upload API endpoint. This returns a unique media ID.</p>
-                </div>
-              </div>
-              <div class="wam-guide-step">
-                <div class="wam-guide-step__number">2</div>
-                <div class="wam-guide-step__content">
-                  <strong>Send the Message</strong>
-                  <p>Include the media ID in the JSON payload of your message API call. Alternatively, use a publicly accessible URL for the media directly in the message payload for one-off messages.</p>
-                </div>
-              </div>
-            </div>
+          <!-- Caption -->
+          <div class="wam-form-group">
+            <label class="wam-label">Caption / Message <span style="font-weight:400; color:var(--color-text-muted)">(optional)</span></label>
+            <textarea class="wam-textarea" id="wamMediaCaption" rows="3" placeholder="Add a caption to your media message..."></textarea>
           </div>
 
-          <!-- Section 3: Marketing Considerations -->
-          <div class="wam-guide-section">
-            <h4 class="wam-guide-section__title">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-              Marketing Considerations
-            </h4>
-            <div class="wam-guide-considerations">
-              <div class="wam-guide-consideration">
-                <div class="wam-guide-consideration__icon">
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                </div>
-                <div>
-                  <strong>Template Messages</strong>
-                  <p>For outbound marketing campaigns, messages must be pre-approved by Meta as message templates. These templates can include rich media content in the header section to enhance visual appeal.</p>
-                </div>
-              </div>
-              <div class="wam-guide-consideration">
-                <div class="wam-guide-consideration__icon">
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                </div>
-                <div>
-                  <strong>Opt-in Required</strong>
-                  <p>All marketing messages, including those with media, must comply with WhatsApp's strict opt-in policies. Customers must give explicit consent to receive communications.</p>
-                </div>
-              </div>
-              <div class="wam-guide-consideration">
-                <div class="wam-guide-consideration__icon">
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-                </div>
-                <div>
-                  <strong>Engagement</strong>
-                  <p>Using high-quality images and engaging videos can significantly increase customer interaction rates compared to text-only messages.</p>
-                </div>
-              </div>
-            </div>
+          <!-- Status & Send -->
+          <div class="wam-composer__actions">
+            <span class="wam-media-send-info" id="wamMediaSendInfo">Attach media above, then select leads from "Send to Dashboard Leads" and use this to send.</span>
+            <span class="wam-send-status" id="wamMediaStatus"></span>
           </div>
 
         </div>

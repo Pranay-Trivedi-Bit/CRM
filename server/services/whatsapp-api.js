@@ -104,6 +104,18 @@ async function sendImage(phone, imageUrl, caption) {
   return res.data;
 }
 
+async function sendVideo(phone, videoUrl, caption) {
+  const url = `${wa.baseUrl}/messages`;
+  const body = {
+    messaging_product: 'whatsapp',
+    to: phone,
+    type: 'video',
+    video: { link: videoUrl, caption: caption || '' }
+  };
+  const res = await axios.post(url, body, { headers: getHeaders() });
+  return res.data;
+}
+
 async function sendDocument(phone, documentUrl, filename) {
   const url = `${wa.baseUrl}/messages`;
   const body = {
@@ -122,5 +134,6 @@ module.exports = {
   sendInteractiveButtons,
   sendInteractiveList,
   sendImage,
+  sendVideo,
   sendDocument
 };

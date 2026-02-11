@@ -115,12 +115,12 @@ var WAMarketing = (function () {
       });
     }
 
-    // Guide card header click — toggle open/close
-    var guideHeader = document.getElementById('wamGuideHeader');
-    if (guideHeader) {
-      guideHeader.addEventListener('click', function () {
-        var body = document.getElementById('wamGuideBody');
-        var arrow = document.getElementById('wamGuideArrow');
+    // Media Upload card header click — toggle open/close
+    var mediaHeader = document.getElementById('wamMediaHeader');
+    if (mediaHeader) {
+      mediaHeader.addEventListener('click', function () {
+        var body = document.getElementById('wamMediaBody');
+        var arrow = document.getElementById('wamMediaArrow');
         var isOpen = body && body.style.display !== 'none';
         if (isOpen) {
           if (body) body.style.display = 'none';
@@ -129,6 +129,72 @@ var WAMarketing = (function () {
           if (body) body.style.display = '';
           if (arrow) arrow.classList.add('wam-expand-arrow--open');
         }
+      });
+    }
+
+    // Media type tab buttons
+    var mediaTypeBtns = document.querySelectorAll('.wam-media-type-btn');
+    for (var m = 0; m < mediaTypeBtns.length; m++) {
+      mediaTypeBtns[m].addEventListener('click', function () {
+        for (var n = 0; n < mediaTypeBtns.length; n++) {
+          mediaTypeBtns[n].classList.remove('wam-media-type-btn--active');
+        }
+        this.classList.add('wam-media-type-btn--active');
+        var type = this.getAttribute('data-type');
+        updateMediaTypeHint(type);
+        clearMediaPreview();
+      });
+    }
+
+    // Upload zone click & drag-drop
+    var uploadZone = document.getElementById('wamUploadZone');
+    var fileInput = document.getElementById('wamFileInput');
+    if (uploadZone && fileInput) {
+      uploadZone.addEventListener('click', function () { fileInput.click(); });
+      uploadZone.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadZone.classList.add('wam-upload-zone--dragover');
+      });
+      uploadZone.addEventListener('dragleave', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadZone.classList.remove('wam-upload-zone--dragover');
+      });
+      uploadZone.addEventListener('drop', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadZone.classList.remove('wam-upload-zone--dragover');
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          handleMediaFile(e.dataTransfer.files[0]);
+        }
+      });
+      fileInput.addEventListener('change', function () {
+        if (this.files && this.files.length > 0) {
+          handleMediaFile(this.files[0]);
+        }
+      });
+    }
+
+    // Media URL input — detect paste/enter
+    var mediaUrlInput = document.getElementById('wamMediaUrl');
+    if (mediaUrlInput) {
+      mediaUrlInput.addEventListener('change', function () {
+        var url = this.value.trim();
+        if (url) {
+          showUrlPreview(url);
+        } else {
+          clearMediaPreview();
+        }
+      });
+    }
+
+    // Preview remove button
+    var removeBtn = document.getElementById('wamPreviewRemove');
+    if (removeBtn) {
+      removeBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        clearMediaPreview();
       });
     }
 
@@ -436,8 +502,11 @@ var WAMarketing = (function () {
     if (!tbody || !messageEl) return;
 
     var messageTemplate = messageEl.value.trim();
-    if (!messageTemplate) {
-      showToast('Please type a message first.', 'error');
+    var mediaAttachment = getMediaAttachment();
+
+    // Need at least text or media
+    if (!messageTemplate && !mediaAttachment) {
+      showToast('Please type a message or attach media first.', 'error');
       return;
     }
 
@@ -468,29 +537,50 @@ var WAMarketing = (function () {
 
     for (var j = 0; j < selectedLeads.length; j++) {
       var lead = selectedLeads[j];
-      var message = interpolateTemplate(messageTemplate, lead);
+      var message = messageTemplate ? interpolateTemplate(messageTemplate, lead) : '';
       statusEl.textContent = 'Sending ' + (j + 1) + ' of ' + selectedLeads.length + '...';
 
       try {
-        var res = await fetch('/api/messages/send', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            phone: lead.phone,
-            text: message,
-            leadId: lead.id,
-            leadName: lead.name,
-            csmName: lead.assignedTo || ''
-          })
-        });
+        var res;
+        if (mediaAttachment) {
+          // Send media message (with optional caption)
+          var mediaCaption = mediaAttachment.caption ? interpolateTemplate(mediaAttachment.caption, lead) : '';
+          var fullCaption = (mediaCaption && message) ? mediaCaption + '\n\n' + message : (mediaCaption || message);
+          res = await fetch('/api/messages/send-media', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              phone: lead.phone,
+              mediaType: mediaAttachment.mediaType,
+              mediaUrl: mediaAttachment.mediaUrl,
+              caption: fullCaption,
+              filename: mediaAttachment.filename,
+              leadId: lead.id,
+              leadName: lead.name
+            })
+          });
+        } else {
+          // Text-only message
+          res = await fetch('/api/messages/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              phone: lead.phone,
+              text: message,
+              leadId: lead.id,
+              leadName: lead.name,
+              csmName: lead.assignedTo || ''
+            })
+          });
+        }
         var data = await res.json();
 
         addToHistory({
-          type: 'bulk',
+          type: mediaAttachment ? 'media' : 'bulk',
           leadName: lead.name || 'Unknown',
           phone: lead.phone,
           csmName: lead.assignedTo || '',
-          message: message,
+          message: mediaAttachment ? '[' + mediaAttachment.mediaType + '] ' + (message || mediaAttachment.caption || '') : message,
           status: data.success ? 'sent' : 'failed',
           simulated: data.simulated || false,
           timestamp: new Date().toISOString()
@@ -501,11 +591,11 @@ var WAMarketing = (function () {
       } catch (err) {
         failCount++;
         addToHistory({
-          type: 'bulk',
+          type: mediaAttachment ? 'media' : 'bulk',
           leadName: lead.name || 'Unknown',
           phone: lead.phone,
           csmName: lead.assignedTo || '',
-          message: message,
+          message: message || (mediaAttachment ? '[' + mediaAttachment.mediaType + ']' : ''),
           status: 'failed',
           timestamp: new Date().toISOString()
         });
@@ -672,6 +762,121 @@ var WAMarketing = (function () {
     };
   }
 
+  // ============ Media Upload Helpers ============
+  var currentMediaType = 'image';
+  var currentMediaUrl = '';
+  var currentMediaFilename = '';
+
+  var mediaTypeConfig = {
+    image:    { accept: 'image/jpeg,image/png', hint: 'JPEG, PNG \u00b7 Max 5 MB', maxSize: 5 * 1024 * 1024 },
+    video:    { accept: 'video/mp4,video/3gpp', hint: 'MP4, 3GPP \u00b7 Max 16 MB', maxSize: 16 * 1024 * 1024 },
+    document: { accept: '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt', hint: 'PDF, DOC, XLS, PPT, TXT \u00b7 Max 100 MB', maxSize: 100 * 1024 * 1024 }
+  };
+
+  function getActiveMediaType() {
+    var activeBtn = document.querySelector('.wam-media-type-btn--active');
+    return activeBtn ? activeBtn.getAttribute('data-type') : 'image';
+  }
+
+  function updateMediaTypeHint(type) {
+    currentMediaType = type;
+    var hint = document.getElementById('wamMediaHint');
+    var fileInput = document.getElementById('wamFileInput');
+    var cfg = mediaTypeConfig[type] || mediaTypeConfig.image;
+    if (hint) hint.textContent = cfg.hint;
+    if (fileInput) fileInput.setAttribute('accept', cfg.accept);
+  }
+
+  function handleMediaFile(file) {
+    var type = getActiveMediaType();
+    var cfg = mediaTypeConfig[type] || mediaTypeConfig.image;
+
+    if (file.size > cfg.maxSize) {
+      showToast('File too large. Max ' + (cfg.maxSize / (1024 * 1024)) + ' MB for ' + type + '.', 'error');
+      return;
+    }
+
+    currentMediaFilename = file.name;
+    // For preview only — actual sending uses URL. Show preview from local blob.
+    var blobUrl = URL.createObjectURL(file);
+    currentMediaUrl = blobUrl;
+    currentMediaType = type;
+    renderPreview(blobUrl, file.name, type);
+
+    // Store file reference for potential upload
+    var uploadZone = document.getElementById('wamUploadZone');
+    if (uploadZone) uploadZone._selectedFile = file;
+  }
+
+  function showUrlPreview(url) {
+    var type = getActiveMediaType();
+    currentMediaUrl = url;
+    currentMediaType = type;
+    currentMediaFilename = url.split('/').pop().split('?')[0] || 'media';
+    renderPreview(url, currentMediaFilename, type);
+  }
+
+  function renderPreview(url, name, type) {
+    var previewContainer = document.getElementById('wamMediaPreview');
+    var previewInner = document.getElementById('wamPreviewInner');
+    var previewName = document.getElementById('wamPreviewName');
+    if (!previewContainer || !previewInner) return;
+
+    previewInner.innerHTML = '';
+    if (type === 'image') {
+      var img = document.createElement('img');
+      img.src = url;
+      img.alt = name;
+      img.onerror = function () { previewInner.innerHTML = '<div class="wam-doc-icon"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Image preview unavailable</span></div>'; };
+      previewInner.appendChild(img);
+    } else if (type === 'video') {
+      var vid = document.createElement('video');
+      vid.src = url;
+      vid.controls = true;
+      vid.style.maxWidth = '100%';
+      vid.style.maxHeight = '280px';
+      vid.onerror = function () { previewInner.innerHTML = '<div class="wam-doc-icon"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg><span>Video preview unavailable</span></div>'; };
+      previewInner.appendChild(vid);
+    } else {
+      previewInner.innerHTML = '<div class="wam-doc-icon"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>' + escapeHtml(name) + '</span></div>';
+    }
+
+    if (previewName) previewName.textContent = name;
+    previewContainer.style.display = '';
+  }
+
+  function clearMediaPreview() {
+    var previewContainer = document.getElementById('wamMediaPreview');
+    var previewInner = document.getElementById('wamPreviewInner');
+    var previewName = document.getElementById('wamPreviewName');
+    var urlInput = document.getElementById('wamMediaUrl');
+    var fileInput = document.getElementById('wamFileInput');
+    var uploadZone = document.getElementById('wamUploadZone');
+
+    if (previewContainer) previewContainer.style.display = 'none';
+    if (previewInner) previewInner.innerHTML = '';
+    if (previewName) previewName.textContent = '';
+    if (urlInput) urlInput.value = '';
+    if (fileInput) fileInput.value = '';
+    if (uploadZone) uploadZone._selectedFile = null;
+
+    currentMediaUrl = '';
+    currentMediaFilename = '';
+  }
+
+  function getMediaAttachment() {
+    // Returns current media state for bulk send integration
+    var url = (document.getElementById('wamMediaUrl') || {}).value || '';
+    var caption = (document.getElementById('wamMediaCaption') || {}).value || '';
+    if (!url && !currentMediaUrl) return null;
+    return {
+      mediaType: getActiveMediaType(),
+      mediaUrl: url || currentMediaUrl,
+      caption: caption,
+      filename: currentMediaFilename || 'media'
+    };
+  }
+
   function showToast(message, type) {
     var container = document.getElementById('toastContainer');
     if (!container) return;
@@ -690,6 +895,7 @@ var WAMarketing = (function () {
   return {
     init: init,
     checkForNewLeads: checkForNewLeads,
-    stopPolling: stopAutoAckPolling
+    stopPolling: stopAutoAckPolling,
+    getMediaAttachment: getMediaAttachment
   };
 })();
