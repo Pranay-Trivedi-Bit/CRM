@@ -115,6 +115,23 @@ var WAMarketing = (function () {
       });
     }
 
+    // Guide card header click — toggle open/close
+    var guideHeader = document.getElementById('wamGuideHeader');
+    if (guideHeader) {
+      guideHeader.addEventListener('click', function () {
+        var body = document.getElementById('wamGuideBody');
+        var arrow = document.getElementById('wamGuideArrow');
+        var isOpen = body && body.style.display !== 'none';
+        if (isOpen) {
+          if (body) body.style.display = 'none';
+          if (arrow) arrow.classList.remove('wam-expand-arrow--open');
+        } else {
+          if (body) body.style.display = '';
+          if (arrow) arrow.classList.add('wam-expand-arrow--open');
+        }
+      });
+    }
+
     // Bulk Send header click — toggle open/close
     var bulkHeader = document.getElementById('wamBulkSendHeader');
     if (bulkHeader) {

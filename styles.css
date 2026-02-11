@@ -6025,6 +6025,179 @@ html {
   padding: 20px 24px;
 }
 
+/* ---- WhatsApp Marketing Guide Card ---- */
+.wam-guide-section {
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(37, 211, 102, 0.1);
+}
+.wam-guide-section:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+.wam-guide-section__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #25d366;
+  margin: 0 0 10px;
+}
+.wam-guide-section__title svg {
+  flex-shrink: 0;
+  color: #25d366;
+}
+.wam-guide-section__desc {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+
+/* Media types grid */
+.wam-guide-media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+.wam-guide-media-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.wam-guide-media-item:hover {
+  border-color: rgba(37, 211, 102, 0.3);
+  box-shadow: 0 0 12px rgba(37, 211, 102, 0.08);
+}
+.wam-guide-media-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.wam-guide-media-icon--image   { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+.wam-guide-media-icon--video   { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+.wam-guide-media-icon--audio   { background: rgba(168, 85, 247, 0.15); color: #a855f7; }
+.wam-guide-media-icon--document{ background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+.wam-guide-media-icon--sticker { background: rgba(236, 72, 153, 0.15); color: #ec4899; }
+.wam-guide-media-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.wam-guide-media-info strong {
+  font-size: 0.92rem;
+  color: #e2e8f0;
+}
+.wam-guide-media-formats {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+.wam-guide-media-limit {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #25d366;
+}
+
+/* How it works steps */
+.wam-guide-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.wam-guide-step {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 16px 18px;
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  transition: border-color 0.2s;
+}
+.wam-guide-step:hover {
+  border-color: rgba(37, 211, 102, 0.3);
+}
+.wam-guide-step__number {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(37, 211, 102, 0.15);
+  color: #25d366;
+  font-weight: 800;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.wam-guide-step__content strong {
+  font-size: 0.92rem;
+  color: #e2e8f0;
+  display: block;
+  margin-bottom: 4px;
+}
+.wam-guide-step__content p {
+  font-size: 0.84rem;
+  color: var(--color-text-muted);
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* Marketing considerations */
+.wam-guide-considerations {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.wam-guide-consideration {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 16px 18px;
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  transition: border-color 0.2s;
+}
+.wam-guide-consideration:hover {
+  border-color: rgba(37, 211, 102, 0.3);
+}
+.wam-guide-consideration__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(37, 211, 102, 0.12);
+  color: #25d366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.wam-guide-consideration strong {
+  font-size: 0.92rem;
+  color: #e2e8f0;
+  display: block;
+  margin-bottom: 4px;
+}
+.wam-guide-consideration p {
+  font-size: 0.84rem;
+  color: var(--color-text-muted);
+  margin: 0;
+  line-height: 1.55;
+}
+
 /* Toggle switch */
 .wam-toggle {
   margin-left: auto;
