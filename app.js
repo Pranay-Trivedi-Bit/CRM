@@ -1579,6 +1579,7 @@
       currentPage: 1,
       pageSize: 50,
       columnFilters: {},  // { name: '', company: '', etc. }
+      dateSortDirection: 'desc', // 'desc' = recent first, 'asc' = oldest first
     },
 
     apply(leads) {
@@ -1593,7 +1594,7 @@
       }
       result = this.filterByDate(result);
       result = this.filterByColumn(result);
-      result = this.sort(result, 'createdAt', 'desc');
+      result = this.sort(result, 'submittedAt', this.state.dateSortDirection);
       return result;
     },
 
@@ -1657,7 +1658,14 @@
       if (!from && !to) return leads;
 
       return leads.filter(lead => {
-        const leadDate = lead.createdAt ? lead.createdAt.substring(0, 10) : '';
+        // Use submittedAt (LinkedIn timestamp) for date filtering; fall back to createdAt
+        let leadDate = '';
+        if (lead.submittedAt) {
+          const dt = new Date(lead.submittedAt);
+          leadDate = dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+        } else if (lead.createdAt) {
+          leadDate = lead.createdAt.substring(0, 10);
+        }
         if (!leadDate) return true;
         if (from && leadDate < from) return false;
         if (to && leadDate > to) return false;
@@ -1712,6 +1720,12 @@
         if (field === 'status') {
           valA = statusOrder[a.status] || 0;
           valB = statusOrder[b.status] || 0;
+          return (valA - valB) * dir;
+        }
+
+        if (field === 'submittedAt') {
+          valA = a.submittedAt || 0;
+          valB = b.submittedAt || 0;
           return (valA - valB) * dir;
         }
 
@@ -2187,6 +2201,18 @@
         Filters.state.currentPage = 1;
         this.refresh();
       });
+
+      // Date & Time column sort toggle
+      const thDateTimeSort = document.getElementById('thDateTimeSort');
+      const dateSortArrow = document.getElementById('dateSortArrow');
+      if (thDateTimeSort) {
+        thDateTimeSort.addEventListener('click', () => {
+          Filters.state.dateSortDirection = Filters.state.dateSortDirection === 'desc' ? 'asc' : 'desc';
+          dateSortArrow.textContent = Filters.state.dateSortDirection === 'desc' ? '↓' : '↑';
+          Filters.state.currentPage = 1;
+          this.refresh();
+        });
+      }
 
       // Pagination
       UI.elements.btnPrevPage.addEventListener('click', () => {

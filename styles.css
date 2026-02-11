@@ -664,6 +664,26 @@ body {
   border-right: none;
 }
 
+/* Sortable Date & Time column header */
+#thDateTimeSort {
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+#thDateTimeSort:hover {
+  color: #818cf8;
+  background: linear-gradient(180deg, rgba(49, 46, 129, 0.9) 0%, rgba(30, 27, 75, 1) 100%);
+}
+#dateSortArrow {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 0.85em;
+  opacity: 0.7;
+  transition: transform 0.2s, opacity 0.2s;
+}
+#thDateTimeSort:hover #dateSortArrow {
+  opacity: 1;
+}
+
 /* Resize handle on table headers */
 .th-resize-handle {
   position: absolute;
