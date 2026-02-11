@@ -1173,7 +1173,23 @@
       tdLeadTemp.appendChild(tempBadge);
       tr.appendChild(tdLeadTemp);
 
-      // 12. Actions
+      // 12. Date & Time (from LinkedIn submittedAt)
+      const tdDateTime = document.createElement('td');
+      if (lead.submittedAt) {
+        const dt = new Date(lead.submittedAt);
+        const dd = String(dt.getDate()).padStart(2, '0');
+        const mm = String(dt.getMonth() + 1).padStart(2, '0');
+        const yyyy = dt.getFullYear();
+        const hh = String(dt.getHours()).padStart(2, '0');
+        const min = String(dt.getMinutes()).padStart(2, '0');
+        tdDateTime.textContent = dd + '/' + mm + '/' + yyyy + '\n' + hh + ':' + min;
+        tdDateTime.style.whiteSpace = 'pre-line';
+      } else {
+        tdDateTime.textContent = '-';
+      }
+      tr.appendChild(tdDateTime);
+
+      // 13. Actions
       const tdActions = document.createElement('td');
       tdActions.className = 'col-actions';
       const actionDiv = document.createElement('div');
@@ -2347,13 +2363,18 @@
         return;
       }
 
-      const headers = ['Name', 'Email', 'Phone', 'Company', 'Job Title', 'Campaign', 'Location', 'Assigned To', 'Last Remark', 'Disposition', 'Sub-Disposition', 'Status', 'Created At'];
+      const headers = ['Name', 'Email', 'Phone', 'Company', 'Job Title', 'Campaign', 'Location', 'Assigned To', 'Last Remark', 'Disposition', 'Sub-Disposition', 'Status', 'Date & Time', 'Created At'];
       const rows = filtered.map(lead => {
         const c = Disposition.classify(lead.currentRemark);
+        let dateTimeStr = '';
+        if (lead.submittedAt) {
+          const dt = new Date(lead.submittedAt);
+          dateTimeStr = String(dt.getDate()).padStart(2, '0') + '/' + String(dt.getMonth() + 1).padStart(2, '0') + '/' + dt.getFullYear() + ' ' + String(dt.getHours()).padStart(2, '0') + ':' + String(dt.getMinutes()).padStart(2, '0');
+        }
         return [
           lead.name, lead.email, lead.phone, lead.company, lead.jobTitle,
           lead.campaign, lead.location, lead.assignedTo, lead.currentRemark,
-          c.disposition, c.subDisposition, c.leadTemp, lead.createdAt
+          c.disposition, c.subDisposition, c.leadTemp, dateTimeStr, lead.createdAt
         ].map(v => '"' + (v || '').replace(/"/g, '""') + '"');
       });
 
@@ -2682,6 +2703,7 @@
         var location = city && country ? city + ', ' + country : (city || country);
         var campaign = (api.campaignName || '').trim();
         var linkedinUrl = (api.linkedinProfileUrl || '').trim();
+        var submittedAt = api.submittedAt || null;
 
         if (!name) continue;
 
@@ -2723,6 +2745,7 @@
           linkedinUrl: linkedinUrl,
           currentRemark: prev ? prev.currentRemark : (remark || jobTitle),
           remarkHistory: prev ? prev.remarkHistory : [],
+          submittedAt: submittedAt || (prev ? prev.submittedAt : null),
           createdAt: prev ? prev.createdAt : createdAt,
           updatedAt: prev ? prev.updatedAt : updatedAt,
         });
