@@ -22,6 +22,30 @@ var WAMarketing = (function () {
   // WhatsApp media IDs returned after uploading files to the server
   var ackMediaId = '';
   var bulkMediaId = '';
+  // Template mode state
+  var loadedTemplates = [];
+  var ackTemplateMode = false;
+  var bulkTemplateMode = false;
+  var ackSelectedTemplate = null;
+  var bulkSelectedTemplate = null;
+  var ackVarMapping = [];   // array of lead field keys, index = {{n}}-1
+  var bulkVarMapping = [];
+
+  // Lead fields available for template variable mapping
+  var LEAD_FIELDS = [
+    { value: 'firstName', label: 'First Name' },
+    { value: 'name',      label: 'Full Name' },
+    { value: 'phone',     label: 'Phone' },
+    { value: 'email',     label: 'Email' },
+    { value: 'company',   label: 'Company' },
+    { value: 'jobTitle',  label: 'Job Title' },
+    { value: 'location',  label: 'Location' },
+    { value: 'campaign',  label: 'Campaign' },
+    { value: 'source',    label: 'Source' },
+    { value: 'assignedTo', label: 'CSM Name' },
+    { value: 'seniority', label: 'Seniority' },
+    { value: 'industry',  label: 'Industry' }
+  ];
 
   function init() {
     if (!initialized) {
@@ -375,6 +399,46 @@ var WAMarketing = (function () {
     var cancelBtn = document.getElementById('wamCancelBulk');
     if (cancelBtn) cancelBtn.addEventListener('click', function () { bulkSendCancelled = true; });
 
+    // ---- Template mode toggles ----
+    var ackModeCustom   = document.getElementById('wamAckModeCustom');
+    var ackModeTemplate = document.getElementById('wamAckModeTemplate');
+    if (ackModeCustom) ackModeCustom.addEventListener('click', function () { setAckMode('custom'); });
+    if (ackModeTemplate) ackModeTemplate.addEventListener('click', function () {
+      setAckMode('template');
+      if (loadedTemplates.length === 0) loadTemplates('ack');
+    });
+
+    var bulkModeCustom   = document.getElementById('wamBulkModeCustom');
+    var bulkModeTemplate = document.getElementById('wamBulkModeTemplate');
+    if (bulkModeCustom) bulkModeCustom.addEventListener('click', function () { setBulkMode('custom'); });
+    if (bulkModeTemplate) bulkModeTemplate.addEventListener('click', function () {
+      setBulkMode('template');
+      if (loadedTemplates.length === 0) loadTemplates('bulk');
+    });
+
+    // Template picker changes
+    var ackPicker = document.getElementById('wamAckTemplatePicker');
+    if (ackPicker) ackPicker.addEventListener('change', function () {
+      var tpl = loadedTemplates.find(function (t) { return t.name === ackPicker.value; });
+      ackSelectedTemplate = tpl || null;
+      ackVarMapping = [];
+      renderVarMap('ack', tpl);
+    });
+
+    var bulkPicker = document.getElementById('wamBulkTemplatePicker');
+    if (bulkPicker) bulkPicker.addEventListener('change', function () {
+      var tpl = loadedTemplates.find(function (t) { return t.name === bulkPicker.value; });
+      bulkSelectedTemplate = tpl || null;
+      bulkVarMapping = [];
+      renderVarMap('bulk', tpl);
+    });
+
+    // Refresh template buttons
+    var ackRefresh = document.getElementById('wamAckRefreshTemplates');
+    if (ackRefresh) ackRefresh.addEventListener('click', function () { loadTemplates('ack'); });
+    var bulkRefresh = document.getElementById('wamBulkRefreshTemplates');
+    if (bulkRefresh) bulkRefresh.addEventListener('click', function () { loadTemplates('bulk'); });
+
     // Save template on change
     var ackTemplate = document.getElementById('wamAckTemplate');
     if (ackTemplate) {
@@ -470,18 +534,34 @@ var WAMarketing = (function () {
 
     try {
       var res;
-      // Send text message first
-      res = await fetch('/api/messages/send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          phone: lead.phone,
-          text: message,
-          leadId: lead.id,
-          leadName: lead.name,
-          csmName: lead.assignedTo || ''
-        })
-      });
+      if (ackTemplateMode && ackSelectedTemplate) {
+        // Send using approved WhatsApp template
+        var params = resolveTemplateParams(ackVarMapping, lead);
+        res = await fetch('/api/messages/send-template', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            phone: lead.phone,
+            templateName: ackSelectedTemplate.name,
+            templateParams: params,
+            leadId: lead.id,
+            leadName: lead.name
+          })
+        });
+      } else {
+        // Free-form text (only works if lead has messaged you in last 24h)
+        res = await fetch('/api/messages/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            phone: lead.phone,
+            text: message,
+            leadId: lead.id,
+            leadName: lead.name,
+            csmName: lead.assignedTo || ''
+          })
+        });
+      }
       var data = await res.json();
 
       // If media is attached, send it as a follow-up
@@ -694,7 +774,21 @@ var WAMarketing = (function () {
 
       try {
         var res;
-        if (mediaAttachment) {
+        if (bulkTemplateMode && bulkSelectedTemplate) {
+          // Send using approved WhatsApp template
+          var tplParams = resolveTemplateParams(bulkVarMapping, lead);
+          res = await fetch('/api/messages/send-template', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              phone: lead.phone,
+              templateName: bulkSelectedTemplate.name,
+              templateParams: tplParams,
+              leadId: lead.id,
+              leadName: lead.name
+            })
+          });
+        } else if (mediaAttachment) {
           // Send media message (with optional caption)
           var mediaCaption = mediaAttachment.caption ? interpolateTemplate(mediaAttachment.caption, lead) : '';
           var fullCaption = (mediaCaption && message) ? mediaCaption + '\n\n' + message : (mediaCaption || message);
@@ -713,7 +807,7 @@ var WAMarketing = (function () {
             })
           });
         } else {
-          // Text-only message
+          // Free-form text (only works within 24h session window)
           res = await fetch('/api/messages/send', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -728,12 +822,16 @@ var WAMarketing = (function () {
         }
         var data = await res.json();
 
+        var histType = bulkTemplateMode ? 'template' : (mediaAttachment ? 'media' : 'bulk');
+        var histMsg  = bulkTemplateMode
+          ? '[Template: ' + (bulkSelectedTemplate ? bulkSelectedTemplate.name : '') + ']'
+          : (mediaAttachment ? '[' + mediaAttachment.mediaType + '] ' + (message || mediaAttachment.caption || '') : message);
         addToHistory({
-          type: mediaAttachment ? 'media' : 'bulk',
+          type: histType,
           leadName: lead.name || 'Unknown',
           phone: lead.phone,
           csmName: lead.assignedTo || '',
-          message: mediaAttachment ? '[' + mediaAttachment.mediaType + '] ' + (message || mediaAttachment.caption || '') : message,
+          message: histMsg,
           status: data.success ? 'sent' : 'failed',
           simulated: data.simulated || false,
           timestamp: new Date().toISOString()
@@ -744,11 +842,12 @@ var WAMarketing = (function () {
       } catch (err) {
         failCount++;
         addToHistory({
-          type: mediaAttachment ? 'media' : 'bulk',
+          type: bulkTemplateMode ? 'template' : (mediaAttachment ? 'media' : 'bulk'),
           leadName: lead.name || 'Unknown',
           phone: lead.phone,
           csmName: lead.assignedTo || '',
-          message: message || (mediaAttachment ? '[' + mediaAttachment.mediaType + ']' : ''),
+          message: bulkTemplateMode ? '[Template: ' + (bulkSelectedTemplate ? bulkSelectedTemplate.name : '') + ']'
+            : (message || (mediaAttachment ? '[' + mediaAttachment.mediaType + ']' : '')),
           status: 'failed',
           timestamp: new Date().toISOString()
         });
@@ -1236,6 +1335,159 @@ var WAMarketing = (function () {
     bulkMediaUrl = '';
     bulkMediaFilename = '';
     bulkMediaId = '';
+  }
+
+  // ============ Template Mode ============
+
+  function setAckMode(mode) {
+    ackTemplateMode = (mode === 'template');
+    var customBtn   = document.getElementById('wamAckModeCustom');
+    var templateBtn = document.getElementById('wamAckModeTemplate');
+    var section     = document.getElementById('wamAckTemplateSection');
+    var freeformEl  = document.getElementById('wamAckTemplate');
+    var freeformLabel = document.getElementById('wamAckFreeformLabel');
+    if (customBtn)   customBtn.classList.toggle('wam-mode-btn--active', !ackTemplateMode);
+    if (templateBtn) templateBtn.classList.toggle('wam-mode-btn--active', ackTemplateMode);
+    if (section)     section.style.display = ackTemplateMode ? '' : 'none';
+    if (freeformEl)  freeformEl.style.display = ackTemplateMode ? 'none' : '';
+    if (freeformLabel) freeformLabel.style.display = ackTemplateMode ? 'none' : '';
+  }
+
+  function setBulkMode(mode) {
+    bulkTemplateMode = (mode === 'template');
+    var customBtn   = document.getElementById('wamBulkModeCustom');
+    var templateBtn = document.getElementById('wamBulkModeTemplate');
+    var section     = document.getElementById('wamBulkTemplateSection');
+    var freeformGroup = document.getElementById('wamBulkFreeformGroup');
+    if (customBtn)    customBtn.classList.toggle('wam-mode-btn--active', !bulkTemplateMode);
+    if (templateBtn)  templateBtn.classList.toggle('wam-mode-btn--active', bulkTemplateMode);
+    if (section)      section.style.display = bulkTemplateMode ? '' : 'none';
+    if (freeformGroup) freeformGroup.style.display = bulkTemplateMode ? 'none' : '';
+  }
+
+  function loadTemplates(scope) {
+    showToast('Loading templates…', 'info');
+    fetch('/api/whatsapp/templates')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        loadedTemplates = data.templates || [];
+        populateTemplatePickers();
+        showToast('Loaded ' + loadedTemplates.length + ' approved template(s).', 'success');
+        // Re-render picker for the current scope
+        if (scope === 'ack') renderVarMap('ack', ackSelectedTemplate);
+        if (scope === 'bulk') renderVarMap('bulk', bulkSelectedTemplate);
+      })
+      .catch(function () { showToast('Failed to load templates.', 'error'); });
+  }
+
+  function populateTemplatePickers() {
+    ['wamAckTemplatePicker', 'wamBulkTemplatePicker'].forEach(function (id) {
+      var picker = document.getElementById(id);
+      if (!picker) return;
+      var current = picker.value;
+      picker.innerHTML = '<option value="">— Select an approved template —</option>';
+      loadedTemplates.forEach(function (tpl) {
+        var opt = document.createElement('option');
+        opt.value = tpl.name;
+        opt.textContent = tpl.name + ' (' + (tpl.language || 'en') + ')';
+        picker.appendChild(opt);
+      });
+      if (current) picker.value = current;
+    });
+  }
+
+  function getTemplateBody(tpl) {
+    if (!tpl || !tpl.components) return '';
+    var body = tpl.components.find(function (c) { return c.type === 'BODY'; });
+    return body ? body.text : '';
+  }
+
+  function getTemplateVarCount(tpl) {
+    var text = getTemplateBody(tpl);
+    var matches = text.match(/\{\{(\d+)\}\}/g) || [];
+    var max = 0;
+    matches.forEach(function (m) {
+      var n = parseInt(m.replace(/\D/g, ''), 10);
+      if (n > max) max = n;
+    });
+    return max;
+  }
+
+  function renderVarMap(scope, tpl) {
+    var mapEl    = document.getElementById(scope === 'ack' ? 'wamAckVarMap'    : 'wamBulkVarMap');
+    var previewWrap = document.getElementById(scope === 'ack' ? 'wamAckTemplatePreviewWrap' : 'wamBulkTemplatePreviewWrap');
+    if (!mapEl) return;
+    if (!tpl) {
+      mapEl.style.display = 'none';
+      if (previewWrap) previewWrap.style.display = 'none';
+      return;
+    }
+    var count = getTemplateVarCount(tpl);
+    if (count === 0) {
+      mapEl.style.display = 'none';
+      updateTemplatePreview(scope, tpl);
+      return;
+    }
+    mapEl.innerHTML = '<div style="font-size:12px; font-weight:600; color:var(--color-text-muted); margin-bottom:6px;">Map template variables to lead fields:</div>';
+    mapEl.style.display = '';
+    for (var i = 1; i <= count; i++) {
+      (function (idx) {
+        var row = document.createElement('div');
+        row.className = 'wam-var-map-row';
+        var lbl = document.createElement('label');
+        lbl.textContent = '{{' + idx + '}}';
+        var sel = document.createElement('select');
+        sel.className = 'wam-select';
+        sel.innerHTML = '<option value="">— pick a field —</option>';
+        LEAD_FIELDS.forEach(function (f) {
+          var opt = document.createElement('option');
+          opt.value = f.value;
+          opt.textContent = f.label;
+          sel.appendChild(opt);
+        });
+        // Default first var → firstName, second → company, etc.
+        if (idx === 1 && !sel.value) sel.value = 'firstName';
+        if (idx === 2 && !sel.value) sel.value = 'company';
+        sel.addEventListener('change', function () {
+          if (scope === 'ack')  ackVarMapping[idx - 1]  = sel.value;
+          if (scope === 'bulk') bulkVarMapping[idx - 1] = sel.value;
+          updateTemplatePreview(scope, tpl);
+        });
+        // Set default mapping
+        if (scope === 'ack')  ackVarMapping[idx - 1]  = sel.value;
+        if (scope === 'bulk') bulkVarMapping[idx - 1] = sel.value;
+        row.appendChild(lbl);
+        row.appendChild(sel);
+        mapEl.appendChild(row);
+      })(i);
+    }
+    updateTemplatePreview(scope, tpl);
+  }
+
+  function updateTemplatePreview(scope, tpl) {
+    var previewEl   = document.getElementById(scope === 'ack' ? 'wamAckTemplatePreview'     : 'wamBulkTemplatePreview');
+    var previewWrap = document.getElementById(scope === 'ack' ? 'wamAckTemplatePreviewWrap' : 'wamBulkTemplatePreviewWrap');
+    if (!previewEl || !tpl) return;
+    var mapping = scope === 'ack' ? ackVarMapping : bulkVarMapping;
+    var sampleLead = { firstName: 'Rahul', name: 'Rahul Sharma', company: 'Accenture',
+      jobTitle: 'Manager', location: 'Delhi', campaign: 'Microsoft', source: 'LinkedIn',
+      assignedTo: 'Priya S.', phone: '+919876543210', email: 'rahul@example.com',
+      seniority: 'Mid-Senior', industry: 'IT Services' };
+    var text = getTemplateBody(tpl);
+    text = text.replace(/\{\{(\d+)\}\}/g, function (match, n) {
+      var field = mapping[parseInt(n, 10) - 1] || '';
+      return field ? (sampleLead[field] || field) : match;
+    });
+    previewEl.textContent = text;
+    if (previewWrap) previewWrap.style.display = '';
+  }
+
+  function resolveTemplateParams(mapping, lead) {
+    return mapping.map(function (field) {
+      if (!field) return '-';
+      if (field === 'firstName') return lead.name ? lead.name.split(' ')[0] : '-';
+      return lead[field] || '-';
+    });
   }
 
   // Upload a local file to the server. On success, stores the mediaId (WhatsApp Media API)

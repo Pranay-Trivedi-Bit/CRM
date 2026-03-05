@@ -348,7 +348,28 @@
         <div class="wam-card__body" id="wamAutoAckBody" style="display:none;">
           <div class="wam-form-row">
             <div class="wam-form-group wam-form-group--full">
-              <label class="wam-label">Acknowledgement Message Template</label>
+              <!-- Message Mode Toggle -->
+              <div class="wam-mode-toggle" style="margin-bottom:12px;">
+                <button class="wam-mode-btn wam-mode-btn--active" id="wamAckModeCustom">Free-form</button>
+                <button class="wam-mode-btn" id="wamAckModeTemplate">Use Approved Template</button>
+              </div>
+
+              <!-- Template Selector (template mode) -->
+              <div id="wamAckTemplateSection" style="display:none; margin-bottom:12px;">
+                <div class="wam-template-picker-row" style="margin-bottom:8px;">
+                  <select class="wam-select" id="wamAckTemplatePicker">
+                    <option value="">— Select an approved template —</option>
+                  </select>
+                  <button class="btn btn--secondary btn--sm" id="wamAckRefreshTemplates">↻ Refresh</button>
+                </div>
+                <div id="wamAckVarMap" class="wam-var-map" style="display:none; margin-bottom:8px;"></div>
+                <div id="wamAckTemplatePreviewWrap" style="display:none;">
+                  <div class="wam-template-preview-label">Preview (sample data)</div>
+                  <div class="wam-template-preview" id="wamAckTemplatePreview"></div>
+                </div>
+              </div>
+
+              <label class="wam-label" id="wamAckFreeformLabel">Acknowledgement Message Template</label>
               <textarea class="wam-textarea" id="wamAckTemplate" rows="12" placeholder="Hi {{firstName}}, thank you for reaching out to Koenig Solutions!">Hi {{firstName}} 👋
 Thank you for reaching out to Koenig Solutions — Your Truster Global IT Training Partner.
 
@@ -527,7 +548,28 @@ We look forward to supporting your Microsoft learning journey 🚀</textarea>
 
           <!-- Message Composer -->
           <div class="wam-composer">
-            <div class="wam-form-group wam-form-group--full">
+            <!-- Message Mode Toggle -->
+            <div class="wam-mode-toggle" style="margin-bottom:12px;">
+              <button class="wam-mode-btn wam-mode-btn--active" id="wamBulkModeCustom">Free-form</button>
+              <button class="wam-mode-btn" id="wamBulkModeTemplate">Use Approved Template</button>
+            </div>
+
+            <!-- Template Selector (template mode) -->
+            <div id="wamBulkTemplateSection" style="display:none; margin-bottom:12px;">
+              <div class="wam-template-picker-row" style="margin-bottom:8px;">
+                <select class="wam-select" id="wamBulkTemplatePicker">
+                  <option value="">— Select an approved template —</option>
+                </select>
+                <button class="btn btn--secondary btn--sm" id="wamBulkRefreshTemplates">↻ Refresh</button>
+              </div>
+              <div id="wamBulkVarMap" class="wam-var-map" style="display:none; margin-bottom:8px;"></div>
+              <div id="wamBulkTemplatePreviewWrap" style="display:none;">
+                <div class="wam-template-preview-label">Preview (sample data)</div>
+                <div class="wam-template-preview" id="wamBulkTemplatePreview"></div>
+              </div>
+            </div>
+
+            <div class="wam-form-group wam-form-group--full" id="wamBulkFreeformGroup">
               <label class="wam-label">Message</label>
               <textarea class="wam-textarea" id="wamBulkMessage" rows="4" placeholder="Type your message here... Use {{name}}, {{company}} for personalization"></textarea>
               <div class="wam-template-vars">

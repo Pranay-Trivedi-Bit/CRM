@@ -9940,3 +9940,78 @@ html {
     height: 18px;
   }
 }
+
+/* ============ WhatsApp Template Selector ============ */
+.wam-mode-toggle {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  overflow: hidden;
+  width: fit-content;
+}
+.wam-mode-btn {
+  padding: 7px 16px;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.wam-mode-btn--active {
+  background: var(--color-primary);
+  color: #fff;
+}
+.wam-mode-btn:not(.wam-mode-btn--active):hover {
+  background: var(--color-surface-hover, #f3f4f6);
+}
+.wam-template-picker-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.wam-template-picker-row .wam-select { flex: 1; }
+.wam-var-map {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 12px;
+}
+.wam-var-map-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--font-size-sm);
+}
+.wam-var-map-row label {
+  min-width: 80px;
+  font-weight: 600;
+  color: var(--color-primary);
+  font-family: monospace;
+}
+.wam-var-map-row .wam-select { flex: 1; }
+.wam-template-preview {
+  background: #e7f8ee;
+  border: 1px solid #b2dfce;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: var(--font-size-sm);
+  color: #1a4731;
+  white-space: pre-wrap;
+  line-height: 1.6;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.wam-template-preview-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin-bottom: 6px;
+}

@@ -8,6 +8,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const axios = require('axios');
 const config = require('../config');
 
 const router = express.Router();
@@ -41,6 +42,27 @@ router.get('/message-log', (req, res) => {
     res.json({ logs: logs.slice(-50) });
   } catch (err) {
     res.json({ logs: [] });
+  }
+});
+
+/**
+ * GET /api/whatsapp/templates — Fetch approved message templates from Meta
+ */
+router.get('/templates', async (req, res) => {
+  const wa = config.whatsapp;
+  if (!wa.accessToken || !wa.businessAccountId) {
+    return res.json({ templates: [] });
+  }
+  try {
+    const url = `https://graph.facebook.com/${wa.apiVersion}/${wa.businessAccountId}/message_templates`;
+    const response = await axios.get(url, {
+      params: { fields: 'name,status,components,language', status: 'APPROVED', limit: 100 },
+      headers: { 'Authorization': `Bearer ${wa.accessToken}` }
+    });
+    res.json({ templates: response.data.data || [] });
+  } catch (err) {
+    console.error('Fetch templates error:', err.response ? err.response.data : err.message);
+    res.json({ templates: [], error: err.message });
   }
 });
 
