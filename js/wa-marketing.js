@@ -14,6 +14,14 @@ var WAMarketing = (function () {
   var lastKnownLeadCount = 0;
   var autoAckPollInterval = null;
   var messageHistory = [];
+  var bulkSendCancelled = false;
+  // Blob URL trackers so we can revoke them when no longer needed
+  var currentBlobUrl = '';
+  var ackBlobUrl = '';
+  var bulkBlobUrl = '';
+  // WhatsApp media IDs returned after uploading files to the server
+  var ackMediaId = '';
+  var bulkMediaId = '';
 
   function init() {
     if (!initialized) {
@@ -363,6 +371,10 @@ var WAMarketing = (function () {
     var sendBtn = document.getElementById('wamSendBulk');
     if (sendBtn) sendBtn.addEventListener('click', sendBulkMessages);
 
+    // Cancel bulk send button
+    var cancelBtn = document.getElementById('wamCancelBulk');
+    if (cancelBtn) cancelBtn.addEventListener('click', function () { bulkSendCancelled = true; });
+
     // Save template on change
     var ackTemplate = document.getElementById('wamAckTemplate');
     if (ackTemplate) {
@@ -482,6 +494,7 @@ var WAMarketing = (function () {
               phone: lead.phone,
               mediaType: ackMedia.mediaType,
               mediaUrl: ackMedia.mediaUrl,
+              mediaId: ackMedia.mediaId,
               caption: '',
               filename: ackMedia.filename,
               leadId: lead.id,
@@ -662,17 +675,22 @@ var WAMarketing = (function () {
     }
 
     var sendBtn = document.getElementById('wamSendBulk');
+    var cancelBtn = document.getElementById('wamCancelBulk');
     var statusEl = document.getElementById('wamSendStatus');
+    bulkSendCancelled = false;
     sendBtn.disabled = true;
     sendBtn.textContent = 'Sending...';
+    if (cancelBtn) cancelBtn.style.display = '';
 
     var sentCount = 0;
     var failCount = 0;
 
     for (var j = 0; j < selectedLeads.length; j++) {
+      if (bulkSendCancelled) break;
+
       var lead = selectedLeads[j];
       var message = messageTemplate ? interpolateTemplate(messageTemplate, lead) : '';
-      statusEl.textContent = 'Sending ' + (j + 1) + ' of ' + selectedLeads.length + '...';
+      if (statusEl) statusEl.textContent = 'Sending ' + (j + 1) + ' of ' + selectedLeads.length + '...';
 
       try {
         var res;
@@ -687,6 +705,7 @@ var WAMarketing = (function () {
               phone: lead.phone,
               mediaType: mediaAttachment.mediaType,
               mediaUrl: mediaAttachment.mediaUrl,
+              mediaId: mediaAttachment.mediaId,
               caption: fullCaption,
               filename: mediaAttachment.filename,
               leadId: lead.id,
@@ -741,12 +760,21 @@ var WAMarketing = (function () {
       }
     }
 
-    statusEl.textContent = 'Sent: ' + sentCount + ', Failed: ' + failCount;
-    statusEl.style.color = failCount > 0 ? '#f59e0b' : '#34d399';
+    if (statusEl) {
+      statusEl.textContent = bulkSendCancelled
+        ? 'Cancelled. Sent: ' + sentCount + ', Failed: ' + failCount
+        : 'Sent: ' + sentCount + ', Failed: ' + failCount;
+      statusEl.style.color = failCount > 0 ? '#f59e0b' : '#34d399';
+    }
     sendBtn.disabled = false;
     sendBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg> Send WhatsApp Messages';
+    if (cancelBtn) cancelBtn.style.display = 'none';
 
-    showToast('Sent ' + sentCount + ' messages' + (failCount > 0 ? ', ' + failCount + ' failed' : ''), sentCount > 0 ? 'success' : 'error');
+    if (!bulkSendCancelled) {
+      showToast('Sent ' + sentCount + ' messages' + (failCount > 0 ? ', ' + failCount + ' failed' : ''), sentCount > 0 ? 'success' : 'error');
+    } else {
+      showToast('Bulk send cancelled. Sent ' + sentCount + ' messages.', 'info');
+    }
 
     renderMessageHistory();
     updateAckStats();
@@ -931,15 +959,14 @@ var WAMarketing = (function () {
     }
 
     currentMediaFilename = file.name;
-    // For preview only — actual sending uses URL. Show preview from local blob.
-    var blobUrl = URL.createObjectURL(file);
-    currentMediaUrl = blobUrl;
     currentMediaType = type;
+    currentMediaUrl = '';
+    // Revoke previous blob URL to avoid memory leak
+    if (currentBlobUrl) { URL.revokeObjectURL(currentBlobUrl); currentBlobUrl = ''; }
+    var blobUrl = URL.createObjectURL(file);
+    currentBlobUrl = blobUrl;
     renderPreview(blobUrl, file.name, type);
-
-    // Store file reference for potential upload
-    var uploadZone = document.getElementById('wamUploadZone');
-    if (uploadZone) uploadZone._selectedFile = file;
+    uploadFileToServer(file, 'standalone');
   }
 
   function showUrlPreview(url) {
@@ -994,6 +1021,7 @@ var WAMarketing = (function () {
     if (fileInput) fileInput.value = '';
     if (uploadZone) uploadZone._selectedFile = null;
 
+    if (currentBlobUrl) { URL.revokeObjectURL(currentBlobUrl); currentBlobUrl = ''; }
     currentMediaUrl = '';
     currentMediaFilename = '';
   }
@@ -1015,10 +1043,11 @@ var WAMarketing = (function () {
     // Returns current media state from the bulk send card's media section
     var url = (document.getElementById('wamBulkMediaUrl') || {}).value || '';
     var caption = (document.getElementById('wamBulkMediaCaption') || {}).value || '';
-    if (!url && !bulkMediaUrl) return null;
+    if (!url && !bulkMediaUrl && !bulkMediaId) return null;
     return {
       mediaType: getActiveBulkMediaType(),
       mediaUrl: url || bulkMediaUrl,
+      mediaId: bulkMediaId,
       caption: caption,
       filename: bulkMediaFilename || 'media'
     };
@@ -1051,12 +1080,14 @@ var WAMarketing = (function () {
       return;
     }
     ackMediaFilename = file.name;
-    var blobUrl = URL.createObjectURL(file);
-    ackMediaUrl = blobUrl;
     ackMediaType = type;
+    ackMediaUrl = '';
+    ackMediaId = '';
+    if (ackBlobUrl) { URL.revokeObjectURL(ackBlobUrl); ackBlobUrl = ''; }
+    var blobUrl = URL.createObjectURL(file);
+    ackBlobUrl = blobUrl;
     renderAckPreview(blobUrl, file.name, type);
-    var zone = document.getElementById('wamAckUploadZone');
-    if (zone) zone._selectedFile = file;
+    uploadFileToServer(file, 'ack');
   }
 
   function showAckUrlPreview(url) {
@@ -1103,16 +1134,19 @@ var WAMarketing = (function () {
     if (urlInput) urlInput.value = '';
     if (fileInput) fileInput.value = '';
     if (zone) zone._selectedFile = null;
+    if (ackBlobUrl) { URL.revokeObjectURL(ackBlobUrl); ackBlobUrl = ''; }
     ackMediaUrl = '';
     ackMediaFilename = '';
+    ackMediaId = '';
   }
 
   function getAckMediaAttachment() {
     var url = (document.getElementById('wamAckMediaUrl') || {}).value || '';
-    if (!url && !ackMediaUrl) return null;
+    if (!url && !ackMediaUrl && !ackMediaId) return null;
     return {
       mediaType: getActiveAckMediaType(),
       mediaUrl: url || ackMediaUrl,
+      mediaId: ackMediaId,
       filename: ackMediaFilename || 'media'
     };
   }
@@ -1144,12 +1178,14 @@ var WAMarketing = (function () {
       return;
     }
     bulkMediaFilename = file.name;
-    var blobUrl = URL.createObjectURL(file);
-    bulkMediaUrl = blobUrl;
     bulkMediaType = type;
+    bulkMediaUrl = '';
+    bulkMediaId = '';
+    if (bulkBlobUrl) { URL.revokeObjectURL(bulkBlobUrl); bulkBlobUrl = ''; }
+    var blobUrl = URL.createObjectURL(file);
+    bulkBlobUrl = blobUrl;
     renderBulkPreview(blobUrl, file.name, type);
-    var zone = document.getElementById('wamBulkUploadZone');
-    if (zone) zone._selectedFile = file;
+    uploadFileToServer(file, 'bulk');
   }
 
   function showBulkUrlPreview(url) {
@@ -1196,8 +1232,45 @@ var WAMarketing = (function () {
     if (urlInput) urlInput.value = '';
     if (fileInput) fileInput.value = '';
     if (zone) zone._selectedFile = null;
+    if (bulkBlobUrl) { URL.revokeObjectURL(bulkBlobUrl); bulkBlobUrl = ''; }
     bulkMediaUrl = '';
     bulkMediaFilename = '';
+    bulkMediaId = '';
+  }
+
+  // Upload a local file to the server. On success, stores the mediaId (WhatsApp Media API)
+  // or a local URL (dev fallback) in the appropriate module-scoped variable.
+  function uploadFileToServer(file, scope) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      var dataUrl = e.target.result;
+      var commaIdx = dataUrl.indexOf(',');
+      var base64 = commaIdx >= 0 ? dataUrl.substring(commaIdx + 1) : dataUrl;
+      fetch('/api/messages/upload-media', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: base64, mimeType: file.type, filename: file.name })
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data.success) {
+            if (scope === 'bulk') {
+              if (data.mediaId) { bulkMediaId = data.mediaId; bulkMediaUrl = ''; }
+              else if (data.url) { bulkMediaUrl = data.url; bulkMediaId = ''; }
+            } else if (scope === 'ack') {
+              if (data.mediaId) { ackMediaId = data.mediaId; ackMediaUrl = ''; }
+              else if (data.url) { ackMediaUrl = data.url; ackMediaId = ''; }
+            }
+            showToast('File uploaded successfully.', 'success');
+          } else {
+            showToast('Upload failed: ' + (data.error || 'Unknown error') + '. Try using a URL instead.', 'error');
+          }
+        })
+        .catch(function () {
+          showToast('Upload failed. Please use a URL instead.', 'error');
+        });
+    };
+    reader.readAsDataURL(file);
   }
 
   function showToast(message, type) {

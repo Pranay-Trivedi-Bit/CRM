@@ -92,40 +92,48 @@ async function sendInteractiveList(phone, bodyText, buttonLabel, sections) {
   return res.data;
 }
 
-async function sendImage(phone, imageUrl, caption) {
+async function sendImage(phone, imageUrl, caption, mediaId) {
   const url = `${wa.baseUrl}/messages`;
-  const body = {
-    messaging_product: 'whatsapp',
-    to: phone,
-    type: 'image',
-    image: { link: imageUrl, caption: caption || '' }
-  };
+  const image = mediaId
+    ? { id: mediaId, caption: caption || '' }
+    : { link: imageUrl, caption: caption || '' };
+  const body = { messaging_product: 'whatsapp', to: phone, type: 'image', image };
   const res = await axios.post(url, body, { headers: getHeaders() });
   return res.data;
 }
 
-async function sendVideo(phone, videoUrl, caption) {
+async function sendVideo(phone, videoUrl, caption, mediaId) {
   const url = `${wa.baseUrl}/messages`;
-  const body = {
-    messaging_product: 'whatsapp',
-    to: phone,
-    type: 'video',
-    video: { link: videoUrl, caption: caption || '' }
-  };
+  const video = mediaId
+    ? { id: mediaId, caption: caption || '' }
+    : { link: videoUrl, caption: caption || '' };
+  const body = { messaging_product: 'whatsapp', to: phone, type: 'video', video };
   const res = await axios.post(url, body, { headers: getHeaders() });
   return res.data;
 }
 
-async function sendDocument(phone, documentUrl, filename) {
+async function sendDocument(phone, documentUrl, filename, mediaId) {
   const url = `${wa.baseUrl}/messages`;
-  const body = {
-    messaging_product: 'whatsapp',
-    to: phone,
-    type: 'document',
-    document: { link: documentUrl, filename: filename || 'document' }
-  };
+  const document = mediaId
+    ? { id: mediaId, filename: filename || 'document' }
+    : { link: documentUrl, filename: filename || 'document' };
+  const body = { messaging_product: 'whatsapp', to: phone, type: 'document', document };
   const res = await axios.post(url, body, { headers: getHeaders() });
   return res.data;
+}
+
+// Upload media to WhatsApp Media API and return the media ID.
+// Requires Node.js 18+ (uses built-in FormData & Blob).
+async function uploadMedia(buffer, mimeType, filename) {
+  const uploadUrl = `https://graph.facebook.com/${wa.apiVersion}/${wa.phoneNumberId}/media`;
+  const form = new FormData();
+  form.append('messaging_product', 'whatsapp');
+  form.append('type', mimeType);
+  form.append('file', new Blob([buffer], { type: mimeType }), filename);
+  const res = await axios.post(uploadUrl, form, {
+    headers: { 'Authorization': `Bearer ${wa.accessToken}` }
+  });
+  return res.data; // { id: 'media-id' }
 }
 
 module.exports = {
@@ -135,5 +143,6 @@ module.exports = {
   sendInteractiveList,
   sendImage,
   sendVideo,
-  sendDocument
+  sendDocument,
+  uploadMedia
 };

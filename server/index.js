@@ -9,10 +9,13 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '25mb' }));
 
 // Serve static files from project root
 app.use(express.static(path.join(__dirname, '..')));
+
+// Serve locally uploaded media (dev fallback when WhatsApp API is not configured)
+app.use('/uploads', express.static(path.join(__dirname, '..', 'data', 'uploads')));
 
 // API Routes
 app.use('/api/leads', require('./routes/leads-proxy'));
